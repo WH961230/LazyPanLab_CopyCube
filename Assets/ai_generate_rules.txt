@@ -1,0 +1,31 @@
+lazyPan 框架
+
+A 框架核心：
+	Flow - 流程
+	Entity - 实体
+	Behaviour - 行为
+
+B 框架其他模块：
+	Scene - 场景
+	UI - 界面
+
+C 框架Mono挂件：
+	Comp - 组件
+	Data - 实体数据
+
+D Editor快速配置工具：
+	LazyPanEditorTool - LazyPan工具编辑器配置界面
+	LazyPanEditorTool.Toolbox - LazyPan工具编辑器配置界面 · 工具箱
+
+框架介绍：
+	Flow - 流程：流程和场景Scene目前一对一关系
+	Entity - 实体：最小的行为单位
+	Behaviour - 行为：实体的行为，一个行为可对多个行为
+	LazyPanEditorTool - LazyPan工具编辑器配置界面
+	LazyPanEditorTool.Toolbox - LazyPan工具编辑器配置界面 · 工具箱：拉取行为
+
+ai生成规则：
+	1Behaviour 保持独立 只和自己实体或者配置里配置的其他实体的数据交互
+	2Behaviour 配套 BehaviourSetting配置 和 behaviourData 行为数据
+	3Behaviour 只能做一个无法拆解的行为
+	4Behaviour 参考其他已有行为的文件结构

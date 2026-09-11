@@ -1,0 +1,4 @@
+﻿Sign,Flow,Type,Name,SetUpLocationInformationSign,SetUpBehaviourName
+string,string,string,string,string,string
+标识,流程,类型,名称,创建绑定的位置信息,创建绑定行为名字
+

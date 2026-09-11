@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_Data:
+    m_SerializedData: []
+  m_GUID: e8d801e81289c9941899b0482b219f92
+  m_SerializeEntries:
+  - m_GUID: 7c35e4bd4d075be40b97bad778ec1d70
+    m_Address: Packages/evoreek.lazypan/Runtime/Bundles/GameSetting/GameSetting.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9bb8d859d388d8747b0338d6da249f17
+    m_Address: Assets/LazyPan/Bundles/Configs
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 076f077b128787b45a405b40237ba4f6
+    m_Address: Assets/LazyPan/Bundles/Prefabs/Global
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8b62de8ba31023d44854b109fb08fe01
+    m_Address: Assets/LazyPan/Bundles/Prefabs/Obj
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6dc1546985b47b342b952d77a3eabd63
+    m_Address: Assets/LazyPan/Bundles/Prefabs/Tool
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7ea3d75d804c03e49a44944fce47551a
+    m_Address: Assets/LazyPan/Bundles/Prefabs/UI
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 28a27709c77fc2e47864d4d46bbea43b
+    m_Address: Assets/LazyPan/Bundles/Images
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0a78a3e23b9103d4094a29334f81ccaa
+    m_Address: Assets/LazyPan/Bundles/Sounds
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 42e9ed98b1491204a8f162ee7494dbeb
+    m_Address: Assets/LazyPan/Bundles/Configs/Input/LazyPanInputControl.inputactions
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: f386ee9d10d0ed749a3a5ff0d3cbdc4d, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 8ff44aae3e2b02a4bb67a0c6ca746436, type: 2}
+    - {fileID: 11400000, guid: d85fc7f4a25c73b44bddc395490cfe66, type: 2}

@@ -1,0 +1,125 @@
+﻿Key,English,中文,日本語
+引导小标题,LazyPan development team tools version 0.0.1,LazyPan开发组工具 version 0.0.1,LazyPan 開発チーム ツール バージョン 0.0.1
+标签页面滑动动画,Tab page sliding animation,页面滑动动画,ページスライドアニメーション
+是否开启标签页面滑动动画,Whether to enable tab page sliding animation,是否开启标签页面滑动动画,タブページのスライドアニメーションを有効にするかどうか
+选择语言,Select language,选择语言,言語を選択してください
+环境配置,Environment configuration,环境配置,環境構成
+配置提示,Step 0: Click the button to automatically clear the directory with the same name that will be deployed. Use with caution! (The directory contains 1. AddressableAssetsData 2. LazyPan 3. StreamingAssets 4. TextMesh Pro under Assets),第零步: 点击按钮自动清除即将部署的同名目录谨慎使用！   （目录包含 Assets 下的   1.AddressableAssetsData   2.LazyPan   3.StreamingAssets   4.TextMesh Pro）,ステップ 0: ボタンをクリックすると、展開される同じ名前のディレクトリが自動的にクリアされます。使用には注意してください。 (ディレクトリには、Assets の下に 1.AddressableAssetsData 2.LazyPan 3.StreamingAssets 4.TextMesh Pro が含まれています)
+清除目录,Click here to automatically clear the directory with the same name that is about to be deployed,点击此处 自动清除即将部署的同名目录,すぐにデプロイされる同じ名前のディレクトリを自動的にクリアするには、ここをクリックしてください
+第一步标题,Step 1: Click the button to automatically create the framework directory,第一步: 点击按钮自动创建框架目录,ステップ 1: ボタンをクリックしてフレームワーク ディレクトリを自動的に作成します
+第一步按钮,Click here to automatically create a framework directory,点击此处 自动创建框架目录,フレームワーク ディレクトリを自動的に作成するには、ここをクリックしてください
+第二步标题,Step 2: Click the button to automatically copy the core file,第二步: 点击按钮自动拷贝核心文件,ステップ 2: ボタンをクリックしてコア ファイルを自動的にコピーします
+第二步按钮,Click here to automatically copy core files (copy scenes. CSV game configuration. game automatically generated Txt templates. game input system. etc.),点击此处 自动拷贝核心文件（拷贝场景 CSV游戏配置 游戏自动化生成的Txt模板 游戏输入系统 等）,コア ファイルを自動的にコピーするには、ここをクリックしてください (シーン、CSV ゲーム設定、ゲームによって自動的に生成された Txt テンプレート、ゲーム入力システムなどのコピー)
+第三步标题,Step 3: Click the button to automatically configure the Addressable resource,第三步: 点击按钮自动配置Addressable资源,ステップ 3: ボタンをクリックして、アドレス指定可能なリソースを自動的に構成します
+第三步按钮,Click here to automatically configure Addressable resources,点击此处 自动配置Addressable资源,アドレス指定可能なリソースを自動的に構成するには、ここをクリックしてください
+第四步标题,Step 4: Click the button to automatically load the scene into BuildSettings,第四步: 点击按钮自动装载场景到BuildSettings,ステップ 4: ボタンをクリックして、シーンを BuildSettings に自動的にロードします。
+第四步按钮,Click here to automatically load the scene into BuildSettings,点击此处 自动装载场景到BuildSettings,ここをクリックしてシーンを BuildSettings に自動的にロードします
+第五步标题,Step 5: Click the button to automatically create the process,第五步: 点击按钮自动创建流程,ステップ 5: ボタンをクリックしてプロセスを自動的に作成します
+第五步按钮,Click here to automatically create a framework process,点击此处 自动创建框架流程,フレームワークプロセスを自動作成するにはここをクリックしてください
+第六步标题,Step 6: Click the button to automatically generate the behavior (or template),第六步: 点击按钮自动生成行为(或模板),ステップ 6: ボタンをクリックして動作 (またはテンプレート) を自動的に生成します
+第六步按钮,Click here to automatically generate behavior,点击此处 自动生成行为,アクションを自動生成するにはここをクリックしてください
+第七步标题,Step 7: Open the entry scene Launch,第七步: 打开入口场景 Launch,ステップ 7: 入場シーンを開く
+第七步按钮,Click here to open the entry scene,点击此处 打开入口场景Launch,エントリーシーンを開くにはここをクリック
+流程小标题,Flow Main Flow in the game,流程 游戏内主流程,処理 ゲーム内の主な処理
+流程自动化工具展开文本,Automation Tool,自动化工具,自動化ツール
+流程自动化工具按钮文本,Open flow configuration table Csv,打开流程配置表 Csv,プロセス構成テーブル CSV を開く
+流程自动化工具自动生成流程按钮文本,One click auto generate flow,一键自动生成流程,ワンクリックでプロセスを自動生成する
+流程预览自动化数据展开文本,Preview flow automation data,预览流程自动化数据,プロセス自動化データのプレビュー
+流程预览标题流程,Flow:,流程：,プロセス：
+流程预览标题生命周期,Life Cycle:,生命周期：,ライフサイクル：
+流程预览标题阶段,Stage:,阶段：,ステージ：
+流程预览标题实体,Entity:,实体：,実在物：
+流程预览生命周期创建界面选项,Create ui,创建界面,インターフェイスの作成
+流程预览生命周期销毁界面选项,Destroy ui,销毁界面,インターフェースを破棄する
+流程预览生命周期创建选项,Create,创建,作成する
+流程预览生命周期销毁选项,Destroy,销毁,破壊する
+流程预览阶段初始化选项,Init,初始化,初期化
+流程预览阶段清除选项,Clear,清除,クリア
+流程预览新增阶段注释标题,Stage Note:,阶段注释:,ステージノート:
+流程预览新增阶段标识标题,Stage Sign,阶段标识:,ステージID:
+流程预览新增阶段录入按钮,Add New Stage,录入新阶段,新たなステージに突入
+实体小标题,Entity The smallest unit in the game,实体 游戏内最小单位,エンティティ ゲーム内の最小単位
+实体预览标题标识,Sign:,标识:,ロゴ：
+实体预览标题流程,Flow:,流程:,プロセス：
+实体预览标题类型,Type:,类型:,タイプ：
+实体预览标题名称,Name:,名称:,名前：
+实体预览标题创建绑定的位置信息,Bind LocationInf:,创建绑定的位置信息:,バインドされた位置情報を作成します。
+实体预览标题创建绑定行为名字,Bind Behaviours:,创建绑定行为名字:,バインディング動作名を作成します:
+实体预览标题操作,Operate:,操作:,操作します:
+实体自动化工具展开文本,Automation Tool,自动化工具,自動化ツール
+实体自动化工具按钮文本,Open entity configuration table Csv,打开实体配置表 Csv,エンティティ構成テーブル CSV を開く
+实体批量输出实体绑定数据日志按钮文本,Batch output entity binding data log,批量输出实体绑定数据日志,エンティティバインディングデータログの一括出力
+实体预览实体配置数据展开文本,Preview entity configuration data,预览实体配置数据,エンティティ構成データのプレビュー
+实体手动创建预制体工具展开文本,Manually create prefabricated tool,手动创建预制体工具,プレハブ ツールを手動で作成する
+实体模糊搜索请输入关键字输入提示文本,Fuzzy search please enter keywords,模糊搜索请输入关键字,あいまい検索のキーワードを入力してください
+实体手动创建预制体工具流程流程标题,Flow Sign (created in folder required),流程标识(创建于文件夹下，必填),プロセスID（フォルダ配下に作成、必須）
+实体手动创建预制体工具流程类型标题,Type Sign (required),类型标识(必填),タイプ識別子 (必須)
+实体手动创建预制体工具流程实体标题,Entity Sign (required),实体标识(必填),エンティティID (必須)
+实体手动创建预制体工具流程实体中文名字标题,Entity Name (required),实体中文名字(必填),エンティティの中国語名 (必須)
+实体手动创建预制体工具流程创建实体物体按钮文本,Create entity prefab,创建实体物体,ソリッドオブジェクトを作成する
+实体手动创建预制体工具流程创建实体物体点位配置,Create entity prefab locationalInf Config,创建实体物体点位配置,固体オブジェクトの点構成を作成する
+实体操作操作文本,Operate,操作,操作する
+实体操作跳转到预制体,Jump to prefab,跳转到预制体,プレハブにジャンプ
+实体操作创建预制体,Create prefab,创建预制体,プレハブを作成する
+实体操作打印绑定数据到日志,Print binding CompData to the log,打印绑定数据到日志,バインディング データをログに出力する
+行为小标题,Behaviour Business logic of entity binding in behavioral games,行为 游戏内实体绑定的业务逻辑,ゲーム内エンティティ バインディングの動作ビジネス ロジック
+行为自动化工具展开文本,Automation Tool,自动化工具,自動化ツール
+行为自动化工具打开配置表按钮文本,Open behaviour configuration table Csv,一键打开行为配置表 Csv,ワンクリックで動作設定テーブル Csv を開きます
+行为自动化工具打开自动脚本生成配置表按钮文本,Open behaviour automatic script generation configuration table Csv,一键打开行为自动脚本生成配置表 Csv,動作自動スクリプトを開き、ワンクリックで構成テーブル CSV を生成します
+行为自动化工具一键自动创建且覆盖所有行为模板按钮文本,Automatically create and overwrite all behavior templates,一键自动创建且覆盖所有行为模板,ワンクリックですべての動作テンプレートを自動的に作成してカバーします
+行为自动化工具一键自动收集新的卸载不合法的配置行为按钮文本,Automatic addition and deletion behavior configuration,一键自动收集新的卸载不合法的配置行为,自動追加および削除動作の設定
+行为手动创建行为工具展开文本,Manually create behavior tool,手动创建行为工具,行動ツールを手動で作成する
+行为预览行为配置数据展开文本,Preview behaviour configuration data,预览行为配置数据,プレビュー動作構成データ
+行为模糊搜索请输入关键字输入提示文本,Fuzzy search please enter keywords,模糊搜索请输入关键字,あいまい検索のキーワードを入力してください
+行为预览行为配置数据标识标题,Sign:,标识:,ロゴ：
+行为预览行为配置数据名字标题,Name:,名字:,名前：
+行为预览行为配置数据描述标题,Describe:,描述:,説明する：
+行为预览行为配置数据操作标题,Operate:,操作:,操作します:
+行为预览行为配置数据行为代码标识标题,Behaviour Code Sign:,行为代码标识:,動作コードの識別:
+行为预览行为配置数据行为标题,Behaviour:,行为:,行動：
+行为预览行为配置数据行为类型代码标识标题,Behaviour Type Code Sign:,行为类型代码标识:,動作タイプのコード識別:
+行为预览行为配置数据方法代码标识标题,Method Code Sign:,方法代码标识:,メソッドコード識別子:
+行为预览行为配置数据方法标题,Method:,方法:,方法：
+行为操作一键跳转到行为脚本文本,Jump to behaviour script,一键跳转到行为脚本,ワンクリックで動作スクリプトにジャンプ
+行为操作步骤一文本,Step 1: Generation of behavior in the behavior template directory,步骤一：一键生成行为在行为模板目录,ステップ 1: ワンクリックで動作テンプレート ディレクトリに動作を生成する
+行为操作步骤二文本,Step 2: Move and overwrite to the behavior directory,步骤二：一键移动并覆盖到行为目录,ステップ 2: ワンクリックで動作ディレクトリに移動して上書きします
+行为操作步骤三文本,Step 3: Configuration of behavior to behavior configuration,步骤三：一键将行为配置到行为配置,ステップ 3: ワンクリックで動作間構成を構成する
+行为操作操作文本,Operate,操作,操作する
+工具箱小标题,Toolbox Miscellaneous game tools,工具箱 零碎的游戏工具,ツールボックスのゲームツールの部品
+支持小标题,Support Clockwork Games Studio,支持发条游戏工作室,Clockwork Games Studios をサポートする
+作者B站主页,Author Bilibili homepage,作者B站主页,著者Bステーションホームページ
+给作者充个电,Charge the author,给作者充个电,作者に力を与えてください
+特别鸣谢,Special thanks,特别鸣谢,特別な感謝
+特别鸣谢备注,(The ranking is in no particular order. Thanks to everyone for supporting the LazyPan plugin!),（排名不分前后 感谢小伙伴们对 LazyPan 插件的支持！）,(ランキングは順不同です。LazyPan プラグインをサポートしてくださったお友達に感謝します!)
+工具箱行为获取展开文本,展开点击获取行为（拉取后请收集行为配置）,展开点击获取行为（拉取后请收集行为配置）,展开点击获取行为（拉取后请收集行为配置）
+工具箱模板获取展开文本,展开点击获取模板（注意：拉取后自动覆盖）,展开点击获取模板（注意：拉取后自动覆盖）,展开点击获取模板（注意：拉取后自动覆盖）
+场景小标题,Scene The stage unit of the game,场景 游戏内的舞台单位,シーン ゲーム内のステージ単位
+场景自动化工具展开文本,Automation Tool,自动化工具,自動化ツール
+场景自动化工具按钮文本,Open scene configuration table Csv,打开场景配置表 Csv,シーン構成テーブル CSV を開く
+场景预览场景配置数据展开文本,Preview scene configuration data,预览场景配置数据,シーン構成データのプレビュー
+场景模糊搜索请输入关键字输入提示文本,Fuzzy search please enter keywords,模糊搜索请输入关键字,あいまい検索のキーワードを入力してください
+场景预览标题标识,Sign:,标识:,ロゴ：
+场景预览标题描述,Description:,描述:,説明：
+场景预览标题物体路径,Dir Path:,物体路径:,オブジェクトパス：
+场景预览标题流程,Flow:,流程:,プロセス：
+场景预览标题加载时间,Delay Time:,加载时间:,ロード時間：
+场景预览标题操作,Operate:,操作:,操作します:
+场景操作操作文本,Operate,操作,操作します
+场景操作打开场景文本,Open scene,打开场景,シーンを開く
+场景操作创建场景文本,Create scene,创建场景,シーンを作成する
+场景操作创建物体加载文件夹文本,Create obj folder,创建物体加载文件夹,オブジェクトフォルダを作成する
+界面小标题,UI The interface of the game,界面 游戏内的交互界面,インターフェース ゲーム内の画面
+UI自动化工具展开文本,Automation Tool,自动化工具,自動化ツール
+UI自动化工具按钮文本,Open ui configuration table Csv,打开界面配置表 Csv,UI構成テーブル CSV を開く
+UI预览界面配置数据展开文本,Preview ui configuration data,预览界面配置数据,UI構成データのプレビュー
+UI模糊搜索请输入关键字输入提示文本,Fuzzy search please enter keywords,模糊搜索请输入关键字,あいまい検索のキーワードを入力してください
+UI预览标题标识,Sign:,标识:,ロゴ：
+UI预览标题描述,Description:,描述:,説明：
+UI预览标题类型,Type:,类型:,タイプ：
+UI预览标题渲染层级,Render Queue:,渲染层级:,レンダリング順：
+UI预览标题操作,Operate:,操作:,操作します:
+UI类型互斥选项,Exclusive (only one visible),互斥(同时只显示一个),排他（同時に一つだけ表示）
+UI类型常驻选项,Always (multiple visible),常驻(可多个同时显示),常駐（複数同時表示可）
+UI操作操作文本,Operate,操作,操作します
+UI操作跳转到预制体,Jump to prefab,跳转到预制体,プレハブにジャンプ
+UI操作创建预制体,Create prefab,创建预制体,プレハブを作成する

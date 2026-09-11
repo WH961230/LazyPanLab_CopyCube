@@ -1,0 +1,16 @@
+﻿Sign,Flow,Type,Name,SetUpLocationInformationSign,SetUpBehaviourName
+string,string,string,string,string,string
+标识,流程,类型,名称,创建绑定的位置信息,创建绑定行为名字
+Obj_Logo_BeginLogo1,场景A,Logo,开头Logo,,开头Logo
+Obj_Camera_Camera1,场景A,Camera,相机A,,
+Obj_Player_Player1,场景C,Player,玩家C,LocationInf_SceneA_Player1,控制器前后左右移动|生命与死亡|实体挂载界面
+Obj_Tower_Tower1,场景C,Tower,塔C,LocationInf_SceneA_Tower1,
+Obj_Enemy_Enemy1,场景C,Enemy,敌人C,LocationInf_SceneA_Enemy1,追踪实体|生命与死亡|实体挂载界面
+Obj_Terrain_Terrain1,场景C,Terrain,地形C,LocationInf_SceneA_Terrain1,
+Obj_Camera_Camera1,场景C,Camera,相机C,,
+Obj_Generate_EnemyGenerate1,场景C,Generate,敌人生成器,,延时生成实体
+Obj_Wave_WaveManager1,场景C,Wave,波数管理器,,波数管理器
+Obj_Player_Player1,场景B,Player,玩家B,,
+Obj_Tower_Tower1,场景B,Tower,塔B,,
+Obj_Terrain_Terrain1,场景B,Terrain,地形B,,
+Obj_Camera_Camera1,场景B,Camera,相机B,,
