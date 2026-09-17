@@ -15,8 +15,31 @@ MonoBehaviour:
   Datas:
   - SourceSign: Obj_Tower_Tower1
     CompTriggerSign: Trigger
-    Waves:
-    - TargetTriggerEntitySign: Obj_Player_Player1
-      TriggerType: 1
-      BehaviourSign: 
-      BehaviourDataParamSign: 
+    Rules:
+    - TriggerEntitySign: Obj_Player_Player1
+      EnterActions: []
+      StayActions:
+      - TargetEntitySign: 
+        ParamSign: Energy
+        ValueType: 2
+        Modify: 2
+        BoolValue: 0
+        IntValue: 0
+        FloatValue: 20
+        StringValue: 
+        Vector3Value: {x: 0, y: 0, z: 0}
+        Min: 0
+        Max: 100
+      ExitActions: []
+      OutsideActions:
+      - TargetEntitySign: 
+        ParamSign: Energy
+        ValueType: 2
+        Modify: 2
+        BoolValue: 0
+        IntValue: 0
+        FloatValue: -30
+        StringValue: 
+        Vector3Value: {x: 0, y: 0, z: 0}
+        Min: 0
+        Max: 100

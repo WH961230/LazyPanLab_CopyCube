@@ -3,7 +3,7 @@ string,string,string
 标识,名字,描述
 Behaviour_Auto_TrackingEntityByNavMeshAgent,追踪实体,追踪实体
 Behaviour_Event_DelayGenerateEntity,延时生成实体,延时生成实体,,,
-Behaviour_Event_HealthAndDeath,生命与死亡,生命与死亡,,,
+Behaviour_Event_Death,死亡,死亡,,,
 Behaviour_Event_EntityUIBinder,实体挂载界面,实体挂载界面,,,
 Behaviour_Auto_InputWASDMove,控制器前后左右移动,控制器前后左右移动,,,
 Behaviour_Event_WaveManager,波数管理器,波数管理器,,,
@@ -11,3 +11,4 @@ Behaviour_Event_UIBinder,挂载界面,挂载界面,,,
 Behaviour_Event_EquipmentMountManager,装备挂载管理器,装备挂载管理器,,,
 Behaviour_Event_BeginLogo,开头Logo,开头Logo,,,
 Behaviour_Auto_EntityTriggerController,实体触发控制器,实体触发控制器,,,
+Behaviour_Event_ParamValue,实体参数值,实体参数值,,,

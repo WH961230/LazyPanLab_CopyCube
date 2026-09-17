@@ -1,10 +1,9 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace LazyPan {
     /// <summary>
-    /// 波次管理器数据 仅承载行为参数 不含运行时状态与业务依赖
+    /// 实体触发控制器数据 仅承载运行时状态 不含业务依赖
     /// </summary>
     public class EntityTriggerControllerData : Data {
         [Header("实体触发控制器参数")] public EntityTriggerControllerConfig Config = new EntityTriggerControllerConfig();
@@ -22,7 +21,7 @@ namespace LazyPan {
         [Serializable]
         public class EntityTriggerControllerConfig {
             [Header("是否触发中")] public bool IsInTrigger = false;
-            [Header("触发类型")] public TriggerType TriggerType;
+            [Header("当前在范围内的触发者数量")] public int InsideCount = 0;
         }
     }
 }

@@ -39,3 +39,16 @@ MonoBehaviour:
         DataSign: Health
         MaxDataSign: MaxHealth
         Format: 
+  - SourceSign: Obj_Tower_Tower1
+    Items:
+    - UIPrefabSign: UI/UI_EnergyBar
+      AttachLabel: UIRoot_Energy
+      Offset: {x: 0, y: 0, z: 0}
+      Billboard: 0
+      DataBinds:
+      - ComponentSign: Energy
+        ComponentType: 2
+        Mode: 0
+        DataSign: Energy
+        MaxDataSign: MaxEnergy
+        Format: 

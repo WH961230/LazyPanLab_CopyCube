@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea77391a4edd4b1dbc64b04a7b1a802d, type: 3}
+  m_Name: ParamValueSetting
+  m_EditorClassIdentifier: 
+  Datas:
+  - SourceSign: Obj_Enemy_Enemy1
+    Items:
+    - TargetEntitySign: 
+      ParamSign: Health
+      ValueType: 2
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: 100
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
+    - TargetEntitySign: 
+      ParamSign: MaxHealth
+      ValueType: 2
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: 100
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
+    - TargetEntitySign: 
+      ParamSign: Dead
+      ValueType: 0
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: 0
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
+  - SourceSign: Obj_Player_Player1
+    Items:
+    - TargetEntitySign: 
+      ParamSign: Health
+      ValueType: 2
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: 500
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
+    - TargetEntitySign: 
+      ParamSign: MaxHealth
+      ValueType: 2
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: 500
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
+    - TargetEntitySign: 
+      ParamSign: Dead
+      ValueType: 0
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: 0
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
+  - SourceSign: Obj_Tower_Tower1
+    Items:
+    - TargetEntitySign: 
+      ParamSign: Energy
+      ValueType: 2
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: 0
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
+    - TargetEntitySign: 
+      ParamSign: MaxEnergy
+      ValueType: 2
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: 100
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
