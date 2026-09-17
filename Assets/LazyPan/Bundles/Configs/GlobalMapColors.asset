@@ -36,3 +36,5 @@ MonoBehaviour:
     Color: {r: 0.7553053, g: 1, b: 0, a: 1}
   - Name: "\u6CE2\u6570\u7BA1\u7406\u5668"
     Color: {r: 0.006934643, g: 0, b: 1, a: 1}
+  - Name: "\u4F20\u9001\u6D41\u7A0B"
+    Color: {r: 0.95, g: 0.65, b: 0.25, a: 1}

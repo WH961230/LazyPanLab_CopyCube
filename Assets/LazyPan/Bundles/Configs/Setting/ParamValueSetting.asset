@@ -73,7 +73,7 @@ MonoBehaviour:
       ApplyOnInit: 1
   - SourceSign: Obj_Tower_SceneB_Tower
     Items:
-    - TargetEntitySign: 
+    - TargetEntitySign: Obj_Tower_SceneB_Tower
       ParamSign: Energy
       ValueType: 2
       BoolValue: 0
@@ -82,7 +82,7 @@ MonoBehaviour:
       StringValue: 
       Vector3Value: {x: 0, y: 0, z: 0}
       ApplyOnInit: 1
-    - TargetEntitySign: 
+    - TargetEntitySign: Obj_Tower_SceneB_Tower
       ParamSign: MaxEnergy
       ValueType: 2
       BoolValue: 0
@@ -92,3 +92,26 @@ MonoBehaviour:
       Vector3Value: {x: 0, y: 0, z: 0}
       ApplyOnInit: 1
   - SourceSign: Obj_Enemy_SceneC_Enemy
+    Items: []
+  - SourceSign: Obj_Logo_SceneA_BeginLogo
+    Items:
+    - TargetEntitySign: Obj_Logo_SceneA_BeginLogo
+      ParamSign: LogoRemainTime
+      ValueType: 2
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: 8
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
+    - TargetEntitySign: Obj_Logo_SceneA_BeginLogo
+      ParamSign: TeleportRequest
+      ValueType: 0
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: 0
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
+  - SourceSign: Obj_Tower_SceneC_Tower
+    Items: []

@@ -10,7 +10,7 @@ namespace LazyPan {
     /// 仅写自身 Data: LivingCount  供其他积木按需读取 不强求
     /// </summary>
     public class Behaviour_Event_DelayGenerateEntity : Behaviour {
-        private const string settingPath = "Setting/DelayGenerateSetting";
+        private const string settingPath = "Setting/DelayGenerateEntitySetting";
         public const string LIVINGCOUNT_LABEL = "LivingCount";
 
         private DelayGenerateEntityData _delayGenerateEntityData;

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using GraphProcessor;
 
 namespace LazyPan {
@@ -100,4 +100,16 @@ namespace LazyPan {
         public override string name => "实体参数值";
         public override string BehaviourSign => nameof(Behaviour_Event_ParamValue);
     }
+
+    /// <summary>
+    /// 传送流程行为节点 对应 TeleportFlowSettingData 一条
+    /// </summary>
+    [Serializable]
+    [NodeMenuItem("LazyPan/行为/传送流程")]
+    public class BehaviourNode_TeleportFlow : BehaviourGraphNode {
+        public TeleportFlowSettingData Config;
+        public override string name => "传送流程";
+        public override string BehaviourSign => nameof(Behaviour_Event_TeleportFlow);
+    }
+
 }

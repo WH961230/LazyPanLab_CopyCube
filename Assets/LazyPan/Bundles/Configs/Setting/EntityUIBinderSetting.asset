@@ -39,7 +39,7 @@ MonoBehaviour:
         DataSign: Health
         MaxDataSign: MaxHealth
         Format: 
-  - SourceSign: 
+  - SourceSign: Obj_Tower_SceneB_Tower
     Items:
     - UIPrefabSign: UI/UI_EnergyBar
       AttachLabel: UIRoot_Energy

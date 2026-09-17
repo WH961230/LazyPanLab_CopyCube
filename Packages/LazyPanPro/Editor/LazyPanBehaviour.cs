@@ -762,6 +762,12 @@ namespace LazyPan {
                     Repaint();
                 }
                 GUILayout.EndHorizontal();
+
+                GUILayout.BeginHorizontal();
+                if (GUILayout.Button(LazyPanTool.GetText("行为自动化工具一键生成行为图节点按钮文本"), style)) {
+                    BehaviourNodeGenerator.GenerateAll();
+                }
+                GUILayout.EndHorizontal();
                 
                 GUILayout.EndVertical();
                 height += GUILayoutUtility.GetLastRect().height;

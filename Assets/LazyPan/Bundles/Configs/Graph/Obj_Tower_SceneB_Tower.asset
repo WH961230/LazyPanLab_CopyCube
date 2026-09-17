@@ -17,6 +17,7 @@ MonoBehaviour:
   - rid: 8263989132141527887
   - rid: 8263989132141527888
   - rid: 8263989132141527889
+  - rid: 8499330833404658016
   edges: []
   groups: []
   stackNodes: []
@@ -25,7 +26,7 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 489, y: 55, z: 0}
+  position: {x: 107, y: 342, z: 0}
   scale: {x: 1.520875, y: 1.520875, z: 1}
   references:
     version: 2
@@ -47,13 +48,13 @@ MonoBehaviour:
         nodeLock: 0
         NodeInitialized: 1
         Config:
-          SourceSign: 
+          SourceSign: Obj_Tower_SceneB_Tower
           CompTriggerSign: Trigger
           Rules:
           - TriggerEntitySign: Obj_Player_SceneB_Player
             EnterActions: []
             StayActions:
-            - TargetEntitySign: 
+            - TargetEntitySign: Obj_Tower_SceneB_Tower
               ParamSign: Energy
               ValueType: 2
               Modify: 2
@@ -66,7 +67,7 @@ MonoBehaviour:
               Max: 100
             ExitActions: []
             OutsideActions:
-            - TargetEntitySign: 
+            - TargetEntitySign: Obj_Tower_SceneB_Tower
               ParamSign: Energy
               ValueType: 2
               Modify: 2
@@ -85,18 +86,18 @@ MonoBehaviour:
         computeOrder: 1
         position:
           serializedVersion: 2
-          x: 189
-          y: -6
+          x: 59.829895
+          y: -6.0000014
           width: 328
           height: 657
-        expanded: 0
+        expanded: 1
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
         Config:
           SourceSign: Obj_Tower_SceneB_Tower
           Items:
-          - TargetEntitySign: 
+          - TargetEntitySign: Obj_Tower_SceneB_Tower
             ParamSign: Energy
             ValueType: 2
             BoolValue: 0
@@ -105,7 +106,7 @@ MonoBehaviour:
             StringValue: 
             Vector3Value: {x: 0, y: 0, z: 0}
             ApplyOnInit: 1
-          - TargetEntitySign: 
+          - TargetEntitySign: Obj_Tower_SceneB_Tower
             ParamSign: MaxEnergy
             ValueType: 2
             BoolValue: 0
@@ -122,16 +123,16 @@ MonoBehaviour:
         computeOrder: 2
         position:
           serializedVersion: 2
-          x: 517
-          y: -6
-          width: 358
+          x: 387.8299
+          y: -6.0000014
+          width: 357
           height: 657
-        expanded: 0
+        expanded: 1
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
         Config:
-          SourceSign: 
+          SourceSign: Obj_Tower_SceneB_Tower
           Items:
           - UIPrefabSign: UI/UI_EnergyBar
             AttachLabel: UIRoot_Energy
@@ -144,3 +145,38 @@ MonoBehaviour:
               DataSign: Energy
               MaxDataSign: MaxEnergy
               Format: 
+    - rid: 8499330833404658016
+      type: {class: BehaviourNode_TeleportFlow, ns: LazyPan, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 54d11026-7d87-4fa6-a26e-43164c3f9147
+        computeOrder: 3
+        position:
+          serializedVersion: 2
+          x: 744.8299
+          y: -6.0000014
+          width: 219
+          height: 202
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        NodeInitialized: 1
+        Config:
+          SourceSign: Obj_Tower_SceneB_Tower
+          TargetSceneSign: SceneC
+          Once: 1
+          Condition:
+            LeftEntitySign: Obj_Tower_SceneB_Tower
+            LeftParamSign: Energy
+            LeftValueType: 2
+            Compare: 2
+            RightIsEntityParam: 1
+            RightEntitySign: Obj_Tower_SceneB_Tower
+            RightParamSign: MaxEnergy
+            RightValueType: 2
+            RightBoolValue: 0
+            RightIntValue: 0
+            RightConstValue: 0
+            RightStringValue: 
+            RightVector3Value: {x: 0, y: 0, z: 0}
+            RightConstType: 2

@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31390c44c9f3a3d40b424bf6821999a2, type: 3}
+  m_Name: Obj_Generate_SceneC_EnemyGenerate
+  m_EditorClassIdentifier: 
+  serializedNodes: []
+  nodes:
+  - rid: 8499330833404658015
+  edges: []
+  groups: []
+  stackNodes: []
+  pinnedElements: []
+  exposedParameters: []
+  serializedParameterList: []
+  stickyNotes: []
+  nodeInspectorReference: {fileID: 0}
+  position: {x: 0, y: 0, z: 0}
+  scale: {x: 1, y: 1, z: 1}
+  references:
+    version: 2
+    RefIds:
+    - rid: 8499330833404658015
+      type: {class: BehaviourNode_DelayGenerate, ns: LazyPan, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: edb691a2-6673-4d54-9353-cc9f3406818b
+        computeOrder: 0
+        position:
+          serializedVersion: 2
+          x: 60
+          y: 80
+          width: 100
+          height: 100
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        NodeInitialized: 1
+        Config:
+          SourceSign: Obj_Generate_SceneC_EnemyGenerate
+          GenerateType: 0
+          IntervalTime: 9999
+          GenerateEntitySign: Obj_Enemy_SceneC_Enemy
+          Profiles:
+          - WatchSign: WaveIndex
+            WatchEntitySign: Obj_Wave_SceneC_WaveManager
+            Compare: 0
+            WatchValue: 1
+            GenerateEntitySign: Obj_Enemy_SceneC_Enemy
+            Count: 3
+            Interval: 1.5
+          - WatchSign: WaveIndex
+            WatchEntitySign: Obj_Wave_SceneC_WaveManager
+            Compare: 0
+            WatchValue: 2
+            GenerateEntitySign: Obj_Enemy_SceneC_Enemy
+            Count: 5
+            Interval: 1

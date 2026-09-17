@@ -19,7 +19,7 @@ MonoBehaviour:
     - TriggerEntitySign: Obj_Player_SceneB_Player
       EnterActions: []
       StayActions:
-      - TargetEntitySign: 
+      - TargetEntitySign: Obj_Tower_SceneB_Tower
         ParamSign: Energy
         ValueType: 2
         Modify: 2
@@ -32,7 +32,7 @@ MonoBehaviour:
         Max: 100
       ExitActions: []
       OutsideActions:
-      - TargetEntitySign: 
+      - TargetEntitySign: Obj_Tower_SceneB_Tower
         ParamSign: Energy
         ValueType: 2
         Modify: 2

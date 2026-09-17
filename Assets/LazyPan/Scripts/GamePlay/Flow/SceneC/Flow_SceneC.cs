@@ -9,7 +9,7 @@ namespace LazyPan {
 		private Entity Obj_Player_SceneC_Player;
 		private Entity Obj_Camera_SceneC_Camera;
 		private Entity Obj_Wave_SceneC_WaveManager;
-		private Entity Obj_Camera_SceneC_EnemyGenerate;
+		private Entity Obj_Generate_SceneC_EnemyGenerate;
 
         public override void Init(Flow baseFlow) {
             base.Init(baseFlow);
@@ -21,7 +21,7 @@ namespace LazyPan {
 			Obj_Player_SceneC_Player = Obj.Instance.LoadEntity("Obj_Player_SceneC_Player");
 			Obj_Camera_SceneC_Camera = Obj.Instance.LoadEntity("Obj_Camera_SceneC_Camera");
 			Obj_Wave_SceneC_WaveManager = Obj.Instance.LoadEntity("Obj_Wave_SceneC_WaveManager");
-			Obj_Camera_SceneC_EnemyGenerate = Obj.Instance.LoadEntity("Obj_Camera_SceneC_EnemyGenerate");
+			Obj_Generate_SceneC_EnemyGenerate = Obj.Instance.LoadEntity("Obj_Generate_SceneC_EnemyGenerate");
 
         }
 
@@ -39,7 +39,7 @@ namespace LazyPan {
 
         public override void Clear() {
             base.Clear();
-			Obj.Instance.UnLoadEntity(Obj_Camera_SceneC_EnemyGenerate);
+			Obj.Instance.UnLoadEntity(Obj_Generate_SceneC_EnemyGenerate);
 			Obj.Instance.UnLoadEntity(Obj_Wave_SceneC_WaveManager);
 			Obj.Instance.UnLoadEntity(Obj_Camera_SceneC_Camera);
 			Obj.Instance.UnLoadEntity(Obj_Player_SceneC_Player);

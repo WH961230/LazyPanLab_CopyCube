@@ -42,9 +42,5 @@ namespace LazyPan {
         [Header("播放时间")]
         [Tooltip("")]
         public float LogoContinueTime;
-        
-        [Header("播放完成后跳转场景")]
-        [Tooltip("")]
-        public string EndJumpToScene;
     }
 }

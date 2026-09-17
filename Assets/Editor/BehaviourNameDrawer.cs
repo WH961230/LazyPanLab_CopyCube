@@ -55,7 +55,7 @@ public class BehaviourNameDrawer : PropertyDrawer {
             nameCache = new List<string>();
             nameStamp = stamp;
             var seen = new HashSet<string>();
-            var lines = System.IO.File.ReadAllLines(path);
+            var lines = LazyPan.CsvEncoding.ReadAllLines(path);
             // BehaviourConfig.csv 只有2行表头(列名行/类型行 无中文行)
             for (int i = 2; i < lines.Length; i++) {
                 var cols = lines[i].Split(',');

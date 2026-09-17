@@ -15,6 +15,8 @@ MonoBehaviour:
   serializedNodes: []
   nodes:
   - rid: 8263989154599141378
+  - rid: 8499330833404657944
+  - rid: 8499330833404658017
   edges: []
   groups: []
   stackNodes: []
@@ -23,8 +25,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 175, y: 57, z: 0}
-  scale: {x: 1.520875, y: 1.520875, z: 1}
+  position: {x: 406, y: -106, z: 0}
+  scale: {x: 1.3225, y: 1.3225, z: 1}
   references:
     version: 2
     RefIds:
@@ -49,4 +51,75 @@ MonoBehaviour:
           UIParentPrefabSign: UI/UI_SceneA
           UIChildPrefabSign: UI/UI_Logo
           LogoContinueTime: 8
-          EndJumpToScene: SceneB
+    - rid: 8499330833404657944
+      type: {class: BehaviourNode_TeleportFlow, ns: LazyPan, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: a17f6fac-5149-49c6-9766-937e42bd8335
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 644.63007
+          y: 80
+          width: 272
+          height: 580
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        NodeInitialized: 1
+        Config:
+          SourceSign: Obj_Logo_SceneA_BeginLogo
+          TargetSceneSign: SceneB
+          Once: 1
+          Condition:
+            LeftEntitySign: Obj_Logo_SceneA_BeginLogo
+            LeftParamSign: LogoRemainTime
+            LeftValueType: 2
+            Compare: 2
+            RightIsEntityParam: 0
+            RightEntitySign: 
+            RightParamSign: 
+            RightValueType: 2
+            RightBoolValue: 0
+            RightIntValue: 0
+            RightConstValue: 0
+            RightStringValue: 
+            RightVector3Value: {x: 0, y: 0, z: 0}
+            RightConstType: 2
+    - rid: 8499330833404658017
+      type: {class: BehaviourNode_ParamValue, ns: LazyPan, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: ef200687-ea1d-4b30-8f88-6a30f2ec8aec
+        computeOrder: 2
+        position:
+          serializedVersion: 2
+          x: 314.45877
+          y: 80
+          width: 315
+          height: 657
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        NodeInitialized: 1
+        Config:
+          SourceSign: Obj_Logo_SceneA_BeginLogo
+          Items:
+          - TargetEntitySign: Obj_Logo_SceneA_BeginLogo
+            ParamSign: LogoRemainTime
+            ValueType: 2
+            BoolValue: 0
+            IntValue: 0
+            FloatValue: 8
+            StringValue: 
+            Vector3Value: {x: 0, y: 0, z: 0}
+            ApplyOnInit: 1
+          - TargetEntitySign: Obj_Logo_SceneA_BeginLogo
+            ParamSign: TeleportRequest
+            ValueType: 0
+            BoolValue: 0
+            IntValue: 0
+            FloatValue: 0
+            StringValue: 
+            Vector3Value: {x: 0, y: 0, z: 0}
+            ApplyOnInit: 1

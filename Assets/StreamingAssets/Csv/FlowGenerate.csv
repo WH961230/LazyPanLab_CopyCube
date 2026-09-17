@@ -23,8 +23,8 @@ SceneC,场景C,load_entity,流程预览生命周期创建选项,Init,Init,Obj_To
 SceneC,场景C,load_entity,流程预览生命周期创建选项,Init,Init,Obj_Player_SceneC_Player,玩家C
 SceneC,场景C,load_entity,流程预览生命周期创建选项,Init,Init,Obj_Camera_SceneC_Camera,相机C
 SceneC,场景C,load_entity,流程预览生命周期创建选项,Init,Init,Obj_Wave_SceneC_WaveManager,波数管理器
-SceneC,场景C,load_entity,流程预览生命周期创建选项,Init,Init,Obj_Camera_SceneC_EnemyGenerate,敌人生成器
-SceneC,场景C,unload_entity,流程预览生命周期销毁选项,Clear,Clear,Obj_Camera_SceneC_EnemyGenerate,敌人生成器
+SceneC,场景C,load_entity,流程预览生命周期创建选项,Init,Init,Obj_Generate_SceneC_EnemyGenerate,敌人生成器
+SceneC,场景C,unload_entity,流程预览生命周期销毁选项,Clear,Clear,Obj_Generate_SceneC_EnemyGenerate,敌人生成器
 SceneC,场景C,unload_entity,流程预览生命周期销毁选项,Clear,Clear,Obj_Wave_SceneC_WaveManager,波数管理器
 SceneC,场景C,unload_entity,流程预览生命周期销毁选项,Clear,Clear,Obj_Camera_SceneC_Camera,相机C
 SceneC,场景C,unload_entity,流程预览生命周期销毁选项,Clear,Clear,Obj_Player_SceneC_Player,玩家C

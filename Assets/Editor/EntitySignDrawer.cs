@@ -82,7 +82,7 @@ public class EntitySignDrawer : PropertyDrawer {
             signStamp = stamp;
             var seen = new HashSet<string>();
             var nameCount = new Dictionary<string, int>();
-            var lines = File.ReadAllLines(path);
+            var lines = LazyPan.CsvEncoding.ReadAllLines(path);
             // 前3行为表头(Sign行/类型行/中文行)
             for (int i = 3; i < lines.Length; i++) {
                 var cols = lines[i].Split(',');

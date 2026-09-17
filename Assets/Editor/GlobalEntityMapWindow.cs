@@ -427,7 +427,7 @@ namespace LazyPan {
             var path = Path.Combine(Application.streamingAssetsPath, "Csv", "ObjConfig.csv");
             string[] lines;
             try {
-                lines = File.ReadAllLines(path);
+                lines = LazyPan.CsvEncoding.ReadAllLines(path);
             } catch {
                 return result;
             }

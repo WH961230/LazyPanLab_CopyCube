@@ -17,4 +17,3 @@ MonoBehaviour:
     UIParentPrefabSign: UI/UI_SceneA
     UIChildPrefabSign: UI/UI_Logo
     LogoContinueTime: 8
-    EndJumpToScene: SceneB

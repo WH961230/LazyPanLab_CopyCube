@@ -68,6 +68,7 @@
 行为自动化工具打开自动脚本生成配置表按钮文本,Open behaviour automatic script generation configuration table Csv,一键打开行为自动脚本生成配置表 Csv,動作自動スクリプトを開き、ワンクリックで構成テーブル CSV を生成します
 行为自动化工具一键自动创建且覆盖所有行为模板按钮文本,Automatically create and overwrite all behavior templates,一键自动创建且覆盖所有行为模板,ワンクリックですべての動作テンプレートを自動的に作成してカバーします
 行为自动化工具一键自动收集新的卸载不合法的配置行为按钮文本,Automatic addition and deletion behavior configuration,一键自动收集新的卸载不合法的配置行为,自動追加および削除動作の設定
+行为自动化工具一键生成行为图节点按钮文本,One-click generate behaviour graph nodes,一键生成行为图节点,ワンクリックで動作図ノードを生成する
 行为手动创建行为工具展开文本,Manually create behavior tool,手动创建行为工具,行動ツールを手動で作成する
 行为预览行为配置数据展开文本,Preview behaviour configuration data,预览行为配置数据,プレビュー動作構成データ
 行为模糊搜索请输入关键字输入提示文本,Fuzzy search please enter keywords,模糊搜索请输入关键字,あいまい検索のキーワードを入力してください

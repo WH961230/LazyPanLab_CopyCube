@@ -34,12 +34,12 @@ namespace LazyPan {
                 AssetDatabase.CreateAsset(graph, AssetDatabase.GenerateUniqueAssetPath(graphPath));
             }
 
-            // 清单以 ObjConfig.csv 文件为准 调用方(实体面板内存数据)可能是删节点之前的旧数据
-            // 直接用旧的会把刚删掉的节点又补回来 导致删了还出现
-            string[] effectiveNames = ResolveBehaviourNames(entitySign, behaviourNames);
-            // 面板里又加回来的行为 允许下次删除时重新弹窗
+            // 图为标准: 打开时只补"面板本次传入的新勾选" 不拿 ObjConfig.csv 反向补图
+            // 文件里多余的旧条目不补回 等 SaveGraph 以图为准反写回去
+            string[] effectiveNames = CleanNames(behaviourNames);
+            // 图上已有的行为 允许下次删除时重新弹窗
             PruneConfirmedRemoves(entitySign, effectiveNames);
-            // 把该实体已配置的行为节点补进图(已有的不重复添加)并立即落盘
+            // 把面板新勾的行为节点补进图(已有的不重复添加)并立即落盘
             AddBehaviourNodes(graph, entitySign, effectiveNames);
             SaveGraph(graph);
 
@@ -110,59 +110,38 @@ namespace LazyPan {
 
         /// <summary>
         /// 从对应 Setting 资产把该实体的那条配置填进节点
+        /// 通用版: 按节点 Config 字段类型反查 Setting 类型 新行为无需加 case
         /// </summary>
         static void LoadNodeConfig(BaseNode node, string entitySign) {
-            switch (node) {
-                case BehaviourNode_Death n: {
-                    var s = LoadSetting<DeathSetting>("DeathSetting");
-                    if (s != null && s.TryGet(entitySign, out var d)) n.Config = d;
-                    break;
-                }
-                case BehaviourNode_TrackingEntity n: {
-                    var s = LoadSetting<TrackingEntitySetting>("TrackingEntitySetting");
-                    if (s != null && s.TryGet(entitySign, out var d)) n.Config = d;
-                    break;
-                }
-                case BehaviourNode_DelayGenerate n: {
-                    var s = LoadSetting<DelayGenerateEntitySetting>("DelayGenerateSetting");
-                    if (s != null && s.TryGet(entitySign, out var d)) n.Config = d;
-                    break;
-                }
-                case BehaviourNode_EntityUIBinder n: {
-                    var s = LoadSetting<EntityUIBinderSetting>("EntityUIBinderSetting");
-                    if (s != null && s.TryGet(entitySign, out var d)) n.Config = d;
-                    break;
-                }
-                case BehaviourNode_InputWASDMove n: {
-                    var s = LoadSetting<InputWASDMoveSetting>("InputWASDMoveSetting");
-                    if (s != null && s.TryGet(entitySign, out var d)) n.Config = d;
-                    break;
-                }
-                case BehaviourNode_WaveManager n: {
-                    var s = LoadSetting<WaveManagerSetting>("WaveManagerSetting");
-                    if (s != null && s.TryGet(entitySign, out var d)) n.Config = d;
-                    break;
-                }
-                case BehaviourNode_EquipmentMount n: {
-                    var s = LoadSetting<EquipmentMountSetting>("EquipmentMountSetting");
-                    if (s != null && s.TryGet(entitySign, out var d)) n.Config = d;
-                    break;
-                }
-                case BehaviourNode_BeginLogo n: {
-                    var s = LoadSetting<BeginLogoSetting>("BeginLogoSetting");
-                    if (s != null && s.TryGet(entitySign, out var d)) n.Config = d;
-                    break;
-                }
-                case BehaviourNode_EntityTriggerController n: {
-                    var s = LoadSetting<EntityTriggerControllerSetting>("EntityTriggerControllerSetting");
-                    if (s != null && s.TryGet(entitySign, out var d)) n.Config = d;
-                    break;
-                }
-                case BehaviourNode_ParamValue n: {
-                    var s = LoadSetting<ParamValueSetting>("ParamValueSetting");
-                    if (s != null && s.TryGet(entitySign, out var d)) n.Config = d;
-                    break;
-                }
+            if (!(node is BehaviourGraphNode)) {
+                return;
+            }
+
+            var configField = node.GetType().GetField("Config");
+            if (configField == null) {
+                return;
+            }
+
+            Type settingType = FindSettingTypeByDataType(configField.FieldType);
+            if (settingType == null) {
+                LogUtil.LogErrorFormat("未找到配置数据类型:{0} 对应的 Setting 请检查 Setting.Datas 元素类型!", configField.FieldType.Name);
+                return;
+            }
+
+            var setting = LoadSettingByType(settingType);
+            if (setting == null) {
+                return;
+            }
+
+            var tryGet = settingType.GetMethod("TryGet");
+            if (tryGet == null) {
+                return;
+            }
+
+            object[] args = new object[] { entitySign, null };
+            bool ok = (bool) tryGet.Invoke(setting, args);
+            if (ok && args[1] != null) {
+                configField.SetValue(node, args[1]);
             }
         }
 
@@ -175,7 +154,7 @@ namespace LazyPan {
             var path = System.IO.Path.Combine(Application.streamingAssetsPath, "Csv", "ObjConfig.csv");
             string[] lines;
             try {
-                lines = System.IO.File.ReadAllLines(path);
+                lines = CsvEncoding.ReadAllLines(path);
             } catch {
                 return new string[0];
             }
@@ -191,31 +170,134 @@ namespace LazyPan {
         static bool SyncGraphToSettings(BaseGraph graph, string entitySign) {
             bool changed = false;
             foreach (var node in graph.nodes.OfType<BehaviourGraphNode>()) {
-                string assetName = GetSettingAssetName(node);
-                if (string.IsNullOrEmpty(assetName))
-                    continue;
                 var configField = node.GetType().GetField("Config");
                 if (configField == null)
                     continue;
-                changed |= SyncSettingData(assetName, entitySign, configField.GetValue(node));
+                Type settingType = FindSettingTypeByDataType(configField.FieldType);
+                if (settingType == null)
+                    continue;
+                changed |= SyncSettingData(GetSettingAssetFileName(settingType), entitySign, configField.GetValue(node));
             }
             return changed;
         }
 
+        /// <summary>
+        /// 按节点 Config 字段类型反查 Setting 类型 通用版 新行为无需加映射 保留供外部查询用
+        /// </summary>
         static string GetSettingAssetName(BehaviourGraphNode node) {
-            switch (node) {
-                case BehaviourNode_Death _: return "DeathSetting";
-                case BehaviourNode_TrackingEntity _: return "TrackingEntitySetting";
-                case BehaviourNode_DelayGenerate _: return "DelayGenerateSetting";
-                case BehaviourNode_EntityUIBinder _: return "EntityUIBinderSetting";
-                case BehaviourNode_InputWASDMove _: return "InputWASDMoveSetting";
-                case BehaviourNode_WaveManager _: return "WaveManagerSetting";
-                case BehaviourNode_EquipmentMount _: return "EquipmentMountSetting";
-                case BehaviourNode_BeginLogo _: return "BeginLogoSetting";
-                case BehaviourNode_EntityTriggerController _: return "EntityTriggerControllerSetting";
-                case BehaviourNode_ParamValue _: return "ParamValueSetting";
-                default: return null;
+            var configField = node?.GetType().GetField("Config");
+            if (configField == null) {
+                return null;
             }
+
+            return GetSettingAssetFileName(FindSettingTypeByDataType(configField.FieldType));
+        }
+
+        /// <summary>
+        /// 按 Config 数据类型反查 Setting 类型 依据 Setting.Datas 列表元素类型 带缓存
+        /// </summary>
+        static readonly Dictionary<Type, Type> settingTypeCache = new Dictionary<Type, Type>();
+
+        static Type FindSettingTypeByDataType(Type dataType) {
+            if (dataType == null) {
+                return null;
+            }
+
+            if (settingTypeCache.TryGetValue(dataType, out Type cached)) {
+                return cached;
+            }
+
+            foreach (Type type in TypeCache.GetTypesDerivedFrom<Setting>()) {
+                if (type.IsAbstract) {
+                    continue;
+                }
+
+                var datasField = type.GetField("Datas");
+                if (datasField == null || !datasField.FieldType.IsGenericType) {
+                    continue;
+                }
+
+                Type[] args = datasField.FieldType.GetGenericArguments();
+                if (args.Length == 1 && args[0] == dataType) {
+                    settingTypeCache[dataType] = type;
+                    return type;
+                }
+            }
+
+            settingTypeCache[dataType] = null;
+            return null;
+        }
+
+        /// <summary>
+        /// 按 Setting 类型加载资产 资产名一般即类型名 兼容 DelayGenerateSetting 这类文件名与类型名不一致的旧资产
+        /// 资产缺失不报错 允许生成器稍后补建
+        /// </summary>
+        static Setting LoadSettingByType(Type settingType) {
+            string assetName = GetSettingAssetFileName(settingType);
+            if (string.IsNullOrEmpty(assetName)) {
+                return null;
+            }
+
+            return AssetDatabase.LoadAssetAtPath<Setting>($"Assets/LazyPan/Bundles/Configs/Setting/{assetName}.asset");
+        }
+
+        /// <summary>
+        /// 按 Setting 类型反查资产文件名(不带扩展名) 先试类型名直连 找不到再按类型扫描目录 兼容旧资产改名残留
+        /// </summary>
+        static string GetSettingAssetFileName(Type settingType) {
+            if (settingType == null) {
+                return null;
+            }
+
+            string direct = $"Assets/LazyPan/Bundles/Configs/Setting/{settingType.Name}.asset";
+            if (AssetDatabase.LoadAssetAtPath<Setting>(direct) != null) {
+                return settingType.Name;
+            }
+
+            string[] guids = AssetDatabase.FindAssets($"t:{settingType.Name}", new[] { "Assets/LazyPan/Bundles/Configs/Setting" });
+            foreach (string guid in guids) {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                if (string.IsNullOrEmpty(path) || !path.EndsWith(".asset")) {
+                    continue;
+                }
+
+                var setting = AssetDatabase.LoadAssetAtPath<Setting>(path);
+                if (setting != null && setting.GetType() == settingType) {
+                    return System.IO.Path.GetFileNameWithoutExtension(path);
+                }
+            }
+
+            return settingType.Name;
+        }
+
+        /// <summary>
+        /// 按 BehaviourSign 反查节点类型 带缓存 供删除同步用
+        /// </summary>
+        static readonly Dictionary<string, Type> nodeTypeCache = new Dictionary<string, Type>();
+
+        static Type FindNodeTypeByBehaviourSign(string behaviourSign) {
+            if (string.IsNullOrEmpty(behaviourSign)) {
+                return null;
+            }
+
+            if (nodeTypeCache.TryGetValue(behaviourSign, out Type cached)) {
+                return cached;
+            }
+
+            foreach (Type type in TypeCache.GetTypesDerivedFrom<BehaviourGraphNode>()) {
+                if (type.IsAbstract) {
+                    continue;
+                }
+
+                var probe = Activator.CreateInstance(type) as BehaviourGraphNode;
+                if (probe != null && probe.BehaviourSign == behaviourSign) {
+                    nodeTypeCache[behaviourSign] = type;
+                    return type;
+                }
+            }
+
+            nodeTypeCache[behaviourSign] = null;
+            return null;
         }
 
         static bool SyncSettingData(string assetName, string entitySign, object graphData) {
@@ -281,13 +363,75 @@ namespace LazyPan {
         static void SaveGraph(BaseGraph graph) {
             if (graph == null)
                 return;
-            // 删节点同步: 图上少掉的行为节点 反写 ObjConfig.csv 清单与 Setting 条目(方向B 以图为准)
-            // 新增节点由 AddBehaviourNodes 在打开时处理 这里只处理删除 避免与补节点逻辑打架
+            // 图为标准: 图上增删都反写 ObjConfig.csv 清单与 Setting 条目
+            SyncAddedNodes(graph);
             SyncRemovedNodes(graph);
             // 图内数据回写到对应 Setting 资产 保持一一对应(按图资产名=实体Sign 定位 Setting 条目)
             SyncGraphToSettings(graph, graph.name);
             EditorUtility.SetDirty(graph);
             AssetDatabase.SaveAssets();
+        }
+
+        /// <summary>
+        /// 新增同步: 图上有但 ObjConfig 清单里没有的行为 视为用户在图中新增的
+        /// 直接反写清单 不弹窗 下次打开不再重复处理 Setting 条目由 SyncGraphToSettings 回写
+        /// </summary>
+        static void SyncAddedNodes(BaseGraph graph) {
+            string entitySign = graph != null ? graph.name : null;
+            if (string.IsNullOrEmpty(entitySign))
+                return;
+            var names = GetBehaviourNames(entitySign);
+            var fileSet = new HashSet<string>(names ?? new string[0]);
+            var signToName = new Dictionary<string, string>();
+            foreach (var sign in BehaviourConfig.GetKeys()) {
+                var cfg = BehaviourConfig.Get(sign);
+                if (cfg != null && !string.IsNullOrEmpty(cfg.Name))
+                    signToName[cfg.Sign] = cfg.Name;
+            }
+            var ordered = new List<string>(names ?? new string[0]);
+            bool changed = false;
+            foreach (var node in graph.nodes.OfType<BehaviourGraphNode>()) {
+                if (string.IsNullOrEmpty(node.BehaviourSign))
+                    continue;
+                if (!signToName.TryGetValue(node.BehaviourSign, out string behaviourName))
+                    continue;
+                if (fileSet.Contains(behaviourName))
+                    continue;
+                ordered.Add(behaviourName);
+                fileSet.Add(behaviourName);
+                confirmedRemoves.Remove(entitySign + "|" + node.BehaviourSign);
+                changed = true;
+            }
+
+            if (changed) {
+                WriteBehaviourNames(entitySign, ordered.ToArray());
+            }
+        }
+
+        /// <summary>按实体 Sign 把行为中文名数组写回 ObjConfig.csv(保序 去空去重)</summary>
+        static void WriteBehaviourNames(string entitySign, string[] behaviourNames) {
+            var path = System.IO.Path.Combine(Application.streamingAssetsPath, "Csv", "ObjConfig.csv");
+            string[] lines;
+            try {
+                lines = CsvEncoding.ReadAllLines(path);
+            } catch {
+                return;
+            }
+            bool changed = false;
+            for (int i = 3; i < lines.Length; i++) {
+                var cols = lines[i].Split(',');
+                if (cols.Length < 6 || cols[0].Trim() != entitySign)
+                    continue;
+                var cleaned = CleanNames(behaviourNames);
+                cols[5] = string.Join("|", cleaned);
+                lines[i] = string.Join(",", cols);
+                changed = true;
+                break;
+            }
+
+            if (changed) {
+                System.IO.File.WriteAllLines(path, lines, new System.Text.UTF8Encoding(false));
+            }
         }
 
         /// <summary>
@@ -355,55 +499,52 @@ namespace LazyPan {
             }
         }
 
-        /// <summary>按 BehaviourSign 找到 Setting 资产名 再删该实体的条目</summary>
+        /// <summary>按 BehaviourSign 反查节点再定位 Setting 资产 通用版 新行为无需加映射</summary>
         static void RemoveSettingEntryBySign(string behaviourSign, string entitySign) {
-            string assetName = null;
-            switch (behaviourSign) {
-                case nameof(Behaviour_Event_Death): assetName = "DeathSetting"; break;
-                case nameof(Behaviour_Auto_TrackingEntityByNavMeshAgent): assetName = "TrackingEntitySetting"; break;
-                case nameof(Behaviour_Event_DelayGenerateEntity): assetName = "DelayGenerateSetting"; break;
-                case nameof(Behaviour_Event_EntityUIBinder): assetName = "EntityUIBinderSetting"; break;
-                case nameof(Behaviour_Auto_InputWASDMove): assetName = "InputWASDMoveSetting"; break;
-                case nameof(Behaviour_Event_WaveManager): assetName = "WaveManagerSetting"; break;
-                case nameof(Behaviour_Event_EquipmentMountManager): assetName = "EquipmentMountSetting"; break;
-                case nameof(Behaviour_Event_BeginLogo): assetName = "BeginLogoSetting"; break;
-                case nameof(Behaviour_Auto_EntityTriggerController): assetName = "EntityTriggerControllerSetting"; break;
-                case nameof(Behaviour_Event_ParamValue): assetName = "ParamValueSetting"; break;
+            Type nodeType = FindNodeTypeByBehaviourSign(behaviourSign);
+            if (nodeType == null) {
+                return;
             }
-            RemoveSettingEntry(assetName, entitySign);
+
+            var configField = nodeType.GetField("Config");
+            if (configField == null) {
+                return;
+            }
+
+            Type settingType = FindSettingTypeByDataType(configField.FieldType);
+            if (settingType == null) {
+                return;
+            }
+
+            RemoveSettingEntry(GetSettingAssetFileName(settingType), entitySign);
         }
 
         /// <summary>
-        /// 生效行为名解析: 优先读 ObjConfig.csv 文件(真相) 调用方传入的只做补充(面板里新勾的)
-        /// 这样删节点反写清单后 即使实体面板没刷新 下次打开也不会用旧数据补回已删节点
+        /// 生效行为名解析已废弃: 图为标准 打开时不再读 ObjConfig.csv
+        /// 保留空壳防外部调用报错 一律返回空 由调用方传入的面板勾选驱动补节点
         /// </summary>
         static string[] ResolveBehaviourNames(string entitySign, string[] passedNames) {
-            var fileNames = GetBehaviourNames(entitySign);
-            var fileSet = new HashSet<string>(fileNames ?? new string[0]);
-            // 调用方是文件子集时(面板没刷新/删前旧数据) 以文件为准 防止删掉的又补回来
-            bool passedIsSubset = true;
-            if (passedNames != null) {
-                foreach (var n in passedNames) {
-                    var t = n?.Trim();
-                    if (string.IsNullOrEmpty(t))
-                        continue;
-                    if (!fileSet.Contains(t)) {
-                        passedIsSubset = false;
-                        break;
-                    }
-                }
+            return CleanNames(passedNames);
+        }
+
+        /// <summary>清洗行为中文名: 去空去重保序</summary>
+        static string[] CleanNames(string[] names) {
+            if (names == null || names.Length == 0) {
+                return new string[0];
             }
-            if (passedIsSubset)
-                return fileNames;
-            // 调用方多出来的才是面板里新勾的行为 合并后允许补节点
-            var merged = new List<string>(fileNames ?? new string[0]);
-            foreach (var n in passedNames) {
-                var t = n?.Trim();
-                if (string.IsNullOrEmpty(t) || merged.Contains(t))
+
+            var list = new List<string>();
+            var seen = new HashSet<string>();
+            foreach (var raw in names) {
+                string t = raw?.Trim();
+                if (string.IsNullOrEmpty(t) || !seen.Add(t)) {
                     continue;
-                merged.Add(t);
+                }
+
+                list.Add(t);
             }
-            return merged.ToArray();
+
+            return list.ToArray();
         }
 
         /// <summary>面板里加回来的行为 从已确认删除集合里移除 允许再次删除时重新弹窗</summary>
@@ -437,7 +578,7 @@ namespace LazyPan {
             var path = System.IO.Path.Combine(Application.streamingAssetsPath, "Csv", "ObjConfig.csv");
             string[] lines;
             try {
-                lines = System.IO.File.ReadAllLines(path, System.Text.Encoding.UTF8);
+                lines = CsvEncoding.ReadAllLines(path);
             } catch {
                 return;
             }
@@ -454,7 +595,7 @@ namespace LazyPan {
                 break;
             }
             if (changed) {
-                System.IO.File.WriteAllLines(path, lines, new System.Text.UTF8Encoding(false));
+                CsvEncoding.WriteAllLines(path, lines);
             }
         }
 

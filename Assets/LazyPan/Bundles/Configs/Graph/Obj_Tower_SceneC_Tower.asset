@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 31390c44c9f3a3d40b424bf6821999a2, type: 3}
-  m_Name: Obj_Player_SceneB_Player
+  m_Name: Obj_Tower_SceneC_Tower
   m_EditorClassIdentifier: 
   serializedNodes: []
   nodes:
-  - rid: 8263989162110877724
+  - rid: 8499330833404658244
   edges: []
   groups: []
   stackNodes: []
@@ -23,30 +23,27 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 0, y: 35, z: 0}
+  position: {x: 0, y: 0, z: 0}
   scale: {x: 1, y: 1, z: 1}
   references:
     version: 2
     RefIds:
-    - rid: 8263989162110877724
-      type: {class: BehaviourNode_InputWASDMove, ns: LazyPan, asm: Assembly-CSharp}
+    - rid: 8499330833404658244
+      type: {class: BehaviourNode_ParamValue, ns: LazyPan, asm: Assembly-CSharp}
       data:
         nodeCustomName: 
-        GUID: ce2a8cff-3dd9-418c-b8bf-1dbbeabd52e1
+        GUID: b9759768-9743-4525-afce-084f6bc79730
         computeOrder: 0
         position:
           serializedVersion: 2
-          x: 61
-          y: 45.280003
-          width: 247
-          height: 297
-        expanded: 1
+          x: 60
+          y: 80
+          width: 100
+          height: 100
+        expanded: 0
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
         Config:
-          SourceSign: Obj_Player_SceneB_Player
-          InputControlSign: Player/Motion
-          MoveSpeed: 5
-          RotateSpeed: 5
-          Gravity: -2
+          SourceSign: Obj_Tower_SceneC_Tower
+          Items: []
