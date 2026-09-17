@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: feff8dc39d1a86d49a82700b3abe9132, type: 3}
+  m_Name: GlobalMapColors
+  m_EditorClassIdentifier: 
+  Start: {r: 0.6, g: 0.6, b: 0.6, a: 1}
+  Launch: {r: 0.65, g: 0.45, b: 0.9, a: 1}
+  Flow: {r: 1, g: 1, b: 1, a: 1}
+  Entity: {r: 0, g: 0.7868886, b: 1, a: 1}
+  BehaviourDefault: {r: 0.95, g: 0.65, b: 0.25, a: 1}
+  BehaviourColors:
+  - Name: "\u5F00\u5934Logo"
+    Color: {r: 0.8060041, g: 0.9490196, b: 0.2509804, a: 1}
+  - Name: "\u63A7\u5236\u5668\u524D\u540E\u5DE6\u53F3\u79FB\u52A8"
+    Color: {r: 1, g: 0, b: 0.8314495, a: 1}
+  - Name: "\u5B9E\u4F53\u53C2\u6570\u503C"
+    Color: {r: 0.186795, g: 1, b: 0, a: 1}
+  - Name: "\u5B9E\u4F53\u89E6\u53D1\u63A7\u5236\u5668"
+    Color: {r: 0.43922853, g: 0, b: 1, a: 1}
+  - Name: "\u5B9E\u4F53\u6302\u8F7D\u754C\u9762"
+    Color: {r: 1, g: 0, b: 0.17541885, a: 1}
+  - Name: "\u6B7B\u4EA1"
+    Color: {r: 0.2509804, g: 0.3270096, b: 0.9490196, a: 1}
+  - Name: "\u8FFD\u8E2A\u5B9E\u4F53"
+    Color: {r: 0.2509804, g: 0.9490196, b: 0.38111734, a: 1}
+  - Name: "\u5EF6\u65F6\u751F\u6210\u5B9E\u4F53"
+    Color: {r: 0.7553053, g: 1, b: 0, a: 1}
+  - Name: "\u6CE2\u6570\u7BA1\u7406\u5668"
+    Color: {r: 0.006934643, g: 0, b: 1, a: 1}

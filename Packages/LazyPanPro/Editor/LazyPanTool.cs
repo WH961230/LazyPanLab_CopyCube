@@ -31,7 +31,7 @@ namespace LazyPan {
         private float maxScrollX = 0f;
         private float minScrollX = -99999f;
 
-        [MenuItem("Tools/LazyPan/Open guide panel 打开引导面板 _F1")]
+        [MenuItem("Tools/LazyPan/Open guide panel 打开引导面板 _F1", priority = 0)]
         public static void OpenGuide() {
             LazyPanTool window = (LazyPanTool)GetWindow(typeof(LazyPanTool), true, "LAZYPANPRO 框架", true);
             window.Show();

@@ -213,8 +213,13 @@ namespace LazyPan {
                             }
                         }
 
-                        //按钮
+                        //实体设置按钮：按实体标识打开对应 Graph 并传入该行配置的行为名
                         labelRect.height = 18f;
+                        if (GUI.Button(labelRect, "实体设置")) {
+                            string[] behaviourNames = entityDatas[index].Infos[5].Split('|');
+                            EntityGraphHook.OpenEntityGraph?.Invoke(entityDatas[index].Infos[0], behaviourNames);
+                        }
+                        /*
                         if (GUI.Button(labelRect, behaviourBindNames)) {
                             selectedOptions = entityDatas[index].BehaviourIndexs;
                             GenericMenu menu = new GenericMenu();
@@ -230,6 +235,7 @@ namespace LazyPan {
                             Vector2 menuPosition = new Vector2(buttonRect.xMin, buttonRect.yMax);
                             menu.DropDown(new Rect(menuPosition, Vector2.zero));
                         }
+                        */
                     } else if (i == 6) {
                         RefreshOperationNameOptions(IsExitPrefab(entityDatas[index]));
 
@@ -280,7 +286,7 @@ namespace LazyPan {
             } else if (operationName == "实体操作创建预制体") {
                 _instanceFlowName = flowCode;
                 _instanceTypeName = infos[2];
-                _instanceObjName = infos[0].Split("_")[2];
+                _instanceObjName = SignNamePart(infos[0]);
                 _instanceObjChineseName = infos[3];
                 GUI.FocusControl("objChineseName");
             } else if (operationName == "实体操作打印绑定数据到日志") {
@@ -381,9 +387,20 @@ namespace LazyPan {
 
         private GameObject GetPrefab(string flowName, string entitySign, out string flowCode) {
             GameObject prefab = null;
+            flowCode = null;
             if (linkedSceneDictionary.TryGetValue(flowName, out flowCode)) {
                 string prefabPath = $"Assets/LazyPan/Bundles/Prefabs/Obj/{flowCode}/{entitySign}.prefab";
                 prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+            }
+            // 新 sign 已含场景段(Obj_类型_场景_名称) 旧路径找不到时按 sign 第3段定位目录
+            if (prefab == null) {
+                string[] parts = (entitySign ?? "").Split("_");
+                if (parts.Length >= 4) {
+                    string sceneCode = parts[2];
+                    string prefabPath = $"Assets/LazyPan/Bundles/Prefabs/Obj/{sceneCode}/{entitySign}.prefab";
+                    prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+                    flowCode = sceneCode;
+                }
             }
 
             return prefab;
@@ -878,7 +895,7 @@ namespace LazyPan {
             } else {
                 _instanceFlowName = str[1];
                 _instanceTypeName = str[2];
-                _instanceObjName = str[0].Split("_")[2];
+                _instanceObjName = SignNamePart(str[0]);
                 GUI.FocusControl("objChineseName");
             }
         }
@@ -895,35 +912,100 @@ namespace LazyPan {
         }
 
         private void InstanceCustomObj() {
-            if (_instanceObjName == "" || _instanceTypeName == "" || _instanceFlowName == "" || _instanceObjChineseName == "") {
+            if (!CheckInstanceInput(out string validError)) {
+                Debug.LogError(validError);
                 return;
             }
+            string newSign = string.Concat("Obj_", _instanceTypeName, "_", _instanceFlowName, "_", _instanceObjName);
             string sourcePath = "Packages/evoreek.lazypan/Runtime/Bundles/Prefabs/Obj/Obj_Sample_Sample.prefab"; // 替换为你的预制体源文件路径
-            string targetFolderPath = "Assets/LazyPan/Bundles/Prefabs/Obj"; // 替换为你想要拷贝到的目标文件夹路径
+            string targetFolderPath = $"Assets/LazyPan/Bundles/Prefabs/Obj/{_instanceFlowName}";
+            // 目标已存在直接提示 不覆盖
+            string existPath = $"{targetFolderPath}/{newSign}.prefab";
+            if (AssetDatabase.LoadAssetAtPath<GameObject>(existPath) != null) {
+                Debug.LogError($"预制体已存在: {existPath} 不再重复创建");
+                return;
+            }
             // 获取选中的游戏对象
             GameObject selectedPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(sourcePath);
             if (selectedPrefab != null && PrefabUtility.IsPartOfPrefabAsset(selectedPrefab)) {
-                // 确保目标文件夹存在
-                if (!Directory.Exists(targetFolderPath)) {
+                // 确保场景子目录存在(与 SceneConfig.DirPath=Obj/场景/ 保持一致)
+                if (!AssetDatabase.IsValidFolder(targetFolderPath)) {
                     Directory.CreateDirectory(targetFolderPath);
+                    AssetDatabase.Refresh();
                 }
 
                 // 获取预制体路径
                 string prefabPath = AssetDatabase.GetAssetPath(selectedPrefab);
-                
-                // 拷贝预制体到目标文件夹
-                string targetPath = Path.Combine(targetFolderPath, Path.GetFileName(prefabPath));
+
+                // 拷贝预制体到场景子目录
+                string targetPath = $"{targetFolderPath}/{Path.GetFileName(prefabPath)}";
                 AssetDatabase.CopyAsset(prefabPath, targetPath);
-                
+
                 // 刷新AssetDatabase
                 AssetDatabase.Refresh();
-                
-                //修改资源的名字为自定义
-                AssetDatabase.RenameAsset(targetPath,
-                    string.Concat(_instanceFlowName, _instanceFlowName != null ? "/" : "", "Obj_", _instanceTypeName,
-                        "_", _instanceObjName));
+
+                //修改资源的名字为自定义 新格式: Obj_类型_场景_名称
+                AssetDatabase.RenameAsset(targetPath, newSign);
                 AssetDatabase.Refresh();
+                Debug.Log($"预制体已创建: {targetFolderPath}/{newSign}.prefab");
             }
+        }
+
+        /// <summary>
+        /// 校验手动创建四段输入: 非空/英文数字/段内无下划线/场景必须在 SceneConfig 存在
+        /// </summary>
+        private bool CheckInstanceInput(out string error) {
+            error = null;
+            if (string.IsNullOrWhiteSpace(_instanceObjName) || string.IsNullOrWhiteSpace(_instanceTypeName)
+                || string.IsNullOrWhiteSpace(_instanceFlowName) || string.IsNullOrWhiteSpace(_instanceObjChineseName)) {
+                error = "创建预制体失败: 场景/类型/名称/中文名均不能为空";
+                return false;
+            }
+            if (!IsSingleWord(_instanceTypeName) || !IsSingleWord(_instanceFlowName) || !IsSingleWord(_instanceObjName)) {
+                error = $"创建预制体失败: 场景/类型/名称只能是英文数字 且不能含下划线与空格 当前({_instanceTypeName}/{_instanceFlowName}/{_instanceObjName})";
+                return false;
+            }
+            // 场景段必须在 SceneConfig 登记 否则运行时 DirPath 拼不出路径
+            ReadCSV.Instance.Read("SceneConfig", out string content, out string[] lines);
+            bool sceneExist = false;
+            if (lines != null) {
+                for (int i = 3; i < lines.Length; i++) {
+                    if (lines[i].Split(",")[0].Trim() == _instanceFlowName.Trim()) {
+                        sceneExist = true;
+                        break;
+                    }
+                }
+            }
+            if (!sceneExist) {
+                error = $"创建预制体失败: 场景 {_instanceFlowName} 不在 SceneConfig.csv 中 请先登记场景";
+                return false;
+            }
+            return true;
+        }
+
+        private static bool IsSingleWord(string s) {
+            if (string.IsNullOrEmpty(s))
+                return false;
+            foreach (char c in s.Trim()) {
+                bool ok = (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9');
+                if (!ok)
+                    return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// 从新格式 Sign(Obj_类型_场景_名称)取第4段名称 兼容旧格式回退第3段
+        /// </summary>
+        private static string SignNamePart(string sign) {
+            if (string.IsNullOrEmpty(sign))
+                return "";
+            string[] parts = sign.Split("_");
+            if (parts.Length >= 4)
+                return parts[3];
+            if (parts.Length >= 3)
+                return parts[2];
+            return sign;
         }
 
         private void InstanceCustomLocationSetting() {

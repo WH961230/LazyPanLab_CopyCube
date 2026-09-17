@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TrackingEntitySetting
   m_EditorClassIdentifier: 
   Datas:
-  - SourceSign: Obj_Enemy_Enemy1
+  - SourceSign: Obj_Enemy_SceneC_Enemy
     TrackingSpeed: 2
     TrackingStop: 0
     TargetType: Player

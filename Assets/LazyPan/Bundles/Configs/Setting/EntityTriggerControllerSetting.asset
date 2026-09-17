@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: EntityTriggerControllerSetting
   m_EditorClassIdentifier: 
   Datas:
-  - SourceSign: Obj_Tower_Tower1
+  - SourceSign: Obj_Tower_SceneB_Tower
     CompTriggerSign: Trigger
     Rules:
-    - TriggerEntitySign: Obj_Player_Player1
+    - TriggerEntitySign: Obj_Player_SceneB_Player
       EnterActions: []
       StayActions:
       - TargetEntitySign: 

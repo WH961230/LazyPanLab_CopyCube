@@ -24,8 +24,9 @@ namespace LazyPan {
 
     [Serializable]
     public struct DeathSettingData {
+        [EntitySign]
         [Header("发起实体的类型标识 SourceSign")]
-        [Tooltip("发起实体的类型标识，必须与 ObjConfig.Sign 一致，如 Obj_Enemy_Enemy1")]
+        [Tooltip("发起实体的类型标识，必须与 ObjConfig.Sign 一致，如 Obj_Enemy_SceneC_Enemy")]
         public string SourceSign;
 
         [Header("死亡延迟销毁时长 0=立即执行")]

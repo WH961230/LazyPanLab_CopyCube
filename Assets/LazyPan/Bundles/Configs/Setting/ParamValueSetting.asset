@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ParamValueSetting
   m_EditorClassIdentifier: 
   Datas:
-  - SourceSign: Obj_Enemy_Enemy1
+  - SourceSign: Obj_Enemy_SceneC_Enemy
     Items:
     - TargetEntitySign: 
       ParamSign: Health
@@ -42,19 +42,10 @@ MonoBehaviour:
       StringValue: 
       Vector3Value: {x: 0, y: 0, z: 0}
       ApplyOnInit: 1
-  - SourceSign: Obj_Player_Player1
+  - SourceSign: Obj_Player_SceneC_Player
     Items:
     - TargetEntitySign: 
       ParamSign: Health
-      ValueType: 2
-      BoolValue: 0
-      IntValue: 0
-      FloatValue: 500
-      StringValue: 
-      Vector3Value: {x: 0, y: 0, z: 0}
-      ApplyOnInit: 1
-    - TargetEntitySign: 
-      ParamSign: MaxHealth
       ValueType: 2
       BoolValue: 0
       IntValue: 0
@@ -71,7 +62,16 @@ MonoBehaviour:
       StringValue: 
       Vector3Value: {x: 0, y: 0, z: 0}
       ApplyOnInit: 1
-  - SourceSign: Obj_Tower_Tower1
+    - TargetEntitySign: 
+      ParamSign: MaxHealth
+      ValueType: 2
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: 500
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
+  - SourceSign: Obj_Tower_SceneB_Tower
     Items:
     - TargetEntitySign: 
       ParamSign: Energy
@@ -91,3 +91,4 @@ MonoBehaviour:
       StringValue: 
       Vector3Value: {x: 0, y: 0, z: 0}
       ApplyOnInit: 1
+  - SourceSign: Obj_Enemy_SceneC_Enemy

@@ -24,8 +24,9 @@ namespace LazyPan {
 
     [Serializable]
     public struct EntityUIBindSettingData {
+        [EntitySign]
         [Header("发起绑定的实体类型")]
-        [Tooltip("发起绑定的实体类型，必须与 ObjConfig.Sign 一致，如 Obj_Enemy_Enemy1")]
+        [Tooltip("发起绑定的实体类型，必须与 ObjConfig.Sign 一致，如 Obj_Enemy_SceneC_Enemy")]
         public string SourceSign;
 
         [Header("绑定UI列表")]

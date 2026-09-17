@@ -30,13 +30,14 @@ namespace LazyPan {
     /// </summary>
     [Serializable]
     public struct TrackingEntitySettingData {
-        [Tooltip("发起追踪的实体类型，与 ObjConfig.Sign 一致，如 Obj_Enemy_Enemy1")]
+        [EntitySign]
+        [Tooltip("发起追踪的实体类型，与 ObjConfig.Sign 一致，如 Obj_Enemy_SceneC_Enemy")]
         [Header("发起追踪的实体类型")] public string SourceSign;
         [Tooltip("追踪速度，代理速度，如 3.5")]
         [Header("追踪速度")] public float TrackingSpeed;
         [Tooltip("配置级停止，勾上后行为不再追踪")]
         [Header("追踪是否停止")] public bool TrackingStop;
-        [Tooltip("被追踪的实体类型，如 Player 或 Obj_Player_Player1")]
+        [Tooltip("被追踪的实体类型，如 Player 或 Obj_Player_SceneC_Player")]
         [Header("被追踪的实体类型")] public string TargetType;
     }
 }

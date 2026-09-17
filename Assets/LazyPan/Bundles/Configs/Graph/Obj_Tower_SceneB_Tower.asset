@@ -1,0 +1,146 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31390c44c9f3a3d40b424bf6821999a2, type: 3}
+  m_Name: Obj_Tower_SceneB_Tower
+  m_EditorClassIdentifier: 
+  serializedNodes: []
+  nodes:
+  - rid: 8263989132141527887
+  - rid: 8263989132141527888
+  - rid: 8263989132141527889
+  edges: []
+  groups: []
+  stackNodes: []
+  pinnedElements: []
+  exposedParameters: []
+  serializedParameterList: []
+  stickyNotes: []
+  nodeInspectorReference: {fileID: 0}
+  position: {x: 489, y: 55, z: 0}
+  scale: {x: 1.520875, y: 1.520875, z: 1}
+  references:
+    version: 2
+    RefIds:
+    - rid: 8263989132141527887
+      type: {class: BehaviourNode_EntityTriggerController, ns: LazyPan, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 1da0f1f6-073f-4699-8e46-44894f494109
+        computeOrder: 0
+        position:
+          serializedVersion: 2
+          x: -208
+          y: -6
+          width: 397
+          height: 704
+        expanded: 1
+        debug: 0
+        nodeLock: 0
+        NodeInitialized: 1
+        Config:
+          SourceSign: 
+          CompTriggerSign: Trigger
+          Rules:
+          - TriggerEntitySign: Obj_Player_SceneB_Player
+            EnterActions: []
+            StayActions:
+            - TargetEntitySign: 
+              ParamSign: Energy
+              ValueType: 2
+              Modify: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 20
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+              Min: 0
+              Max: 100
+            ExitActions: []
+            OutsideActions:
+            - TargetEntitySign: 
+              ParamSign: Energy
+              ValueType: 2
+              Modify: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: -30
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+              Min: 0
+              Max: 100
+    - rid: 8263989132141527888
+      type: {class: BehaviourNode_ParamValue, ns: LazyPan, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: e170fc75-fd74-418f-92f2-0666aab9c66c
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 189
+          y: -6
+          width: 328
+          height: 657
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        NodeInitialized: 1
+        Config:
+          SourceSign: Obj_Tower_SceneB_Tower
+          Items:
+          - TargetEntitySign: 
+            ParamSign: Energy
+            ValueType: 2
+            BoolValue: 0
+            IntValue: 0
+            FloatValue: 0
+            StringValue: 
+            Vector3Value: {x: 0, y: 0, z: 0}
+            ApplyOnInit: 1
+          - TargetEntitySign: 
+            ParamSign: MaxEnergy
+            ValueType: 2
+            BoolValue: 0
+            IntValue: 0
+            FloatValue: 100
+            StringValue: 
+            Vector3Value: {x: 0, y: 0, z: 0}
+            ApplyOnInit: 1
+    - rid: 8263989132141527889
+      type: {class: BehaviourNode_EntityUIBinder, ns: LazyPan, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: f0d4d56b-8fe8-4365-9b56-9706b5936a79
+        computeOrder: 2
+        position:
+          serializedVersion: 2
+          x: 517
+          y: -6
+          width: 358
+          height: 657
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        NodeInitialized: 1
+        Config:
+          SourceSign: 
+          Items:
+          - UIPrefabSign: UI/UI_EnergyBar
+            AttachLabel: UIRoot_Energy
+            Offset: {x: 0, y: 0, z: 0}
+            Billboard: 0
+            DataBinds:
+            - ComponentSign: Energy
+              ComponentType: 2
+              Mode: 0
+              DataSign: Energy
+              MaxDataSign: MaxEnergy
+              Format: 

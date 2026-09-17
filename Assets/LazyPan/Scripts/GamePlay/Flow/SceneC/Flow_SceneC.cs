@@ -4,24 +4,24 @@ namespace LazyPan {
     public class Flow_SceneC : Flow {
 		private Comp UI_SceneC;
 
-		private Entity Obj_Terrain_Terrain1;
-		private Entity Obj_Tower_Tower1;
-		private Entity Obj_Player_Player1;
-		private Entity Obj_Camera_Camera1;
-		private Entity Obj_Wave_WaveManager1;
-		private Entity Obj_Generate_EnemyGenerate1;
+		private Entity Obj_Terrain_SceneC_Terrain;
+		private Entity Obj_Tower_SceneC_Tower;
+		private Entity Obj_Player_SceneC_Player;
+		private Entity Obj_Camera_SceneC_Camera;
+		private Entity Obj_Wave_SceneC_WaveManager;
+		private Entity Obj_Camera_SceneC_EnemyGenerate;
 
         public override void Init(Flow baseFlow) {
             base.Init(baseFlow);
             ConsoleEx.Instance.ContentSave("flow", "Flow_SceneC  场景C流程");
 			UI_SceneC = UI.Instance.Open("UI_SceneC");
 
-			Obj_Terrain_Terrain1 = Obj.Instance.LoadEntity("Obj_Terrain_Terrain1");
-			Obj_Tower_Tower1 = Obj.Instance.LoadEntity("Obj_Tower_Tower1");
-			Obj_Player_Player1 = Obj.Instance.LoadEntity("Obj_Player_Player1");
-			Obj_Camera_Camera1 = Obj.Instance.LoadEntity("Obj_Camera_Camera1");
-			Obj_Wave_WaveManager1 = Obj.Instance.LoadEntity("Obj_Wave_WaveManager1");
-			Obj_Generate_EnemyGenerate1 = Obj.Instance.LoadEntity("Obj_Generate_EnemyGenerate1");
+			Obj_Terrain_SceneC_Terrain = Obj.Instance.LoadEntity("Obj_Terrain_SceneC_Terrain");
+			Obj_Tower_SceneC_Tower = Obj.Instance.LoadEntity("Obj_Tower_SceneC_Tower");
+			Obj_Player_SceneC_Player = Obj.Instance.LoadEntity("Obj_Player_SceneC_Player");
+			Obj_Camera_SceneC_Camera = Obj.Instance.LoadEntity("Obj_Camera_SceneC_Camera");
+			Obj_Wave_SceneC_WaveManager = Obj.Instance.LoadEntity("Obj_Wave_SceneC_WaveManager");
+			Obj_Camera_SceneC_EnemyGenerate = Obj.Instance.LoadEntity("Obj_Camera_SceneC_EnemyGenerate");
 
         }
 
@@ -39,12 +39,12 @@ namespace LazyPan {
 
         public override void Clear() {
             base.Clear();
-			Obj.Instance.UnLoadEntity(Obj_Generate_EnemyGenerate1);
-			Obj.Instance.UnLoadEntity(Obj_Wave_WaveManager1);
-			Obj.Instance.UnLoadEntity(Obj_Camera_Camera1);
-			Obj.Instance.UnLoadEntity(Obj_Player_Player1);
-			Obj.Instance.UnLoadEntity(Obj_Tower_Tower1);
-			Obj.Instance.UnLoadEntity(Obj_Terrain_Terrain1);
+			Obj.Instance.UnLoadEntity(Obj_Camera_SceneC_EnemyGenerate);
+			Obj.Instance.UnLoadEntity(Obj_Wave_SceneC_WaveManager);
+			Obj.Instance.UnLoadEntity(Obj_Camera_SceneC_Camera);
+			Obj.Instance.UnLoadEntity(Obj_Player_SceneC_Player);
+			Obj.Instance.UnLoadEntity(Obj_Tower_SceneC_Tower);
+			Obj.Instance.UnLoadEntity(Obj_Terrain_SceneC_Terrain);
 
 			UI.Instance.Close("UI_SceneC");
 

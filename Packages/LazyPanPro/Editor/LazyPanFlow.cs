@@ -261,7 +261,7 @@ namespace LazyPan {
                 for (int i = 0; i < objContents.Length; i++) {
                     if (i > 2) {
                         string[] lineStr = objContents[i].Split(",");
-                        linkedEntityDictionary.TryAdd(lineStr[3], string.Concat(lineStr[0], '|', lineStr[1]));
+                        linkedEntityDictionary.TryAdd(lineStr[3], lineStr[0]);
                     }
                 }
             }

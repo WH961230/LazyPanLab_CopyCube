@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EquipmentMountSetting
   m_EditorClassIdentifier: 
   Datas:
-  - SourceSign: Obj_Tower_Tower1
+  - SourceSign: Obj_Tower_SceneB_Tower
     InitialMount: 1
     Mounts:
     - SlotSign: 

@@ -24,8 +24,9 @@ namespace LazyPan {
 
     [Serializable]
     public class DelayGenerateEntitySettingData {
+        [EntitySign]
         [Header("发起生成的实体类型")]
-        [Tooltip("发起生成的实体类型，必须与 ObjConfig.Sign 一致，如 Obj_Generate_EnemyGenerate1")]
+        [Tooltip("发起生成的实体类型，必须与 ObjConfig.Sign 一致，如 Obj_Camera_SceneC_EnemyGenerate")]
         public string SourceSign;
 
         [Header("无触发时的默认行为 Once/Loop")]
@@ -36,8 +37,9 @@ namespace LazyPan {
         [Tooltip("无触发档案满足时的默认产间隔（秒）")]
         public float IntervalTime;
 
+        [EntitySign]
         [Header("无触发时的默认实体 Sign")]
-        [Tooltip("无触发档案满足时要产的实体 Sign，如 Obj_Enemy_Enemy1")]
+        [Tooltip("无触发档案满足时要产的实体 Sign，如 Obj_Enemy_SceneC_Enemy")]
         public string GenerateEntitySign;
 
         [Header("触发档案 按序匹配首个满足条件的档案")]
@@ -51,6 +53,7 @@ namespace LazyPan {
         [Tooltip("监听的 Data 标签名，如 WaveIndex。为空=无条件命中（装上就产）。数据源由 WatchEntitySign 指定")]
         public string WatchSign;
 
+        [EntitySign]
         [Header("监听的数据源实体 留空读自己")]
         [Tooltip("监听的数据源实体 Sign，留空=读自己实体的 Data。波次在别的实体上时填波次实体的 Sign")]
         public string WatchEntitySign;
@@ -63,8 +66,9 @@ namespace LazyPan {
         [Tooltip("目标值，与 Compare 配合。监听 WaveIndex 时默认从 1 起：第1波=1、第2波=2")]
         public int WatchValue;
 
+        [EntitySign]
         [Header("要产的实体 Sign")]
-        [Tooltip("要产的实体 Sign，如 Obj_Enemy_Enemy1")]
+        [Tooltip("要产的实体 Sign，如 Obj_Enemy_SceneC_Enemy")]
         public string GenerateEntitySign;
 
         [Header("本档案产几只 0则无限循环产")]

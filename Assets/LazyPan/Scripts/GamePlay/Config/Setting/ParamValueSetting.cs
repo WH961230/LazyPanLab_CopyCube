@@ -24,8 +24,9 @@ namespace LazyPan {
 
     [Serializable]
     public class ParamValueSettingData {
+        [EntitySign]
         [Header("发起赋值的实体类型 SourceSign")]
-        [Tooltip("发起赋值的实体类型，必须与 ObjConfig.Sign 一致，如 Obj_Enemy_Enemy1")]
+        [Tooltip("发起赋值的实体类型，必须与 ObjConfig.Sign 一致，如 Obj_Enemy_SceneC_Enemy")]
         public string SourceSign;
 
         [Header("参数项列表")]
@@ -35,6 +36,7 @@ namespace LazyPan {
 
     [Serializable]
     public class ParamValueItem {
+        [EntitySign]
         [Header("目标实体 留空写自己")]
         [Tooltip("要写值的目标实体 Sign，留空=写自己实体的 Data。跨实体联动时填对方 Sign，行为不感知对方类型")]
         public string TargetEntitySign;

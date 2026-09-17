@@ -24,8 +24,9 @@ namespace LazyPan {
 
     [Serializable]
     public class WaveManagerSettingData {
+        [EntitySign]
         [Header("发起波次的实体类型 SourceSign")]
-        [Tooltip("发起波次的实体类型，必须与 ObjConfig.Sign 一致，如 Obj_Generate_EnemyGenerate1")]
+        [Tooltip("发起波次的实体类型，必须与 ObjConfig.Sign 一致，如 Obj_Camera_SceneC_EnemyGenerate")]
         public string SourceSign;
 
         [Header("起始波数 默认1")]
@@ -59,6 +60,7 @@ namespace LazyPan {
         [Tooltip("等待的 Data 标签名，如 LivingCount。为空则不等待，不感知怪只认数字。数据源由 WaitWatchEntitySign 指定")]
         public string WaitWatchSign;
 
+        [EntitySign]
         [Header("等待的数据源实体 留空读自己")]
         [Tooltip("等待的数据源实体 Sign，留空=读自己实体的 Data。波次与产怪分属两个实体时，填产怪实体 Sign 读它的 LivingCount")]
         public string WaitWatchEntitySign;

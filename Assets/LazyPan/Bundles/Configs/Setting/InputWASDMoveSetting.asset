@@ -13,7 +13,12 @@ MonoBehaviour:
   m_Name: InputWASDMoveSetting
   m_EditorClassIdentifier: 
   Datas:
-  - SourceSign: Obj_Player_Player1
+  - SourceSign: Obj_Player_SceneB_Player
+    InputControlSign: Player/Motion
+    MoveSpeed: 5
+    RotateSpeed: 5
+    Gravity: -2
+  - SourceSign: Obj_Player_SceneC_Player
     InputControlSign: Player/Motion
     MoveSpeed: 5
     RotateSpeed: 5

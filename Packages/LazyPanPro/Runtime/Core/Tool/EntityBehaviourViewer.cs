@@ -87,7 +87,7 @@ namespace LazyPan {
     }
 
     public static class EntityBehaviourViewerMenu {
-        [MenuItem("LazyPan/实体行为查看器 开关")]
+        [MenuItem("Tools/LazyPan/实体行为查看器 开关")]
         public static void Toggle() {
             EntityBehaviourViewerSetting.Enabled = !EntityBehaviourViewerSetting.Enabled;
             Debug.Log($"实体行为查看器:{(EntityBehaviourViewerSetting.Enabled ? "开启" : "关闭")}");

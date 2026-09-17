@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EntityUIBinderSetting
   m_EditorClassIdentifier: 
   Datas:
-  - SourceSign: Obj_Enemy_Enemy1
+  - SourceSign: Obj_Enemy_SceneC_Enemy
     Items:
     - UIPrefabSign: UI/UI_HealthBar
       AttachLabel: UIRoot
@@ -26,7 +26,7 @@ MonoBehaviour:
         DataSign: Health
         MaxDataSign: MaxHealth
         Format: 
-  - SourceSign: Obj_Player_Player1
+  - SourceSign: Obj_Player_SceneC_Player
     Items:
     - UIPrefabSign: UI/UI_HealthBar
       AttachLabel: UIRoot
@@ -39,7 +39,7 @@ MonoBehaviour:
         DataSign: Health
         MaxDataSign: MaxHealth
         Format: 
-  - SourceSign: Obj_Tower_Tower1
+  - SourceSign: 
     Items:
     - UIPrefabSign: UI/UI_EnergyBar
       AttachLabel: UIRoot_Energy

@@ -24,8 +24,9 @@ namespace LazyPan {
 
     [Serializable]
     public class EntityTriggerControllerSettingData {
+        [EntitySign]
         [Header("触发源实体类型 SourceSign")]
-        [Tooltip("持有触发器碰撞体的实体，必须与 ObjConfig.Sign 一致，如 Obj_Tower_Tower1")]
+        [Tooltip("持有触发器碰撞体的实体，必须与 ObjConfig.Sign 一致，如 Obj_Tower_SceneB_Tower")]
         public string SourceSign;
 
         [Header("组件触发器标识")]
@@ -39,8 +40,9 @@ namespace LazyPan {
 
     [Serializable]
     public class TriggerRule {
+        [EntitySign]
         [Header("触发者实体标识 TriggerEntitySign")]
-        [Tooltip("允许触发此规则的实体 Sign，如 Obj_Player_Player1。留空=任意实体进入都算")]
+        [Tooltip("允许触发此规则的实体 Sign，如 Obj_Player_SceneB_Player。留空=任意实体进入都算")]
         public string TriggerEntitySign;
 
         [Header("进入瞬间 触发一次")]
@@ -62,6 +64,7 @@ namespace LazyPan {
 
     [Serializable]
     public class TriggerAction {
+        [EntitySign]
         [Header("被修改实体 留空改自己")]
         [Tooltip("要增减参数的目标实体 Sign，留空=触发源实体自己(塔)。填对方 Sign 即改其他实体参数，行为不感知对方类型")]
         public string TargetEntitySign;

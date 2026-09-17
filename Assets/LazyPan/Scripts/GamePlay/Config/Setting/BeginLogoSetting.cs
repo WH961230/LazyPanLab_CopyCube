@@ -26,8 +26,9 @@ namespace LazyPan {
 
     [Serializable]
     public class BeginLogoSettingData {
+        [EntitySign]
         [Header("发起挂载的实体类型 SourceSign")]
-        [Tooltip("发起挂载的实体类型，必须与 ObjConfig.Sign 一致，如 Obj_Player_Player1")]
+        [Tooltip("发起挂载的实体类型，必须与 ObjConfig.Sign 一致，如 Obj_Player_SceneB_Player")]
         public string SourceSign;
 
         [Header("挂载在哪个UI预制体上面")]

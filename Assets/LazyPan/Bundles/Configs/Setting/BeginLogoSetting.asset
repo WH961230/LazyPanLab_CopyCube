@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BeginLogoSetting
   m_EditorClassIdentifier: 
   Datas:
-  - SourceSign: Obj_Logo_BeginLogo1
+  - SourceSign: Obj_Logo_SceneA_BeginLogo
     UIParentPrefabSign: UI/UI_SceneA
     UIChildPrefabSign: UI/UI_Logo
     LogoContinueTime: 8

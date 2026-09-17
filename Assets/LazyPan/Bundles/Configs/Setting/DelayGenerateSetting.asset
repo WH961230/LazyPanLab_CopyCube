@@ -13,22 +13,22 @@ MonoBehaviour:
   m_Name: DelayGenerateSetting
   m_EditorClassIdentifier: 
   Datas:
-  - SourceSign: Obj_Generate_EnemyGenerate1
+  - SourceSign: Obj_Camera_SceneC_EnemyGenerate
     GenerateType: 0
     IntervalTime: 9999
-    GenerateEntitySign: Obj_Enemy_Enemy1
+    GenerateEntitySign: Obj_Enemy_SceneC_Enemy
     Profiles:
     - WatchSign: WaveIndex
-      WatchEntitySign: Obj_Wave_WaveManager1
+      WatchEntitySign: Obj_Wave_SceneC_WaveManager
       Compare: 0
       WatchValue: 1
-      GenerateEntitySign: Obj_Enemy_Enemy1
+      GenerateEntitySign: Obj_Enemy_SceneC_Enemy
       Count: 3
       Interval: 1.5
     - WatchSign: WaveIndex
-      WatchEntitySign: Obj_Wave_WaveManager1
+      WatchEntitySign: Obj_Wave_SceneC_WaveManager
       Compare: 0
       WatchValue: 2
-      GenerateEntitySign: Obj_Enemy_Enemy1
+      GenerateEntitySign: Obj_Enemy_SceneC_Enemy
       Count: 5
       Interval: 1

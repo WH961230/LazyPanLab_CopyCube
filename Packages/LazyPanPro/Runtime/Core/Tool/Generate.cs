@@ -174,16 +174,16 @@ namespace LazyPan {
                             if (key == "Init") {
                                 foreach (string tmpInit in keyValue.Value) {
                                     string[] valStrs = tmpInit.Split("$");
-                                    string[] valStrsSplit = valStrs[1].Split("|");
-                                    initloadentityreplace += $"\t\t\t{valStrsSplit[0]} = Obj.Instance.LoadEntity(\"{valStrsSplit[0]}\");\n";
+                                    string entitySign = valStrs[1];
+                                    initloadentityreplace += $"\t\t\t{entitySign} = Obj.Instance.LoadEntity(\"{entitySign}\");\n";
                                     /*实体属性*/
-                                    entityfieldreplace += $"\t\tprivate Entity {valStrsSplit[0]};\n";
+                                    entityfieldreplace += $"\t\tprivate Entity {entitySign};\n";
                                 }
                             } else if (key == "Clear") {
                                 foreach (string tmpInit in keyValue.Value) {
                                     string[] valStrs = tmpInit.Split("$");
-                                    string[] valStrsSplit = valStrs[1].Split("|");
-                                    unloadentityreplace += $"\t\t\tObj.Instance.UnLoadEntity({valStrsSplit[0]});\n";
+                                    string entitySign = valStrs[1];
+                                    unloadentityreplace += $"\t\t\tObj.Instance.UnLoadEntity({entitySign});\n";
                                 }
                             } else {
                                 /*创建阶段方法开头*/
@@ -193,13 +193,13 @@ namespace LazyPan {
                                 /*阶段创建数据*/
                                 foreach (string tmpInit in keyValue.Value) {
                                     string[] valStrs = tmpInit.Split("$");
-                                    string[] valStrsSplit = valStrs[1].Split("|");
+                                    string entitySign = valStrs[1];
                                     if (valStrs[0] == "load_entity") {
-                                        stagereplace += $"\t\t\t{valStrsSplit[0]} = Obj.Instance.LoadEntity(\"{valStrsSplit[0]}\");\n";
+                                        stagereplace += $"\t\t\t{entitySign} = Obj.Instance.LoadEntity(\"{entitySign}\");\n";
                                         /*实体属性*/
-                                        entityfieldreplace += $"\t\tprivate Entity {valStrsSplit[0]};\n";
+                                        entityfieldreplace += $"\t\tprivate Entity {entitySign};\n";
                                     } else if (valStrs[0] == "unload_entity") {
-                                        stagereplace += $"\t\t\tObj.Instance.UnLoadEntity({valStrsSplit[0]});\n";
+                                        stagereplace += $"\t\t\tObj.Instance.UnLoadEntity({entitySign});\n";
                                     }
                                 }
 

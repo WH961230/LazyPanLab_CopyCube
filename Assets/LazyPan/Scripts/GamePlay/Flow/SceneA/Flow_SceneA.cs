@@ -4,16 +4,16 @@ namespace LazyPan {
     public class Flow_SceneA : Flow {
 		private Comp UI_SceneA;
 
-		private Entity Obj_Logo_BeginLogo1;
-		private Entity Obj_Camera_Camera1;
+		private Entity Obj_Logo_SceneA_BeginLogo;
+		private Entity Obj_Camera_SceneA_Camera;
 
         public override void Init(Flow baseFlow) {
             base.Init(baseFlow);
             ConsoleEx.Instance.ContentSave("flow", "Flow_SceneA  场景A流程");
 			UI_SceneA = UI.Instance.Open("UI_SceneA");
 
-			Obj_Logo_BeginLogo1 = Obj.Instance.LoadEntity("Obj_Logo_BeginLogo1");
-			Obj_Camera_Camera1 = Obj.Instance.LoadEntity("Obj_Camera_Camera1");
+			Obj_Logo_SceneA_BeginLogo = Obj.Instance.LoadEntity("Obj_Logo_SceneA_BeginLogo");
+			Obj_Camera_SceneA_Camera = Obj.Instance.LoadEntity("Obj_Camera_SceneA_Camera");
 
         }
 
@@ -31,8 +31,8 @@ namespace LazyPan {
 
         public override void Clear() {
             base.Clear();
-			Obj.Instance.UnLoadEntity(Obj_Camera_Camera1);
-			Obj.Instance.UnLoadEntity(Obj_Logo_BeginLogo1);
+			Obj.Instance.UnLoadEntity(Obj_Camera_SceneA_Camera);
+			Obj.Instance.UnLoadEntity(Obj_Logo_SceneA_BeginLogo);
 
 			UI.Instance.Close("UI_SceneA");
 

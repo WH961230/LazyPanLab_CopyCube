@@ -1,0 +1,151 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31390c44c9f3a3d40b424bf6821999a2, type: 3}
+  m_Name: Obj_Player_SceneC_Player
+  m_EditorClassIdentifier: 
+  serializedNodes: []
+  nodes:
+  - rid: 8263989132141527882
+  - rid: 8263989132141527883
+  - rid: 8263989154599141376
+  - rid: 8263989154599141377
+  edges: []
+  groups: []
+  stackNodes: []
+  pinnedElements: []
+  exposedParameters: []
+  serializedParameterList: []
+  stickyNotes: []
+  nodeInspectorReference: {fileID: 0}
+  position: {x: 541, y: 448, z: 0}
+  scale: {x: 1, y: 1, z: 1}
+  references:
+    version: 2
+    RefIds:
+    - rid: 8263989132141527882
+      type: {class: BehaviourNode_InputWASDMove, ns: LazyPan, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 548d717e-5ca5-4cf7-a89e-0cb1c24d9716
+        computeOrder: 0
+        position:
+          serializedVersion: 2
+          x: -232
+          y: -260
+          width: 247
+          height: 297
+        expanded: 1
+        debug: 0
+        nodeLock: 0
+        NodeInitialized: 1
+        Config:
+          SourceSign: Obj_Player_SceneC_Player
+          InputControlSign: Player/Motion
+          MoveSpeed: 5
+          RotateSpeed: 5
+          Gravity: -2
+    - rid: 8263989132141527883
+      type: {class: BehaviourNode_ParamValue, ns: LazyPan, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: b505188a-50d3-47b9-bf17-7e05080d64a8
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 15
+          y: -260
+          width: 328
+          height: 657
+        expanded: 1
+        debug: 0
+        nodeLock: 0
+        NodeInitialized: 1
+        Config:
+          SourceSign: Obj_Player_SceneC_Player
+          Items:
+          - TargetEntitySign: 
+            ParamSign: Health
+            ValueType: 2
+            BoolValue: 0
+            IntValue: 0
+            FloatValue: 500
+            StringValue: 
+            Vector3Value: {x: 0, y: 0, z: 0}
+            ApplyOnInit: 1
+          - TargetEntitySign: 
+            ParamSign: Dead
+            ValueType: 0
+            BoolValue: 0
+            IntValue: 0
+            FloatValue: 0
+            StringValue: 
+            Vector3Value: {x: 0, y: 0, z: 0}
+            ApplyOnInit: 1
+          - TargetEntitySign: 
+            ParamSign: MaxHealth
+            ValueType: 2
+            BoolValue: 0
+            IntValue: 0
+            FloatValue: 500
+            StringValue: 
+            Vector3Value: {x: 0, y: 0, z: 0}
+            ApplyOnInit: 1
+    - rid: 8263989154599141376
+      type: {class: BehaviourNode_Death, ns: LazyPan, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: c26ad918-5e94-4b68-abda-73f2481f92d4
+        computeOrder: 2
+        position:
+          serializedVersion: 2
+          x: 343
+          y: -260
+          width: 260
+          height: 204
+        expanded: 1
+        debug: 0
+        nodeLock: 0
+        NodeInitialized: 1
+        Config:
+          SourceSign: Obj_Player_SceneC_Player
+          DeathDelay: 0
+          DeathAction: 1
+    - rid: 8263989154599141377
+      type: {class: BehaviourNode_EntityUIBinder, ns: LazyPan, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: b00d380a-d035-40dd-b876-524da6a730ff
+        computeOrder: 3
+        position:
+          serializedVersion: 2
+          x: 603
+          y: -260
+          width: 358
+          height: 657
+        expanded: 1
+        debug: 0
+        nodeLock: 0
+        NodeInitialized: 1
+        Config:
+          SourceSign: Obj_Player_SceneC_Player
+          Items:
+          - UIPrefabSign: UI/UI_HealthBar
+            AttachLabel: UIRoot
+            Offset: {x: 0, y: 0, z: 0}
+            Billboard: 0
+            DataBinds:
+            - ComponentSign: Slider
+              ComponentType: 0
+              Mode: 0
+              DataSign: Health
+              MaxDataSign: MaxHealth
+              Format: 

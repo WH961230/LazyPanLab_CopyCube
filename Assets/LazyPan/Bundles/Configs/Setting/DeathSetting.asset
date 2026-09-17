@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: DeathSetting
   m_EditorClassIdentifier: 
   Datas:
-  - SourceSign: Obj_Enemy_Enemy1
+  - SourceSign: Obj_Enemy_SceneC_Enemy
     DeathDelay: 0
     DeathAction: 1
-  - SourceSign: Obj_Player_Player1
+  - SourceSign: Obj_Player_SceneC_Player
     DeathDelay: 0
     DeathAction: 1

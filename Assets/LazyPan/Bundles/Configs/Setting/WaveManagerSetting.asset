@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WaveManagerSetting
   m_EditorClassIdentifier: 
   Datas:
-  - SourceSign: Obj_Wave_WaveManager1
+  - SourceSign: Obj_Wave_SceneC_WaveManager
     StartWaveIndex: 1
     InitialDelay: 1
     Loop: 0
@@ -21,12 +21,12 @@ MonoBehaviour:
     - RestDuration: 3
       AdvanceMode: 1
       WaitWatchSign: LivingCount
-      WaitWatchEntitySign: Obj_Generate_EnemyGenerate1
+      WaitWatchEntitySign: Obj_Camera_SceneC_EnemyGenerate
       WaitTargetValue: 0
       Compare: 0
     - RestDuration: 5
       AdvanceMode: 1
       WaitWatchSign: LivingCount
-      WaitWatchEntitySign: Obj_Generate_EnemyGenerate1
+      WaitWatchEntitySign: Obj_Camera_SceneC_EnemyGenerate
       WaitTargetValue: 0
       Compare: 0
