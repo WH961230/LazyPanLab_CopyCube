@@ -1,4 +1,6 @@
-﻿namespace LazyPan {
+﻿using UnityEngine;
+
+namespace LazyPan {
     public abstract class Behaviour {
         public string BehaviourSign;
         public string BehaviourName => BehaviourConfig.Get(BehaviourSign)?.Name;
@@ -13,6 +15,31 @@
 
         public void SetBehaviourData(Data data) {
             BehaviourData = data;
+        }
+
+        protected T AttachBehaviourData<T>() where T : Data {
+            if (entity == null || entity.Prefab == null) {
+                return null;
+            }
+
+            T data = entity.Prefab.GetComponent<T>();
+            if (data == null) {
+                data = entity.Prefab.AddComponent<T>();
+            }
+
+            data.EntityID = entity.ID;
+            return data;
+        }
+
+        protected void DetachBehaviourData<T>() where T : Data {
+            if (entity == null || entity.Prefab == null) {
+                return;
+            }
+
+            T data = entity.Prefab.GetComponent<T>();
+            if (data != null) {
+                Object.Destroy(data);
+            }
         }
 
         public abstract void DelayedExecute();

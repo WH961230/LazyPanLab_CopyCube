@@ -30,8 +30,7 @@ namespace LazyPan {
         private bool[] profileConsumed;
 
         public Behaviour_Event_DelayGenerateEntity(Entity entity, string behaviourSign) : base(entity, behaviourSign) {
-            _delayGenerateEntityData = entity.Prefab.AddComponent<DelayGenerateEntityData>();
-            _delayGenerateEntityData.EntityID = entity.ID;
+            _delayGenerateEntityData = AttachBehaviourData<DelayGenerateEntityData>();
 
             DelayGenerateEntitySetting setting = Loader.LoadAsset<DelayGenerateEntitySetting>(AssetType.ASSET, settingPath);
 
@@ -47,9 +46,25 @@ namespace LazyPan {
             _config = _delayGenerateEntityData.Config;
             _config.GenerateType = settingData.GenerateType;
             _config.IntervalTime = Mathf.Max(settingData.IntervalTime, 0.01f);
+            if (!BehaviourSigns.Require(settingData.GenerateEntitySign, BehaviourSign, entity.ObjConfig?.Sign, nameof(DelayGenerateEntitySettingData.GenerateEntitySign))) {
+                return;
+            }
+
             _config.GenerateEntitySign = settingData.GenerateEntitySign;
             _config.Profiles.Clear();
             foreach (DelayGenerateProfile profile in settingData.Profiles) {
+                if (!BehaviourSigns.Require(profile.WatchSign, BehaviourSign, entity.ObjConfig?.Sign, nameof(DelayGenerateProfile.WatchSign))) {
+                    return;
+                }
+
+                if (!BehaviourSigns.Require(profile.WatchEntitySign, BehaviourSign, entity.ObjConfig?.Sign, nameof(DelayGenerateProfile.WatchEntitySign))) {
+                    return;
+                }
+
+                if (!BehaviourSigns.Require(profile.GenerateEntitySign, BehaviourSign, entity.ObjConfig?.Sign, nameof(DelayGenerateProfile.GenerateEntitySign))) {
+                    return;
+                }
+
                 _config.Profiles.Add(new DelayGenerateProfile() {
                     WatchSign = profile.WatchSign,
                     WatchEntitySign = profile.WatchEntitySign,
@@ -174,19 +189,17 @@ namespace LazyPan {
         }
 
         /// <summary>
-        /// 积木连接 按配置解析要读的实体 空=读自己 非空=按Sign读其他实体的Data 行为不感知对方类型
+        /// 积木连接 按配置解析要读的实体 Self=读自己 其他按Sign读其他实体的Data 行为不感知对方类型
         /// </summary>
         private bool TryGetWatchEntity(string sign, out Entity watchEntity) {
-            if (string.IsNullOrEmpty(sign)) {
-                watchEntity = entity;
-                return true;
-            }
-            return EntityRegister.TryGetEntityBySign(sign, out watchEntity);
+            return BehaviourSigns.ResolveEntity(entity, BehaviourSign, nameof(DelayGenerateProfile.WatchEntitySign), sign, out watchEntity);
         }
 
         private bool CheckWatch(Entity dataEntity, string sign, WatchCompare compare, int target) {
-            if (string.IsNullOrEmpty(sign)) return true;
             if (dataEntity == null) return false;
+            if (!BehaviourSigns.Require(sign, BehaviourSign, dataEntity.ObjConfig?.Sign, nameof(DelayGenerateProfile.WatchSign))) {
+                return false;
+            }
             int current;
             if (Cond.Instance.GetData<IntData>(dataEntity, sign, out IntData intData)) current = intData.Int;
             else if (Cond.Instance.GetData<FloatData>(dataEntity, sign, out FloatData floatData)) current = Mathf.RoundToInt(floatData.Float);
@@ -243,6 +256,7 @@ namespace LazyPan {
                 }
             }
             _livingCountData.Int = 0;
+            DetachBehaviourData<DelayGenerateEntityData>();
             base.Clear();
         }
     }

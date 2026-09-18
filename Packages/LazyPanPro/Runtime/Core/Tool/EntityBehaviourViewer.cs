@@ -6,10 +6,17 @@ using UnityEngine;
 
 namespace LazyPan {
     /// <summary>
-    /// 行为查看器全局设置
+    /// 行为查看器全局设置 状态持久化到 EditorPrefs 关闭编辑器后记住上次开关
     /// </summary>
     public static class EntityBehaviourViewerSetting {
-        public static bool Enabled = true;
+        private const string PREFS_KEY = "LazyPan.EntityBehaviourViewer.Enabled";
+
+        public static bool Enabled {
+            get => EditorPrefs.GetBool(PREFS_KEY, true);
+            set {
+                EditorPrefs.SetBool(PREFS_KEY, value);
+            }
+        }
     }
 
     /// <summary>
@@ -87,10 +94,16 @@ namespace LazyPan {
     }
 
     public static class EntityBehaviourViewerMenu {
-        [MenuItem("Tools/LazyPan/实体行为查看器 开关")]
+        [MenuItem("Tools/LazyPan/实体行为查看器 开关 _F3")]
         public static void Toggle() {
             EntityBehaviourViewerSetting.Enabled = !EntityBehaviourViewerSetting.Enabled;
+            Menu.SetChecked("Tools/LazyPan/实体行为查看器 开关", EntityBehaviourViewerSetting.Enabled);
             Debug.Log($"实体行为查看器:{(EntityBehaviourViewerSetting.Enabled ? "开启" : "关闭")}");
+        }
+
+        [InitializeOnLoadMethod]
+        private static void SyncMenuChecked() {
+            Menu.SetChecked("Tools/LazyPan/实体行为查看器 开关", EntityBehaviourViewerSetting.Enabled);
         }
     }
 }

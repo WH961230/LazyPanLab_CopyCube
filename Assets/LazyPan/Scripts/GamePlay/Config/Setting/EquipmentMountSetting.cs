@@ -44,12 +44,12 @@ namespace LazyPan {
         [Tooltip("槽位唯一标识，如 Hand/Back/Skill1。不可含 | 分隔符。运行时产出 Data: {槽位}Mounted / {槽位}TriggerTick / {槽位}DetachTick")]
         public string SlotSign;
 
-        [Header("装备标识 留空为虚拟装备")]
-        [Tooltip("物理装备填 Bundles/Prefabs 相对路径(如 Equipment/Sword_01)会实例化挂载；留空=虚拟装备(如技能) 仅写数据不生成物体")]
+        [Header("装备标识 Virtual=虚拟装备")]
+        [Tooltip("物理装备填 Bundles/Prefabs 相对路径(如 Equipment/Sword_01)会实例化挂载；Virtual=虚拟装备(如技能) 仅写数据不生成物体。不允许为空")]
         public string EquipmentPrefabSign;
 
-        [Header("挂点标签 物理装备用")]
-        [Tooltip("挂点标签，实体 Comp 里的 Transform Sign，如 Hand。为空挂到实体根节点。虚拟装备忽略此项")]
+        [Header("挂点标签 物理装备用 Root=实体根")]
+        [Tooltip("挂点标签，实体 Comp 里的 Transform Sign，如 Hand。Root=挂到实体根节点。不允许为空。虚拟装备忽略此项")]
         public string MountPointLabel;
 
         [Header("位置偏移")]

@@ -29,8 +29,7 @@ namespace LazyPan {
         private StringData _mountedSlotsData;
 
         public Behaviour_Event_EquipmentMountManager(Entity entity, string behaviourSign) : base(entity, behaviourSign) {
-            _mountData = entity.Prefab.AddComponent<EquipmentMountData>();
-            _mountData.EntityID = entity.ID;
+            _mountData = AttachBehaviourData<EquipmentMountData>();
 
             EquipmentMountSetting setting = Loader.LoadAsset<EquipmentMountSetting>(AssetType.ASSET, settingPath);
 
@@ -70,6 +69,18 @@ namespace LazyPan {
             if (settingData.Mounts == null) return;
             HashSet<string> seenSlots = new HashSet<string>();
             foreach (EquipmentMountItem item in settingData.Mounts) {
+                if (!BehaviourSigns.Require(item.SlotSign, BehaviourSign, entity.ObjConfig?.Sign, nameof(EquipmentMountItem.SlotSign))) {
+                    continue;
+                }
+
+                if (!BehaviourSigns.Require(item.EquipmentPrefabSign, BehaviourSign, entity.ObjConfig?.Sign, nameof(EquipmentMountItem.EquipmentPrefabSign))) {
+                    continue;
+                }
+
+                if (item.EquipmentPrefabSign != BehaviourSigns.Virtual && !BehaviourSigns.Require(item.MountPointLabel, BehaviourSign, entity.ObjConfig?.Sign, nameof(EquipmentMountItem.MountPointLabel))) {
+                    continue;
+                }
+
                 if (!IsValidSlotSign(item.SlotSign)) {
                     LogUtil.LogErrorFormat("行为:{0} 实体:{1} 槽位标识非法(空或含分隔符:{2}) 已跳过", BehaviourSign, entity.ObjConfig.Sign, item.SlotSign);
                     continue;
@@ -141,7 +152,7 @@ namespace LazyPan {
             }
 
             GameObject go = null;
-            if (!string.IsNullOrEmpty(item.EquipmentPrefabSign)) {
+            if (item.EquipmentPrefabSign != BehaviourSigns.Virtual) {
                 if (!MountPhysical(item, out go)) {
                     return false;
                 }
@@ -248,13 +259,7 @@ namespace LazyPan {
         }
 
         private Transform ResolveMountPoint(string mountPointLabel) {
-            if (!string.IsNullOrEmpty(mountPointLabel)) {
-                Transform tran = Cond.Instance.Get<Transform>(entity, mountPointLabel);
-                if (tran != null) return tran;
-                LogUtil.LogErrorFormat("行为:{0} 挂点标签:{1} 未找到 回退挂到实体根节点", BehaviourSign, mountPointLabel);
-            }
-
-            return entity.Prefab.transform;
+            return BehaviourSigns.ResolveMountPoint(entity, BehaviourSign, mountPointLabel);
         }
 
         private void RefreshSummary() {
@@ -277,6 +282,7 @@ namespace LazyPan {
             mounted.Clear();
             if (_mountCountData != null) _mountCountData.Int = 0;
             if (_mountedSlotsData != null) _mountedSlotsData.String = string.Empty;
+            DetachBehaviourData<EquipmentMountData>();
             base.Clear();
         }
 

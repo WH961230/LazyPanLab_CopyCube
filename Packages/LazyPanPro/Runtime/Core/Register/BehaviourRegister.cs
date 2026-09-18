@@ -32,15 +32,28 @@ namespace LazyPan {
                         }
                     }
 
+                    if (string.IsNullOrEmpty(sign)) {
+                        outBehaviour = default;
+                        LogUtil.LogErrorFormat("行为:{0} 在 BehaviourConfig.csv 中不存在 已跳过注册", name);
+                        return false;
+                    }
+
+                    Type type = Assembly.Load("Assembly-CSharp").GetType(string.Concat("LazyPan.", sign));
+                    if (type == null) {
+                        outBehaviour = default;
+                        LogUtil.LogErrorFormat("行为:{0} 对应的类 LazyPan.{1} 不存在 已跳过注册", name, sign);
+                        return false;
+                    }
+
                     //创建行为实体
                     try {
-                        Type type = Assembly.Load("Assembly-CSharp").GetType(string.Concat("LazyPan.", sign));
                         Behaviour behaviour = (Behaviour) Activator.CreateInstance(type, entity, sign);
                         outBehaviour = behaviour;
                         behaviours.Add(behaviour);
                     } catch (Exception e) {
-                        LogUtil.LogError(name);
-                        throw;
+                        outBehaviour = default;
+                        LogUtil.LogErrorFormat("行为:{0} 注册失败:{1}", name, e.Message);
+                        return false;
                     }
 
                     return true;
@@ -56,14 +69,28 @@ namespace LazyPan {
                                 break;
                             }
                         }
+
+                        if (string.IsNullOrEmpty(sign)) {
+                            outBehaviour = default;
+                            LogUtil.LogErrorFormat("行为:{0} 在 BehaviourConfig.csv 中不存在 已跳过注册", name);
+                            return false;
+                        }
+
                         Type type = Assembly.Load("Assembly-CSharp").GetType(string.Concat("LazyPan.", sign));
+                        if (type == null) {
+                            outBehaviour = default;
+                            LogUtil.LogErrorFormat("行为:{0} 对应的类 LazyPan.{1} 不存在 已跳过注册", name, sign);
+                            return false;
+                        }
+
                         Behaviour behaviour = (Behaviour) Activator.CreateInstance(type, entity, sign);
                         outBehaviour = behaviour;
                         instanceBehaviours.Add(behaviour);
                         BehaviourDic.TryAdd(id, instanceBehaviours);
                     } catch (Exception e) {
-                        LogUtil.LogError(name);
-                        throw;
+                        outBehaviour = default;
+                        LogUtil.LogErrorFormat("行为:{0} 注册失败:{1}", name, e.Message);
+                        return false;
                     }
                     
                     return true;

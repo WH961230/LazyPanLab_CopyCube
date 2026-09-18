@@ -29,8 +29,8 @@ namespace LazyPan {
         [Tooltip("持有触发器碰撞体的实体，必须与 ObjConfig.Sign 一致，如 Obj_Tower_SceneB_Tower")]
         public string SourceSign;
 
-        [Header("组件触发器标识")]
-        [Tooltip("实体上带触发碰撞体的 Comp 标签，如 Trigger。留空则用实体自身根 Comp")]
+        [Header("组件触发器标识 Root=实体根")]
+        [Tooltip("实体上带触发碰撞体的 Comp 标签，如 Trigger。Root=用实体自身根 Comp。不允许为空")]
         public string CompTriggerSign;
 
         [Header("触发规则")]
@@ -41,8 +41,8 @@ namespace LazyPan {
     [Serializable]
     public class TriggerRule {
         [EntitySign]
-        [Header("触发者实体标识 TriggerEntitySign")]
-        [Tooltip("允许触发此规则的实体 Sign，如 Obj_Player_SceneB_Player。留空=任意实体进入都算")]
+        [Header("触发者实体标识 Any=任意实体")]
+        [Tooltip("允许触发此规则的实体 Sign，如 Obj_Player_SceneB_Player。Any=任意实体进入都算。不允许为空")]
         public string TriggerEntitySign;
 
         [Header("进入瞬间 触发一次")]
@@ -64,13 +64,13 @@ namespace LazyPan {
 
     [Serializable]
     public class TriggerAction {
-        [EntitySign]
-        [Header("被修改实体 留空改自己")]
-        [Tooltip("要增减参数的目标实体 Sign，留空=触发源实体自己(塔)。填对方 Sign 即改其他实体参数，行为不感知对方类型")]
+        [EntitySign(true)]
+        [Header("被修改实体 必填 Self=自己 Triggerer=触发者")]
+        [Tooltip("要增减参数的目标实体 Sign，Self=触发源实体自己(塔)。Triggerer=带起本次规则的那只实体(谁碰撞就改谁)。填对方 Sign 即改其他实体参数。不允许为空")]
         public string TargetEntitySign;
 
-        [Header("参数标签")]
-        [Tooltip("目标实体上的 Data 标签名，如 Energy。不存在时自动创建")]
+        [Header("参数标签 必填")]
+        [Tooltip("目标实体上的 Data 标签名，如 Energy。不允许为空，不存在时自动创建")]
         public string ParamSign;
 
         [Header("参数类型")]

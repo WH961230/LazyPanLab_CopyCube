@@ -5,7 +5,7 @@ using UnityEngine;
 namespace LazyPan {
     /// <summary>
     /// 传送流程 — 到前置条件满足才切场景 不感知触发源业务
-    /// 前置条件为空=无条件命中(装上配合 TeleportRequest 照跳) 非空则左右参数比较通过才放行
+    /// 前置条件 null=无条件走内部请求(RequestTeleport) 非空则左右参数比较通过才放行
     /// </summary>
     [CreateAssetMenu(fileName = "TeleportFlowSetting", menuName = "LazyPan/TeleportFlowSetting")]
     public class TeleportFlowSetting : Setting {
@@ -40,20 +40,20 @@ namespace LazyPan {
         [Tooltip("勾上则传送一次后锁住 同一实体生命周期内不再重复传送")]
         public bool Once = true;
 
-        [Header("前置条件 为空=无条件命中")]
-        [Tooltip("前置条件 为空=无条件命中 直接按 TeleportRequest 跳转 非空则左右参数比较通过才放行")]
+        [Header("前置条件 null=无条件走内部请求")]
+        [Tooltip("前置条件 null=无条件走内部请求(RequestTeleport)，非空则左右参数比较通过才放行。不允许空字符串")]
         public TeleportCondition Condition = new TeleportCondition();
     }
 
     [Serializable]
     public class TeleportCondition {
         [EntitySign]
-        [Header("左边实体 留空读自己")]
-        [Tooltip("左边数据源实体 Sign 留空=读自己实体的 Data 如塔B填自己")]
+        [Header("左边实体 必填 Self=自己")]
+        [Tooltip("左边数据源实体 Sign Self=读自己实体的 Data 如塔B填自己。不允许为空")]
         public string LeftEntitySign;
 
-        [Header("左边参数标签 为空=无条件命中")]
-        [Tooltip("左边 Data 标签名 如 Energy 为空则本条件视为无条件命中")]
+        [Header("左边参数标签 必填")]
+        [Tooltip("左边 Data 标签名 如 Energy 不允许为空")]
         public string LeftParamSign;
 
         [Header("左边参数类型")]
@@ -69,12 +69,12 @@ namespace LazyPan {
         public bool RightIsEntityParam;
 
         [EntitySign]
-        [Header("右边实体 右边是参数时有效 留空读自己")]
-        [Tooltip("右边数据源实体 Sign 仅 RightIsEntityParam 勾上时有效 留空=读自己")]
+        [Header("右边实体 右边是参数时有效 必填")]
+        [Tooltip("右边数据源实体 Sign 仅 RightIsEntityParam 勾上时有效 Self=读自己。不允许为空")]
         public string RightEntitySign;
 
-        [Header("右边参数标签 右边是参数时有效")]
-        [Tooltip("右边 Data 标签名 如 MaxEnergy 仅 RightIsEntityParam 勾上时有效")]
+        [Header("右边参数标签 右边是参数时有效 必填")]
+        [Tooltip("右边 Data 标签名 如 MaxEnergy 仅 RightIsEntityParam 勾上时有效。不允许为空")]
         public string RightParamSign;
 
         [Header("右边参数类型 右边是参数时有效")]

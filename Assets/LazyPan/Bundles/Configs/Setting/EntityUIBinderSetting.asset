@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EntityUIBinderSetting
   m_EditorClassIdentifier: 
   Datas:
-  - SourceSign: Obj_Enemy_SceneC_Enemy
+  - SourceSign: Obj_Tower_SceneC_Tower
     Items:
     - UIPrefabSign: UI/UI_HealthBar
       AttachLabel: UIRoot
@@ -51,4 +51,17 @@ MonoBehaviour:
         Mode: 0
         DataSign: Energy
         MaxDataSign: MaxEnergy
+        Format: 
+  - SourceSign: Obj_Enemy_SceneC_Enemy
+    Items:
+    - UIPrefabSign: UI/UI_HealthBar
+      AttachLabel: UIRoot
+      Offset: {x: 0, y: 0, z: 0}
+      Billboard: 0
+      DataBinds:
+      - ComponentSign: Slider
+        ComponentType: 0
+        Mode: 0
+        DataSign: Health
+        MaxDataSign: MaxHealth
         Format: 

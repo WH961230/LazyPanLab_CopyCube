@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 31390c44c9f3a3d40b424bf6821999a2, type: 3}
-  m_Name: Obj_Tower_SceneC_Tower
+  m_Name: Obj_Wave_SceneC_WaveManager
   m_EditorClassIdentifier: 
   serializedNodes: []
   nodes:
-  - rid: 8499330833404658244
+  - rid: 8263989181806280857
   edges: []
   groups: []
   stackNodes: []
@@ -23,16 +23,16 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 189, y: -58, z: 0}
-  scale: {x: 1.7490063, y: 1.7490063, z: 1}
+  position: {x: 13, y: 129, z: 0}
+  scale: {x: 0.8695652, y: 0.8695652, z: 1}
   references:
     version: 2
     RefIds:
-    - rid: 8499330833404658244
-      type: {class: BehaviourNode_ParamValue, ns: LazyPan, asm: Assembly-CSharp}
+    - rid: 8263989181806280857
+      type: {class: BehaviourNode_WaveManager, ns: LazyPan, asm: Assembly-CSharp}
       data:
         nodeCustomName: 
-        GUID: b9759768-9743-4525-afce-084f6bc79730
+        GUID: 63d6556e-96d5-484a-9f0d-a49439f8851e
         computeOrder: 0
         position:
           serializedVersion: 2
@@ -45,5 +45,20 @@ MonoBehaviour:
         nodeLock: 0
         NodeInitialized: 1
         Config:
-          SourceSign: Obj_Tower_SceneC_Tower
-          Items: []
+          SourceSign: Obj_Wave_SceneC_WaveManager
+          StartWaveIndex: 1
+          InitialDelay: 1
+          Loop: 0
+          Waves:
+          - RestDuration: 3
+            AdvanceMode: 1
+            WaitWatchSign: LivingCount
+            WaitWatchEntitySign: Obj_Generate_SceneC_EnemyGenerate
+            WaitTargetValue: 0
+            Compare: 0
+          - RestDuration: 5
+            AdvanceMode: 1
+            WaitWatchSign: LivingCount
+            WaitWatchEntitySign: Obj_Generate_SceneC_EnemyGenerate
+            WaitTargetValue: 0
+            Compare: 0

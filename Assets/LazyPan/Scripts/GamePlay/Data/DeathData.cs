@@ -35,8 +35,8 @@ namespace LazyPan {
 
             if (keyboard.digit1Key.wasPressedThisFrame) {
                 if (EntityRegister.TryGetEntityByID(EntityID, out Entity target)) {
-                    if (BehaviourRegister.GetBehaviour(target, out Behaviour_Event_Death behaviour)) {
-                        behaviour.Kill();
+                    if (Cond.Instance.TryGetData(target, Behaviour_Event_Death.HEALTH_LABEL, out FloatData health)) {
+                        health.Float = 0f;
                     }
                 }
             }

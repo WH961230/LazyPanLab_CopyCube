@@ -21,12 +21,12 @@ MonoBehaviour:
     - RestDuration: 3
       AdvanceMode: 1
       WaitWatchSign: LivingCount
-      WaitWatchEntitySign: Obj_Camera_SceneC_EnemyGenerate
+      WaitWatchEntitySign: Obj_Generate_SceneC_EnemyGenerate
       WaitTargetValue: 0
       Compare: 0
     - RestDuration: 5
       AdvanceMode: 1
       WaitWatchSign: LivingCount
-      WaitWatchEntitySign: Obj_Camera_SceneC_EnemyGenerate
+      WaitWatchEntitySign: Obj_Generate_SceneC_EnemyGenerate
       WaitTargetValue: 0
       Compare: 0

@@ -17,7 +17,7 @@ MonoBehaviour:
   - rid: 8263989132141527887
   - rid: 8263989132141527888
   - rid: 8263989132141527889
-  - rid: 8499330833404658016
+  - rid: 8263989181806280780
   edges: []
   groups: []
   stackNodes: []
@@ -26,8 +26,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 107, y: 342, z: 0}
-  scale: {x: 1.520875, y: 1.520875, z: 1}
+  position: {x: 973, y: 178, z: 0}
+  scale: {x: 1.3225, y: 1.3225, z: 1}
   references:
     version: 2
     RefIds:
@@ -54,7 +54,7 @@ MonoBehaviour:
           - TriggerEntitySign: Obj_Player_SceneB_Player
             EnterActions: []
             StayActions:
-            - TargetEntitySign: Obj_Tower_SceneB_Tower
+            - TargetEntitySign: Self
               ParamSign: Energy
               ValueType: 2
               Modify: 2
@@ -86,9 +86,9 @@ MonoBehaviour:
         computeOrder: 1
         position:
           serializedVersion: 2
-          x: 59.829895
-          y: -6.0000014
-          width: 328
+          x: 929.19135
+          y: -6.000016
+          width: 221
           height: 657
         expanded: 1
         debug: 0
@@ -145,18 +145,18 @@ MonoBehaviour:
               DataSign: Energy
               MaxDataSign: MaxEnergy
               Format: 
-    - rid: 8499330833404658016
+    - rid: 8263989181806280780
       type: {class: BehaviourNode_TeleportFlow, ns: LazyPan, asm: Assembly-CSharp}
       data:
         nodeCustomName: 
-        GUID: 54d11026-7d87-4fa6-a26e-43164c3f9147
+        GUID: 30344f5b-cb3e-4c9a-8133-e5a39da5fead
         computeOrder: 3
         position:
           serializedVersion: 2
-          x: 744.8299
-          y: -6.0000014
-          width: 219
-          height: 202
+          x: 1315.7864
+          y: -33.685394
+          width: 280
+          height: 911
         expanded: 0
         debug: 0
         nodeLock: 0

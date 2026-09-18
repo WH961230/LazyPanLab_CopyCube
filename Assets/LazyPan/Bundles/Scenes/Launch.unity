@@ -168,5 +168,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OpenConsole: 0
-  StageLoadScene: SceneA
+  StageLoadScene: SceneC
   UIDontDestroyRoot: {fileID: 0}

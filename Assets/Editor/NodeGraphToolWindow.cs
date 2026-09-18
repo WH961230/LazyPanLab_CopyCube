@@ -34,17 +34,76 @@ namespace LazyPan {
                 AssetDatabase.CreateAsset(graph, AssetDatabase.GenerateUniqueAssetPath(graphPath));
             }
 
-            // 图为标准: 打开时只补"面板本次传入的新勾选" 不拿 ObjConfig.csv 反向补图
-            // 文件里多余的旧条目不补回 等 SaveGraph 以图为准反写回去
-            string[] effectiveNames = CleanNames(behaviourNames);
-            // 图上已有的行为 允许下次删除时重新弹窗
-            PruneConfirmedRemoves(entitySign, effectiveNames);
-            // 把面板新勾的行为节点补进图(已有的不重复添加)并立即落盘
-            AddBehaviourNodes(graph, entitySign, effectiveNames);
+            // ObjConfig 为准: 每次打开严格按 ObjConfig.csv 该实体的行为列重建图
+            // 图里多余的节点删掉 缺的按 Setting 回填补上 再落盘 保证图与清单一致
+            string[] effectiveNames = GetBehaviourNames(entitySign);
+            RebuildGraphFromObjConfig(graph, entitySign, effectiveNames);
             SaveGraph(graph);
 
             window.InitializeGraph(graph);
             window.Show();
+        }
+
+        /// <summary>
+        /// ObjConfig 为准重建图: 删除清单里没有的节点 补上清单里缺的节点
+        /// 节点参数从对应 Setting 资产中按 SourceSign == 实体Sign 的那条加载
+        /// </summary>
+        static void RebuildGraphFromObjConfig(BaseGraph graph, string entitySign, string[] behaviourNames) {
+            RemoveExtraNodes(graph, entitySign, behaviourNames);
+            AddBehaviourNodes(graph, entitySign, behaviourNames);
+        }
+
+        /// <summary>
+        /// 删除图中多余节点: ObjConfig 清单里没有的行为直接删 不弹窗
+        /// 对应 Setting 条目同步删除 保证三处一致
+        /// </summary>
+        static void RemoveExtraNodes(BaseGraph graph, string entitySign, string[] behaviourNames) {
+            var wantedSigns = BehaviourSignsOf(behaviourNames);
+            var nameToSign = new Dictionary<string, string>();
+            foreach (var sign in BehaviourConfig.GetKeys()) {
+                var cfg = BehaviourConfig.Get(sign);
+                if (cfg != null && !string.IsNullOrEmpty(cfg.Name))
+                    nameToSign[cfg.Name] = sign;
+            }
+
+            var nodesToRemove = new List<BehaviourGraphNode>();
+            foreach (var node in graph.nodes.OfType<BehaviourGraphNode>()) {
+                if (!wantedSigns.Contains(node.BehaviourSign)) {
+                    nodesToRemove.Add(node);
+                }
+            }
+
+            foreach (var node in nodesToRemove) {
+                graph.RemoveNode(node);
+                foreach (var name in nameToSign.Where(kv => kv.Value == node.BehaviourSign).Select(kv => kv.Key)) {
+                    confirmedRemoves.Remove(entitySign + "|" + node.BehaviourSign);
+                }
+
+                RemoveSettingEntryBySign(node.BehaviourSign, entitySign);
+            }
+        }
+
+        /// <summary>行为中文名数组转 BehaviourSign 集合</summary>
+        static HashSet<string> BehaviourSignsOf(string[] behaviourNames) {
+            var wanted = new HashSet<string>();
+            if (behaviourNames == null)
+                return wanted;
+            var nameToSign = new Dictionary<string, string>();
+            foreach (var sign in BehaviourConfig.GetKeys()) {
+                var cfg = BehaviourConfig.Get(sign);
+                if (cfg != null && !string.IsNullOrEmpty(cfg.Name))
+                    nameToSign[cfg.Name] = sign;
+            }
+
+            foreach (var rawName in behaviourNames) {
+                string name = rawName?.Trim();
+                if (string.IsNullOrEmpty(name))
+                    continue;
+                if (nameToSign.TryGetValue(name, out var sign))
+                    wanted.Add(sign);
+            }
+
+            return wanted;
         }
 
         /// <summary>

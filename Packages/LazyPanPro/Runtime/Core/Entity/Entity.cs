@@ -58,11 +58,16 @@ namespace LazyPan {
             }
             //注册实体
             EntityRegister.AddEntity(ID, this);
-            //注册配置行为
+            //注册配置行为 空项直接跳过 避免尾部分隔符产生空行为名导致注册崩溃
             if (!string.IsNullOrEmpty(objConfig.SetUpBehaviourName)) {
                 string[] behaviourArray = objConfig.SetUpBehaviourName.Split("|");
                 for (int i = 0; i < behaviourArray.Length; i++) {
-                    BehaviourRegister.RegisterBehaviour(ID, behaviourArray[i], out Behaviour outBehaviour);
+                    string behaviourName = behaviourArray[i]?.Trim();
+                    if (string.IsNullOrEmpty(behaviourName)) {
+                        continue;
+                    }
+
+                    BehaviourRegister.RegisterBehaviour(ID, behaviourName, out Behaviour outBehaviour);
                 }
             }
 #if UNITY_EDITOR

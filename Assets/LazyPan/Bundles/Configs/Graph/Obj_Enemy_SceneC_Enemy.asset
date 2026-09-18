@@ -18,6 +18,7 @@ MonoBehaviour:
   - rid: 8263989132141527884
   - rid: 8263989132141527885
   - rid: 8263989132141527886
+  - rid: 8263989181806280860
   edges: []
   groups: []
   stackNodes: []
@@ -26,8 +27,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 169, y: 135, z: 0}
-  scale: {x: 1.15, y: 1.15, z: 1}
+  position: {x: -349, y: 351, z: 0}
+  scale: {x: 1.3225, y: 1.3225, z: 1}
   references:
     version: 2
     RefIds:
@@ -91,7 +92,7 @@ MonoBehaviour:
         Config:
           SourceSign: Obj_Enemy_SceneC_Enemy
           Items:
-          - TargetEntitySign: 
+          - TargetEntitySign: Obj_Enemy_SceneC_Enemy
             ParamSign: Health
             ValueType: 2
             BoolValue: 0
@@ -100,7 +101,7 @@ MonoBehaviour:
             StringValue: 
             Vector3Value: {x: 0, y: 0, z: 0}
             ApplyOnInit: 1
-          - TargetEntitySign: 
+          - TargetEntitySign: Obj_Enemy_SceneC_Enemy
             ParamSign: MaxHealth
             ValueType: 2
             BoolValue: 0
@@ -109,7 +110,7 @@ MonoBehaviour:
             StringValue: 
             Vector3Value: {x: 0, y: 0, z: 0}
             ApplyOnInit: 1
-          - TargetEntitySign: 
+          - TargetEntitySign: Obj_Enemy_SceneC_Enemy
             ParamSign: Dead
             ValueType: 0
             BoolValue: 0
@@ -148,3 +149,39 @@ MonoBehaviour:
               DataSign: Health
               MaxDataSign: MaxHealth
               Format: 
+    - rid: 8263989181806280860
+      type: {class: BehaviourNode_EntityTriggerController, ns: LazyPan, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 8aaaa24c-470a-41ad-88cb-078950099043
+        computeOrder: 4
+        position:
+          serializedVersion: 2
+          x: 1282
+          y: 80
+          width: 219
+          height: 704
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        NodeInitialized: 1
+        Config:
+          SourceSign: Obj_Enemy_SceneC_Enemy
+          CompTriggerSign: 
+          Rules:
+          - TriggerEntitySign: Obj_Player_SceneC_Player
+            EnterActions: []
+            StayActions:
+            - TargetEntitySign: Triggerer
+              ParamSign: Health
+              ValueType: 2
+              Modify: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: -20
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+              Min: 0
+              Max: 500
+            ExitActions: []
+            OutsideActions: []

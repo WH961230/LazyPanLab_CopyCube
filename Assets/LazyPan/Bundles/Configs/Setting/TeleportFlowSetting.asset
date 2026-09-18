@@ -22,8 +22,8 @@ MonoBehaviour:
       LeftValueType: 2
       Compare: 2
       RightIsEntityParam: 0
-      RightEntitySign: 
-      RightParamSign: 
+      RightEntitySign: Self
+      RightParamSign: None
       RightValueType: 2
       RightBoolValue: 0
       RightIntValue: 0

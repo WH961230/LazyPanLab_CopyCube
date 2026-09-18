@@ -18,6 +18,7 @@ MonoBehaviour:
   - rid: 8263989132141527883
   - rid: 8263989154599141376
   - rid: 8263989154599141377
+  - rid: 8263989181806280859
   edges: []
   groups: []
   stackNodes: []
@@ -26,8 +27,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 541, y: 448, z: 0}
-  scale: {x: 1, y: 1, z: 1}
+  position: {x: -548, y: 583, z: 0}
+  scale: {x: 1.15, y: 1.15, z: 1}
   references:
     version: 2
     RefIds:
@@ -72,7 +73,7 @@ MonoBehaviour:
         Config:
           SourceSign: Obj_Player_SceneC_Player
           Items:
-          - TargetEntitySign: 
+          - TargetEntitySign: Obj_Player_SceneC_Player
             ParamSign: Health
             ValueType: 2
             BoolValue: 0
@@ -81,7 +82,7 @@ MonoBehaviour:
             StringValue: 
             Vector3Value: {x: 0, y: 0, z: 0}
             ApplyOnInit: 1
-          - TargetEntitySign: 
+          - TargetEntitySign: Obj_Player_SceneC_Player
             ParamSign: Dead
             ValueType: 0
             BoolValue: 0
@@ -90,7 +91,7 @@ MonoBehaviour:
             StringValue: 
             Vector3Value: {x: 0, y: 0, z: 0}
             ApplyOnInit: 1
-          - TargetEntitySign: 
+          - TargetEntitySign: Obj_Player_SceneC_Player
             ParamSign: MaxHealth
             ValueType: 2
             BoolValue: 0
@@ -107,7 +108,7 @@ MonoBehaviour:
         computeOrder: 2
         position:
           serializedVersion: 2
-          x: 343
+          x: 342.82617
           y: -260
           width: 260
           height: 204
@@ -127,9 +128,9 @@ MonoBehaviour:
         computeOrder: 3
         position:
           serializedVersion: 2
-          x: 603
+          x: 602.8262
           y: -260
-          width: 358
+          width: 357
           height: 657
         expanded: 1
         debug: 0
@@ -149,3 +150,39 @@ MonoBehaviour:
               DataSign: Health
               MaxDataSign: MaxHealth
               Format: 
+    - rid: 8263989181806280859
+      type: {class: BehaviourNode_EntityTriggerController, ns: LazyPan, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 4e2d4298-0002-4c90-ae5f-8cb54095a98f
+        computeOrder: 4
+        position:
+          serializedVersion: 2
+          x: 1152.1608
+          y: -260
+          width: 397
+          height: 704
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        NodeInitialized: 1
+        Config:
+          SourceSign: Obj_Player_SceneC_Player
+          CompTriggerSign: Trigger
+          Rules:
+          - TriggerEntitySign: Obj_Enemy_SceneC_Enemy
+            EnterActions: []
+            StayActions:
+            - TargetEntitySign: Triggerer
+              ParamSign: Health
+              ValueType: 2
+              Modify: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: -30
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+              Min: 0
+              Max: 100
+            ExitActions: []
+            OutsideActions: []

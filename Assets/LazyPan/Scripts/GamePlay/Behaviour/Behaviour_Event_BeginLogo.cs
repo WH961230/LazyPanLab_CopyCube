@@ -22,8 +22,7 @@ namespace LazyPan {
         private FloatData _remainData;
 
         public Behaviour_Event_BeginLogo(Entity entity, string behaviourSign) : base(entity, behaviourSign) {
-            _beginLogoEntityData = entity.Prefab.AddComponent<BeginLogoData>();
-            _beginLogoEntityData.EntityID = entity.ID;
+            _beginLogoEntityData = AttachBehaviourData<BeginLogoData>();
 
             BeginLogoSetting setting = Loader.LoadAsset<BeginLogoSetting>(AssetType.ASSET, settingPath);
 
@@ -86,6 +85,7 @@ namespace LazyPan {
 
         public override void Clear() {
             Game.instance.OnUpdateEvent.RemoveListener(OnUpdate);
+            DetachBehaviourData<BeginLogoData>();
             base.Clear();
         }
     }

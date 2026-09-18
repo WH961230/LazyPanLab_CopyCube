@@ -20,8 +20,7 @@ namespace LazyPan {
         private Comp _triggerComp;
 
         public Behaviour_Auto_EntityTriggerController(Entity entity, string behaviourSign) : base(entity, behaviourSign) {
-            _triggerData = entity.Prefab.AddComponent<EntityTriggerControllerData>();
-            _triggerData.EntityID = entity.ID;
+            _triggerData = AttachBehaviourData<EntityTriggerControllerData>();
 
             EntityTriggerControllerSetting setting = Loader.LoadAsset<EntityTriggerControllerSetting>(AssetType.ASSET, settingPath);
 
@@ -67,10 +66,10 @@ namespace LazyPan {
         }
 
         /// <summary>
-        /// 按 CompTriggerSign 解出带触发碰撞体的 Comp 并订阅触发器事件 留空回退实体根 Comp
+        /// 按 CompTriggerSign 解出带触发碰撞体的 Comp 并订阅触发器事件 Root=实体根
         /// </summary>
         private void BindTriggerComp(string compTriggerSign) {
-            _triggerComp = string.IsNullOrEmpty(compTriggerSign) ? entity.Comp : Cond.Instance.Get<Comp>(entity, compTriggerSign);
+            _triggerComp = compTriggerSign == BehaviourSigns.Root ? entity.Comp : Cond.Instance.Get<Comp>(entity, compTriggerSign);
             if (_triggerComp == null) {
                 return;
             }
@@ -104,7 +103,7 @@ namespace LazyPan {
 
             foreach (RuleRuntime runtime in _rules) {
                 if (runtime.Inside.Remove(otherEntity.ID)) {
-                    ApplyActions(runtime.Rule.ExitActions, 1f);
+                    ApplyActions(runtime.Rule.ExitActions, 1f, otherEntity);
                 }
             }
         }
@@ -119,13 +118,14 @@ namespace LazyPan {
                 }
 
                 if (runtime.Inside.Add(otherEntity.ID)) {
-                    ApplyActions(runtime.Rule.EnterActions, 1f);
+                    ApplyActions(runtime.Rule.EnterActions, 1f, otherEntity);
                 }
             }
         }
 
         /// <summary>
         /// 每帧驱动 范围内走停留相位 范围外走范围外相位 AddPerSecond 按 deltaTime 累加
+        /// 停留相位按每一位停留的触发者分别执行 谁在范围内谁受作用
         /// </summary>
         private void OnUpdate() {
             bool anyInside = false;
@@ -136,9 +136,13 @@ namespace LazyPan {
                 if (runtime.Inside.Count > 0) {
                     anyInside = true;
                     insideCount += runtime.Inside.Count;
-                    ApplyActions(runtime.Rule.StayActions, dt);
+                    foreach (int insideID in runtime.Inside) {
+                        if (EntityRegister.TryGetEntityByID(insideID, out Entity triggerer)) {
+                            ApplyActions(runtime.Rule.StayActions, dt, triggerer);
+                        }
+                    }
                 } else {
-                    ApplyActions(runtime.Rule.OutsideActions, dt);
+                    ApplyActions(runtime.Rule.OutsideActions, dt, null);
                 }
             }
 
@@ -170,28 +174,29 @@ namespace LazyPan {
         }
 
         private bool Matches(TriggerRule rule, Entity otherEntity) {
-            return string.IsNullOrEmpty(rule.TriggerEntitySign) || rule.TriggerEntitySign == otherEntity.ObjConfig.Sign;
+            return rule.TriggerEntitySign == BehaviourSigns.Any || rule.TriggerEntitySign == otherEntity.ObjConfig.Sign;
         }
 
-        private void ApplyActions(List<TriggerAction> actions, float dt) {
+        private void ApplyActions(List<TriggerAction> actions, float dt, Entity triggerer) {
             if (actions == null) {
                 return;
             }
 
             foreach (TriggerAction action in actions) {
-                ApplyAction(action, dt);
+                ApplyAction(action, dt, triggerer);
             }
         }
 
         /// <summary>
         /// 单条参数操作 Set赋值 Add累加 AddPerSecond按dt累加 数值类型受 Min/Max 钳制 目标缺失静默跳过避免每帧报错
+        /// 目标解析优先用触发者 Triggerer 其余按 Sign 查实体
         /// </summary>
-        private void ApplyAction(TriggerAction action, float dt) {
+        private void ApplyAction(TriggerAction action, float dt, Entity triggerer) {
             if (action == null || string.IsNullOrEmpty(action.ParamSign)) {
                 return;
             }
 
-            if (!ResolveTargetEntity(action.TargetEntitySign, out Entity target)) {
+            if (!ResolveTargetEntity(action.TargetEntitySign, triggerer, out Entity target)) {
                 return;
             }
 
@@ -236,15 +241,15 @@ namespace LazyPan {
         }
 
         /// <summary>
-        /// 解析被修改实体 空=触发源自己 非空按Sign查其他实体 行为不感知对方类型
+        /// 解析被修改实体 Triggerer=作用在触发者身上 Self/自己Sign=触发源自己 其他按Sign查其他实体 行为不感知对方类型
         /// </summary>
-        private bool ResolveTargetEntity(string targetEntitySign, out Entity target) {
-            if (string.IsNullOrEmpty(targetEntitySign)) {
-                target = entity;
-                return true;
+        private bool ResolveTargetEntity(string targetEntitySign, Entity triggerer, out Entity target) {
+            if (targetEntitySign == BehaviourSigns.Triggerer) {
+                target = triggerer;
+                return target != null;
             }
 
-            return EntityRegister.TryGetEntityBySign(targetEntitySign, out target);
+            return BehaviourSigns.ResolveEntity(entity, BehaviourSign, nameof(TriggerAction.TargetEntitySign), targetEntitySign, out target);
         }
 
         private void OnEntityRemoved(int id) {
@@ -263,6 +268,7 @@ namespace LazyPan {
             }
 
             _rules.Clear();
+            DetachBehaviourData<EntityTriggerControllerData>();
             base.Clear();
         }
 

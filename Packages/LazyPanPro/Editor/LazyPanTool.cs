@@ -284,37 +284,50 @@ namespace LazyPan {
         
         #region 多语言
 
-        public static string _currentLanguage; 
-        private static Dictionary<string, LanguageEntry> languageDictionary = new Dictionary<string, LanguageEntry>();
+        public static string _currentLanguage;
+        public const string LanguagePreferenceKey = "LazyPanLanguage";
+        private static readonly Dictionary<string, LanguageEntry> languageDictionary = new Dictionary<string, LanguageEntry>();
 
         /// <summary>
         /// 多语言初始化
         /// </summary>
         public static void InitLanguage() {
-            if (languageDictionary.Count > 0) {
-                return;
-            }
-            ReadLanguageCSV("Language", out string content, out string[] lines);
-
-            if (lines != null && lines.Length > 0) {
-                languageDictionary.Clear();
-                string[][] LanguageConfigStr = new string[lines.Length - 1][];
-                for (int i = 0; i < lines.Length; i++) {
-                    if (i > 0) {
-                        string[] lineStr = lines[i].Split(",");
-                        LanguageConfigStr[i - 1] = new string[lineStr.Length];
-                        if (lineStr.Length > 0) {
-                            LanguageEntry entry = new LanguageEntry {
-                                Key = lineStr[0],
-                                English = lineStr[1],
-                                Chinese = lineStr[2],
-                                Japanese = lineStr[3]
-                            };
-                            languageDictionary[entry.Key] = entry;
+            if (languageDictionary.Count == 0) {
+                ReadLanguageCSV("Language", out _, out string[] lines);
+                if (lines != null && lines.Length > 1) {
+                    languageDictionary.Clear();
+                    for (int i = 1; i < lines.Length; i++) {
+                        string[] lineStr = ParseLanguageLine(lines[i]);
+                        if (lineStr.Length != 4 || string.IsNullOrWhiteSpace(lineStr[0])) {
+                            continue;
                         }
+
+                        LanguageEntry entry = new LanguageEntry {
+                            Key = lineStr[0],
+                            English = lineStr[1],
+                            Chinese = lineStr[2],
+                            Japanese = lineStr[3]
+                        };
+                        languageDictionary[entry.Key] = entry;
                     }
                 }
             }
+
+            string savedLanguage;
+            if (EditorPrefs.HasKey(LanguagePreferenceKey)) {
+                savedLanguage = EditorPrefs.GetString(LanguagePreferenceKey);
+            } else if (PlayerPrefs.HasKey(LanguagePreferenceKey)) {
+                savedLanguage = PlayerPrefs.GetString(LanguagePreferenceKey);
+                EditorPrefs.SetString(LanguagePreferenceKey, savedLanguage);
+            } else {
+                savedLanguage = "English";
+            }
+
+            if (savedLanguage != "English" && savedLanguage != "中文" && savedLanguage != "日本語") {
+                savedLanguage = "English";
+            }
+
+            _currentLanguage = savedLanguage;
         }
         
         /// <summary>
@@ -322,12 +335,43 @@ namespace LazyPan {
         /// </summary>
         /// <param name="currentLanguage"></param>
         public static void CheckLanguage(string currentLanguage) {
-            string language = PlayerPrefs.GetString("LazyPanLanguage");
-            if (string.IsNullOrEmpty(language) || currentLanguage != language) {
-                PlayerPrefs.SetString("LazyPanLanguage", currentLanguage);
-                PlayerPrefs.Save();
-                _currentLanguage = currentLanguage;
+            if (currentLanguage != "English" && currentLanguage != "中文" && currentLanguage != "日本語") {
+                currentLanguage = "English";
             }
+
+            _currentLanguage = currentLanguage;
+            EditorPrefs.SetString(LanguagePreferenceKey, currentLanguage);
+        }
+
+        private static string[] ParseLanguageLine(string line) {
+            List<string> fields = new List<string>();
+            bool inQuotes = false;
+            string field = string.Empty;
+
+            for (int i = 0; i < line.Length; i++) {
+                char character = line[i];
+                if (character == '"') {
+                    if (inQuotes && i + 1 < line.Length && line[i + 1] == '"') {
+                        field += '"';
+                        i++;
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (character == ',' && !inQuotes) {
+                    fields.Add(field);
+                    field = string.Empty;
+                } else {
+                    field += character;
+                }
+            }
+
+            fields.Add(field.TrimEnd('\r'));
+            if (fields.Count > 4) {
+                string english = string.Join(",", fields.GetRange(1, fields.Count - 3));
+                return new[] { fields[0], english, fields[fields.Count - 2], fields[fields.Count - 1] };
+            }
+
+            return fields.ToArray();
         }
 
         /// <summary>
@@ -386,8 +430,7 @@ namespace LazyPan {
         /// <param name="content"></param>
         /// <param name="lines"></param>
         private static void ReadLanguageCSV(string fileName, out string content, out string[] lines) {
-            string filePath = Path.Combine(Application.dataPath, "../Packages/evoreek.lazypan/Editor/Language/Language.csv");
-            filePath = Path.GetFullPath(filePath); // 将路径转换为绝对路径
+            string filePath = Path.GetFullPath(Path.Combine(Application.dataPath, "..", "Packages", "LazyPanPro", "Editor", "Language", $"{fileName}.csv"));
 
             // 检查文件是否存在
             if (!File.Exists(filePath)) {

@@ -56,13 +56,13 @@ namespace LazyPan {
         [Tooltip("Interval=计时到就下一波；WaitValue=等指定 Data 满足条件再计时")]
         public WaveAdvanceMode AdvanceMode = WaveAdvanceMode.Interval;
 
-        [Header("等待的 Data 标签 空则不等待 比如 LivingCount")]
-        [Tooltip("等待的 Data 标签名，如 LivingCount。为空则不等待，不感知怪只认数字。数据源由 WaitWatchEntitySign 指定")]
+        [Header("等待的 Data 标签 必填 比如 LivingCount")]
+        [Tooltip("等待的 Data 标签名，如 LivingCount。不允许为空，不感知怪只认数字。数据源由 WaitWatchEntitySign 指定")]
         public string WaitWatchSign;
 
         [EntitySign]
-        [Header("等待的数据源实体 留空读自己")]
-        [Tooltip("等待的数据源实体 Sign，留空=读自己实体的 Data。波次与产怪分属两个实体时，填产怪实体 Sign 读它的 LivingCount")]
+        [Header("等待的数据源实体 必填 Self=自己")]
+        [Tooltip("等待的数据源实体 Sign，Self=读自己实体的 Data。波次与产怪分属两个实体时，填产怪实体 Sign 读它的 LivingCount。不允许为空")]
         public string WaitWatchEntitySign;
 
         [Header("等待的目标值")]

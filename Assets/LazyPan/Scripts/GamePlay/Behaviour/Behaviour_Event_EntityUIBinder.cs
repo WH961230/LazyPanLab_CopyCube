@@ -22,8 +22,7 @@ namespace LazyPan {
         private List<BoundUI> bounds = new List<BoundUI>();
 
         public Behaviour_Event_EntityUIBinder(Entity entity, string behaviourSign) : base(entity, behaviourSign) {
-            _uiBinderData = entity.Prefab.AddComponent<EntityUIBinderData>();
-            _uiBinderData.EntityID = entity.ID;
+            _uiBinderData = AttachBehaviourData<EntityUIBinderData>();
             
             EntityUIBinderSetting setting = Loader.LoadAsset<EntityUIBinderSetting>(AssetType.ASSET, settingPath);
 
@@ -102,8 +101,7 @@ namespace LazyPan {
         }
 
         private bool CreateBound(EntityUIBindItem item) {
-            if (string.IsNullOrEmpty(item.UIPrefabSign)) {
-                LogUtil.LogErrorFormat("行为:{0} UI绑定失败 未配置UI预制体标识!", BehaviourSign);
+            if (!BehaviourSigns.Require(item.UIPrefabSign, BehaviourSign, entity.ObjConfig?.Sign, nameof(EntityUIBindItem.UIPrefabSign))) {
                 return false;
             }
 
@@ -114,14 +112,9 @@ namespace LazyPan {
                 return false;
             }
 
-            Transform parent = entity.Prefab.transform;
-            if (!string.IsNullOrEmpty(item.AttachLabel)) {
-                Transform attachTran = Cond.Instance.Get<Transform>(entity, item.AttachLabel);
-                if (attachTran != null) {
-                    parent = attachTran;
-                } else {
-                    LogUtil.LogErrorFormat("行为:{0} 未找到挂点标签:{1} 回退挂到实体根节点", BehaviourSign, item.AttachLabel);
-                }
+            Transform parent = BehaviourSigns.ResolveMountPoint(entity, BehaviourSign, item.AttachLabel);
+            if (parent == null) {
+                return false;
             }
 
             GameObject go = Loader.LoadGo(prefab.name, item.UIPrefabSign, parent, true);
@@ -145,8 +138,7 @@ namespace LazyPan {
         private void ResolveDataBindings(BoundUI bound, EntityUIBindItem item) {
             Comp comp = bound.Go.GetComponent<Comp>();
             foreach (EntityUIDataBind bind in item.DataBinds) {
-                if (string.IsNullOrEmpty(bind.ComponentSign)) {
-                    LogUtil.LogErrorFormat("行为:{0} 数值绑定失败 未配置组件标签!", BehaviourSign);
+                if (!BehaviourSigns.Require(bind.ComponentSign, BehaviourSign, entity.ObjConfig?.Sign, nameof(EntityUIDataBind.ComponentSign))) {
                     continue;
                 }
 
@@ -346,8 +338,8 @@ namespace LazyPan {
 
         private bool TryReadNumber(DataBinding binding, string sign, out float value) {
             value = 0f;
-            if (string.IsNullOrEmpty(sign)) {
-                LogBindErrorOnce(binding, $"未配置数据标签!");
+            if (!BehaviourSigns.Require(sign, BehaviourSign, entity.ObjConfig?.Sign, nameof(EntityUIDataBind.DataSign))) {
+                LogBindErrorOnce(binding, "数据标签不允许为空!");
                 return false;
             }
 
@@ -367,8 +359,8 @@ namespace LazyPan {
 
         private bool TryReadText(DataBinding binding, out string content) {
             content = null;
-            if (string.IsNullOrEmpty(binding.DataSign)) {
-                LogBindErrorOnce(binding, "未配置数据标签!");
+            if (!BehaviourSigns.Require(binding.DataSign, BehaviourSign, entity.ObjConfig?.Sign, nameof(EntityUIDataBind.DataSign))) {
+                LogBindErrorOnce(binding, "数据标签不允许为空!");
                 return false;
             }
 
@@ -429,6 +421,7 @@ namespace LazyPan {
             }
 
             bounds.Clear();
+            DetachBehaviourData<EntityUIBinderData>();
             base.Clear();
         }
 

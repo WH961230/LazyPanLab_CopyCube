@@ -15,8 +15,7 @@ namespace LazyPan {
         private BoolData _movementStopData;
 
         public Behaviour_Auto_TrackingEntityByNavMeshAgent(Entity entity, string behaviourSign) : base(entity, behaviourSign) {
-            _trackingData = entity.Prefab.AddComponent<TrackingEntityData>();
-            _trackingData.EntityID = entity.ID;
+            _trackingData = AttachBehaviourData<TrackingEntityData>();
             
             TrackingEntitySetting setting = Loader.LoadAsset<TrackingEntitySetting>(AssetType.ASSET, settingPath);
 
@@ -63,7 +62,12 @@ namespace LazyPan {
         }
 
         private void OnUpdate() {
-            if (!GetNavMeshAgent() || !GetTargetEntity()) {
+            if (entity.Prefab == null || !GetNavMeshAgent() || !GetTargetEntity()) {
+                return;
+            }
+
+            if (_targetEntity.Prefab == null) {
+                _targetEntity = null;
                 return;
             }
 
@@ -86,6 +90,7 @@ namespace LazyPan {
 
         public override void Clear() {
             Game.instance.OnUpdateEvent.RemoveListener(OnUpdate);
+            DetachBehaviourData<TrackingEntityData>();
             base.Clear();
         }
     }

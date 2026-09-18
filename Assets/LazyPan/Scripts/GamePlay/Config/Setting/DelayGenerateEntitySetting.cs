@@ -49,13 +49,13 @@ namespace LazyPan {
 
     [Serializable]
     public class DelayGenerateProfile {
-        [Header("监听的 Data 标签 为空则无条件命中 比如 WaveIndex")]
-        [Tooltip("监听的 Data 标签名，如 WaveIndex。为空=无条件命中（装上就产）。数据源由 WatchEntitySign 指定")]
+        [Header("监听的 Data 标签 必填 比如 WaveIndex")]
+        [Tooltip("监听的 Data 标签名，如 WaveIndex。不允许为空。数据源由 WatchEntitySign 指定")]
         public string WatchSign;
 
         [EntitySign]
-        [Header("监听的数据源实体 留空读自己")]
-        [Tooltip("监听的数据源实体 Sign，留空=读自己实体的 Data。波次在别的实体上时填波次实体的 Sign")]
+        [Header("监听的数据源实体 必填 Self=自己")]
+        [Tooltip("监听的数据源实体 Sign，Self=读自己实体的 Data。波次在别的实体上时填波次实体的 Sign。不允许为空")]
         public string WatchEntitySign;
 
         [Header("比较方式")]
@@ -67,8 +67,8 @@ namespace LazyPan {
         public int WatchValue;
 
         [EntitySign]
-        [Header("要产的实体 Sign")]
-        [Tooltip("要产的实体 Sign，如 Obj_Enemy_SceneC_Enemy")]
+        [Header("要产的实体 Sign 必填")]
+        [Tooltip("要产的实体 Sign，如 Obj_Enemy_SceneC_Enemy。不允许为空")]
         public string GenerateEntitySign;
 
         [Header("本档案产几只 0则无限循环产")]

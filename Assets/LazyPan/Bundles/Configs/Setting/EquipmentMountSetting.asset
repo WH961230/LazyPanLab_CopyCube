@@ -16,9 +16,9 @@ MonoBehaviour:
   - SourceSign: Obj_Tower_SceneB_Tower
     InitialMount: 1
     Mounts:
-    - SlotSign: 
-      EquipmentPrefabSign: 
-      MountPointLabel: 
+    - SlotSign: Skill1
+      EquipmentPrefabSign: Virtual
+      MountPointLabel: Root
       OffsetPosition: {x: 0, y: 0, z: 0}
       OffsetRotation: {x: 0, y: 0, z: 0}
       OffsetScale: {x: 0, y: 0, z: 0}

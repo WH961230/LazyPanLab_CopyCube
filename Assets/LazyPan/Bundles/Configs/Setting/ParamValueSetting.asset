@@ -15,7 +15,7 @@ MonoBehaviour:
   Datas:
   - SourceSign: Obj_Enemy_SceneC_Enemy
     Items:
-    - TargetEntitySign: 
+    - TargetEntitySign: Obj_Enemy_SceneC_Enemy
       ParamSign: Health
       ValueType: 2
       BoolValue: 0
@@ -24,7 +24,7 @@ MonoBehaviour:
       StringValue: 
       Vector3Value: {x: 0, y: 0, z: 0}
       ApplyOnInit: 1
-    - TargetEntitySign: 
+    - TargetEntitySign: Obj_Enemy_SceneC_Enemy
       ParamSign: MaxHealth
       ValueType: 2
       BoolValue: 0
@@ -33,7 +33,7 @@ MonoBehaviour:
       StringValue: 
       Vector3Value: {x: 0, y: 0, z: 0}
       ApplyOnInit: 1
-    - TargetEntitySign: 
+    - TargetEntitySign: Obj_Enemy_SceneC_Enemy
       ParamSign: Dead
       ValueType: 0
       BoolValue: 0
@@ -44,7 +44,7 @@ MonoBehaviour:
       ApplyOnInit: 1
   - SourceSign: Obj_Player_SceneC_Player
     Items:
-    - TargetEntitySign: 
+    - TargetEntitySign: Obj_Player_SceneC_Player
       ParamSign: Health
       ValueType: 2
       BoolValue: 0
@@ -53,7 +53,7 @@ MonoBehaviour:
       StringValue: 
       Vector3Value: {x: 0, y: 0, z: 0}
       ApplyOnInit: 1
-    - TargetEntitySign: 
+    - TargetEntitySign: Obj_Player_SceneC_Player
       ParamSign: Dead
       ValueType: 0
       BoolValue: 0
@@ -62,7 +62,7 @@ MonoBehaviour:
       StringValue: 
       Vector3Value: {x: 0, y: 0, z: 0}
       ApplyOnInit: 1
-    - TargetEntitySign: 
+    - TargetEntitySign: Obj_Player_SceneC_Player
       ParamSign: MaxHealth
       ValueType: 2
       BoolValue: 0
@@ -91,8 +91,6 @@ MonoBehaviour:
       StringValue: 
       Vector3Value: {x: 0, y: 0, z: 0}
       ApplyOnInit: 1
-  - SourceSign: Obj_Enemy_SceneC_Enemy
-    Items: []
   - SourceSign: Obj_Logo_SceneA_BeginLogo
     Items:
     - TargetEntitySign: Obj_Logo_SceneA_BeginLogo

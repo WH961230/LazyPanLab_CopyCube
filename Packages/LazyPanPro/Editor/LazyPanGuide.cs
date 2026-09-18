@@ -24,12 +24,30 @@ namespace LazyPan {
         private LazyPanTool _tool;
 
         private void OnEnable() {
-            // 加载保存的语言索引
-            selectedLanguageIndex = EditorPrefs.GetInt("SelectedLanguageIndex", 0); // 默认值为0
-            LazyPanTool._currentLanguage = languages[selectedLanguageIndex];
+            int savedIndex = Mathf.Clamp(EditorPrefs.GetInt("SelectedLanguageIndex", 0), 0, languages.Length - 1);
+            LazyPanTool.InitLanguage();
+
+            if (EditorPrefs.HasKey(LazyPanTool.LanguagePreferenceKey)) {
+                selectedLanguageIndex = GetLanguageIndex(LazyPanTool._currentLanguage);
+            } else {
+                selectedLanguageIndex = savedIndex;
+            }
+
+            oldSelectedLanguageIndex = selectedLanguageIndex;
+            LazyPanTool.CheckLanguage(languages[selectedLanguageIndex]);
 
             openTabSliderAnim = EditorPrefs.GetBool("OpenSliderAnim");//是否开启滑动动画
             LazyPanTool._currentTabSliderAnim = openTabSliderAnim;
+        }
+
+        private static int GetLanguageIndex(string language) {
+            for (int i = 0; i < languages.Length; i++) {
+                if (languages[i] == language) {
+                    return i;
+                }
+            }
+
+            return 0;
         }
         
         public void OnStart(LazyPanTool tool) {
@@ -260,6 +278,9 @@ namespace LazyPan {
                     LazyPanTool.CheckLanguage(languages[selectedLanguageIndex]);
                     EditorPrefs.SetInt("SelectedLanguageIndex", selectedLanguageIndex);
                     oldSelectedLanguageIndex = selectedLanguageIndex;
+                    GUI.changed = true;
+                    _tool?.Repaint();
+                    Repaint();
                 }
             } else {
                 GUILayout.Space(10);

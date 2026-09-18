@@ -51,11 +51,13 @@ namespace LazyPan {
         }
 
         private void Kill() {
-            if (!TryGetTarget(out _, out var death)) {
+            if (!TryGetTarget(out Entity targetEntity, out _)) {
                 return;
             }
 
-            death.Kill();
+            if (Cond.Instance.TryGetData(targetEntity, Behaviour_Event_Death.HEALTH_LABEL, out FloatData health)) {
+                health.Float = 0f;
+            }
         }
 
         private void Revive() {

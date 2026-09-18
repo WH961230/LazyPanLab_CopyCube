@@ -14,6 +14,8 @@ public class EntitySignDrawer : PropertyDrawer {
     static System.DateTime signStamp;
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
+        var attr = (LazyPan.EntitySignAttribute)attribute;
+        var includeTriggerer = attr != null && attr.IncludeTriggerer;
         var signs = LoadSigns();
         if (signs.Count == 0) {
             EditorGUI.PropertyField(position, property, label);
@@ -47,10 +49,32 @@ public class EntitySignDrawer : PropertyDrawer {
             GUI.Label(labelRect, label);
         if (GUI.Button(buttonRect, display)) {
             var menu = new GenericMenu();
-            menu.AddItem(new GUIContent("<留空/自己>"), string.IsNullOrEmpty(current), () => {
-                property.stringValue = "";
+            menu.AddItem(new GUIContent("Self（自己）"), current == "Self", () => {
+                property.stringValue = "Self";
                 property.serializedObject.ApplyModifiedProperties();
             });
+            menu.AddItem(new GUIContent("Root（实体根）"), current == "Root", () => {
+                property.stringValue = "Root";
+                property.serializedObject.ApplyModifiedProperties();
+            });
+            menu.AddItem(new GUIContent("Any（任意实体）"), current == "Any", () => {
+                property.stringValue = "Any";
+                property.serializedObject.ApplyModifiedProperties();
+            });
+            menu.AddItem(new GUIContent("None（无/空条件）"), current == "None", () => {
+                property.stringValue = "None";
+                property.serializedObject.ApplyModifiedProperties();
+            });
+            menu.AddItem(new GUIContent("Virtual（虚拟装备）"), current == "Virtual", () => {
+                property.stringValue = "Virtual";
+                property.serializedObject.ApplyModifiedProperties();
+            });
+            if (includeTriggerer) {
+                menu.AddItem(new GUIContent("Triggerer（触发者）"), current == "Triggerer", () => {
+                    property.stringValue = "Triggerer";
+                    property.serializedObject.ApplyModifiedProperties();
+                });
+            }
             foreach (var kv in signs) {
                 var tmp = kv;
                 menu.AddItem(new GUIContent(MenuLabel(tmp.Value, tmp.Key)), tmp.Key == current, () => {

@@ -77,6 +77,7 @@ namespace LazyPan {
         private string textName = "模糊搜索控件";
 
         private LazyPanTool _tool;
+        private string behaviourValidationMessage;
 
         public void OnStart(LazyPanTool tool) {
             _tool = tool;
@@ -259,7 +260,7 @@ namespace LazyPan {
             reorderableList.onAddCallback = (ReorderableList list) => {
                 string[] infos = new string[]{"", "", "", "", "", ""};
                 int sceneIndex = -1;
-                List<string> bindBehaviour = new List<string>();
+                List<string> bindBehaviour = new List<string> { behaviourNames.Length > 0 ? behaviourNames[0] : string.Empty };
                 bool[] behaviourName = new bool[behaviourNames.Length];
                 entityDatas.Add(new MyEntityData(infos, sceneIndex, bindBehaviour, behaviourName));
             };
@@ -481,6 +482,9 @@ namespace LazyPan {
                             for (int j = 0; j <= 5; j++) {
                                 lineInfo[j] = lineStr[j];
                             }
+                            if (string.IsNullOrWhiteSpace(lineInfo[5])) {
+                                lineInfo[5] = behaviourNames.Length > 0 ? behaviourNames[0] : string.Empty;
+                            }
                             //场景数据
                             string[] sceneIndex = sceneNameOptions.ToArray();
                             int selectScene = -1;
@@ -504,6 +508,10 @@ namespace LazyPan {
                                 }
                             }
 
+                            if (string.IsNullOrWhiteSpace(lineInfo[5])) {
+                                behaviourBindName = new[] { behaviourNames.Length > 0 ? behaviourNames[0] : string.Empty };
+                            }
+
                             MyEntityData instanceEntityData = new MyEntityData(lineInfo, selectScene,
                                 behaviourBindName.ToList(), selectBehaviour);
                             entityDatas.Add(instanceEntityData);
@@ -519,6 +527,9 @@ namespace LazyPan {
 
         private void WriteEntityData() {
             ReadCSV.Instance.Read("ObjConfig", out string content, out string[] lines);
+            if (!ValidateBehaviourConfiguration()) {
+                return;
+            }
             try {
                 Queue<MyEntityData> entityDataQue = new Queue<MyEntityData>(entityDatas);
                 int newLength = -1;
@@ -569,7 +580,24 @@ namespace LazyPan {
             }
         }
 
-        private void PreviewEntityConfigData() {            
+        private bool ValidateBehaviourConfiguration() {
+            behaviourValidationMessage = null;
+            for (int i = 0; i < entityDatas.Count; i++) {
+                MyEntityData data = entityDatas[i];
+                if (data?.Infos == null || data.Infos.Length <= 5 || string.IsNullOrWhiteSpace(data.Infos[5])) {
+                    behaviourValidationMessage = $"实体配置第 {i + 1} 行必须配置行为。";
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private void PreviewEntityConfigData() {
+            if (!ValidateBehaviourConfiguration()) {
+                EditorGUILayout.HelpBox(behaviourValidationMessage, MessageType.Error);
+            }
+
             isFoldoutData = EditorGUILayout.Foldout(isFoldoutData, LazyPanTool.GetText("实体预览实体配置数据展开文本"), true);
             Rect rect = GUILayoutUtility.GetLastRect();
             float height = 0;

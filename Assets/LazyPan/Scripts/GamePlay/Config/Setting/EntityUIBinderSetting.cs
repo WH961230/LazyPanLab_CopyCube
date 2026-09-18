@@ -40,8 +40,8 @@ namespace LazyPan {
         [Tooltip("UI预制体标识，Bundles/Prefabs 下相对路径，如 UI/UI_HealthBar")]
         public string UIPrefabSign;
 
-        [Header("挂点标签 留空挂实体根节点 如Foot")]
-        [Tooltip("挂点标签（实体Comp里的Transform Sign），留空挂实体根节点，如 UIRoot/Foot/Body")]
+        [Header("挂点标签 Root=实体根 如Foot")]
+        [Tooltip("挂点标签（实体Comp里的Transform Sign），Root=挂实体根节点，如 UIRoot/Foot/Body。不允许为空")]
         public string AttachLabel;
 
         [Header("挂点局部偏移")]

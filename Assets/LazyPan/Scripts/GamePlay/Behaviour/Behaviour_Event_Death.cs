@@ -3,9 +3,9 @@ using UnityEngine;
 namespace LazyPan {
     /// <summary>
     /// 行为 - 死亡
-    /// 只做一件事: 监听实体 Data 的 Dead 标记 执行死亡处理与延迟销毁 不管理数值不做伤害判定
-    /// 数值参数 Health/MaxHealth/Dead 归实体参数值(ParamValue)初始化与写入 血量增减规则归数值类行为 本行为只消费 Dead
-    /// 配置来源 Setting/DeathSetting 运行时状态写自身 Data(Dead 归 ParamValue 初始化)
+    /// 只做一件事: 监听实体 Health 状态并维护 Dead 标记 执行死亡处理与延迟销毁
+    /// Health 由其他数值行为修改 本行为不感知伤害来源 不调用其他行为
+    /// 配置来源 Setting/DeathSetting 运行时状态写入实体 Data(Dead)
     /// </summary>
     public class Behaviour_Event_Death : Behaviour {
         private const string settingPath = "Setting/DeathSetting";
@@ -26,8 +26,7 @@ namespace LazyPan {
         private BoolData _deadBoolData;
 
         public Behaviour_Event_Death(Entity entity, string behaviourSign) : base(entity, behaviourSign) {
-            _deathData = entity.Prefab.AddComponent<DeathData>();
-            _deathData.EntityID = entity.ID;
+            _deathData = AttachBehaviourData<DeathData>();
 
             DeathSetting setting = Loader.LoadAsset<DeathSetting>(AssetType.ASSET, settingPath);
 
@@ -56,7 +55,8 @@ namespace LazyPan {
         }
 
         /// <summary>
-        /// 绑定实体 Data 标签 Health/MaxHealth 只读用于展示 Dead 必须存在 归 ParamValue 初始化
+        /// 绑定实体 Data 标签 Health/MaxHealth/Dead。
+        /// Health 与 MaxHealth 用于状态读取，Dead 由本行为维护。
         /// </summary>
         private bool BindRuntimeData() {
             bool hasHealth = Cond.Instance.TryGetData(entity, HEALTH_LABEL, out _healthFloatData);
@@ -66,6 +66,10 @@ namespace LazyPan {
         }
 
         private void OnUpdate() {
+            if (!_deadBoolData.Bool && _healthFloatData.Float <= 0f) {
+                SetDead();
+            }
+
             //死亡标记有效时进入延迟销毁计时
             if (_deadBoolData.Bool && _config.DeathAction == DeathAction.DestroyEntity && _config.DeathDelay > 0f) {
                 deathDelayRemainTime -= Time.deltaTime;
@@ -76,33 +80,25 @@ namespace LazyPan {
         }
 
         /// <summary>
-        /// 处决 置 Dead 标记 触发死亡处理 外部可用作即死入口
-        /// </summary>
-        public void Kill() {
-            SetDead(true);
-        }
-
-        /// <summary>
-        /// 复活 清除 Dead 标记并复位计时
+        /// 复活由外部直接把 Health 改回正数后自动恢复存活状态。
         /// </summary>
         public void Revive() {
-            SetDead(false);
+            if (_deadBoolData.Bool && _healthFloatData.Float > 0f) {
+                _deadBoolData.Bool = false;
+                deathDelayRemainTime = 0f;
+            }
         }
 
         /// <summary>
-        /// 死亡标记统一入口 去重后触发死亡处理
+        /// Health 小于等于 0 时统一进入死亡状态。
         /// </summary>
-        private void SetDead(bool dead) {
-            if (_deadBoolData.Bool == dead) {
+        private void SetDead() {
+            if (_deadBoolData.Bool) {
                 return;
             }
 
-            _deadBoolData.Bool = dead;
-            if (dead) {
-                Die();
-            } else {
-                deathDelayRemainTime = 0f;
-            }
+            _deadBoolData.Bool = true;
+            Die();
         }
 
         /// <summary>
@@ -129,6 +125,7 @@ namespace LazyPan {
 
         public override void Clear() {
             Game.instance.OnUpdateEvent.RemoveListener(OnUpdate);
+            DetachBehaviourData<DeathData>();
             base.Clear();
         }
     }

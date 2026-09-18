@@ -20,8 +20,7 @@ namespace LazyPan {
         private bool hasTeleported;
 
         public Behaviour_Event_TeleportFlow(Entity entity, string behaviourSign) : base(entity, behaviourSign) {
-            _teleportData = entity.Prefab.AddComponent<TeleportFlowData>();
-            _teleportData.EntityID = entity.ID;
+            _teleportData = AttachBehaviourData<TeleportFlowData>();
 
             TeleportFlowSetting setting = Loader.LoadAsset<TeleportFlowSetting>(AssetType.ASSET, settingPath);
 
@@ -38,6 +37,10 @@ namespace LazyPan {
             _config.TargetSceneSign = settingData.TargetSceneSign;
             _config.Once = settingData.Once;
             _config.Condition = settingData.Condition ?? new TeleportCondition();
+            _config.UseRequest = settingData.Condition == null;
+            if (!_config.UseRequest && !BehaviourSigns.Require(_config.Condition.LeftParamSign, BehaviourSign, entity.ObjConfig?.Sign, nameof(TeleportCondition.LeftParamSign))) {
+                return;
+            }
 
             if (string.IsNullOrEmpty(_config.TargetSceneSign)) {
                 LogUtil.LogErrorFormat("行为:{0} 实体:{1} 未配置目标场景标识!", BehaviourSign, entity.ObjConfig.Sign);
@@ -62,12 +65,11 @@ namespace LazyPan {
                 return;
             }
 
-            // 有条件只看条件 无条件只看内部请求 两条路二选一 不再双重要求
-            if (HasCondition(_config.Condition)) {
-                if (!IsConditionTrue(_config.Condition)) {
+            if (_config.UseRequest) {
+                if (!_innerRequest) {
                     return;
                 }
-            } else if (!_innerRequest) {
+            } else if (!IsConditionTrue(_config.Condition)) {
                 return;
             }
 
@@ -81,19 +83,16 @@ namespace LazyPan {
         }
 
         /// <summary>
-        /// 是否配了前置条件 左边标签为空=无条件
-        /// </summary>
-        private bool HasCondition(TeleportCondition condition) {
-            return condition != null && !string.IsNullOrEmpty(condition.LeftParamSign);
-        }
-
-        /// <summary>
-        /// 前置条件 左边标签为空=无条件命中 否则左右比较通过才放行 只读 Data 不引用其他行为
+        /// 前置条件必填 左右比较通过才放行 只读 Data 不引用其他行为
         /// 数值走差值比较 字符串/向量仅支持相等与不等 布尔按 1/0 参与数值比较
         /// </summary>
         private bool IsConditionTrue(TeleportCondition condition) {
-            if (condition == null || string.IsNullOrEmpty(condition.LeftParamSign)) {
-                return true;
+            if (condition == null) {
+                return false;
+            }
+
+            if (!BehaviourSigns.Require(condition.LeftParamSign, BehaviourSign, entity.ObjConfig?.Sign, nameof(TeleportCondition.LeftParamSign))) {
+                return false;
             }
 
             if (!TryGetWatchEntity(condition.LeftEntitySign, out Entity leftEntity)) {
@@ -107,7 +106,7 @@ namespace LazyPan {
             object rightValue;
             ParamValueType rightType = condition.LeftValueType;
             if (condition.RightIsEntityParam) {
-                if (string.IsNullOrEmpty(condition.RightParamSign)) {
+                if (!BehaviourSigns.Require(condition.RightParamSign, BehaviourSign, leftEntity.ObjConfig?.Sign, nameof(TeleportCondition.RightParamSign))) {
                     return false;
                 }
 
@@ -128,15 +127,10 @@ namespace LazyPan {
         }
 
         /// <summary>
-        /// 积木连接 按配置解析要读的实体 空=读自己 非空=按Sign读其他实体的Data 行为不感知对方类型
+        /// 积木连接 按配置解析要读的实体 Self=读自己 其他按Sign读其他实体的Data 行为不感知对方类型
         /// </summary>
         private bool TryGetWatchEntity(string sign, out Entity watchEntity) {
-            if (string.IsNullOrEmpty(sign)) {
-                watchEntity = entity;
-                return true;
-            }
-
-            return EntityRegister.TryGetEntityBySign(sign, out watchEntity);
+            return BehaviourSigns.ResolveEntity(entity, BehaviourSign, nameof(TeleportCondition.LeftEntitySign), sign, out watchEntity);
         }
 
         /// <summary>
@@ -291,6 +285,7 @@ namespace LazyPan {
 
         public override void Clear() {
             Game.instance.OnUpdateEvent.RemoveListener(OnUpdate);
+            DetachBehaviourData<TeleportFlowData>();
             base.Clear();
         }
     }

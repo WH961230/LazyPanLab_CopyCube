@@ -22,7 +22,8 @@ namespace LazyPan {
         public class TeleportFlowConfig {
             [Header("目标场景标识")] public string TargetSceneSign;
             [Header("仅触发一次")] public bool Once = true;
-            [Header("前置条件 为空=无条件命中")] public TeleportCondition Condition = new TeleportCondition();
+            [Header("无条件走内部请求 Condition为空时有效")] public bool UseRequest;
+            [Header("前置条件 留空=无条件")] public TeleportCondition Condition = new TeleportCondition();
         }
     }
 }

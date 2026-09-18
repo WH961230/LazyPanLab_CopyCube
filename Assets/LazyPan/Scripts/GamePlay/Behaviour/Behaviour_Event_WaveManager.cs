@@ -24,7 +24,7 @@ namespace LazyPan {
         private FloatData _waveRestRemainData;
 
         public Behaviour_Event_WaveManager(Entity entity, string behaviourSign) : base(entity, behaviourSign) {
-            _waveData = entity.Prefab.AddComponent<WaveManagerData>();
+            _waveData = AttachBehaviourData<WaveManagerData>();
             WaveManagerSetting setting = Loader.LoadAsset<WaveManagerSetting>(AssetType.ASSET, settingPath);
 
             if (setting == null) {
@@ -63,6 +63,16 @@ namespace LazyPan {
             waveNumber = _config.StartWaveIndex - 1;
             _config.Waves.Clear();
             foreach (WaveEntry entry in settingData.Waves) {
+                if (entry.AdvanceMode == WaveAdvanceMode.WaitValue) {
+                    if (!BehaviourSigns.Require(entry.WaitWatchSign, BehaviourSign, entity.ObjConfig?.Sign, nameof(WaveEntry.WaitWatchSign))) {
+                        return;
+                    }
+
+                    if (!BehaviourSigns.Require(entry.WaitWatchEntitySign, BehaviourSign, entity.ObjConfig?.Sign, nameof(WaveEntry.WaitWatchEntitySign))) {
+                        return;
+                    }
+                }
+
                 _config.Waves.Add(new WaveEntry() {
                     RestDuration = Mathf.Max(entry.RestDuration, 0f),
                     AdvanceMode = entry.AdvanceMode,
@@ -163,19 +173,17 @@ namespace LazyPan {
         }
 
         /// <summary>
-        /// 积木连接 按配置解析要读的实体 空=读自己 非空=按Sign读其他实体的Data 行为不感知对方类型
+        /// 积木连接 按配置解析要读的实体 Self=读自己 其他按Sign读其他实体的Data 行为不感知对方类型
         /// </summary>
         private bool TryGetWatchEntity(string sign, out Entity watchEntity) {
-            if (string.IsNullOrEmpty(sign)) {
-                watchEntity = entity;
-                return true;
-            }
-            return EntityRegister.TryGetEntityBySign(sign, out watchEntity);
+            return BehaviourSigns.ResolveEntity(entity, BehaviourSign, nameof(WaveEntry.WaitWatchEntitySign), sign, out watchEntity);
         }
 
         private bool CheckWatch(Entity dataEntity, string sign, WatchCompare compare, int target) {
-            if (string.IsNullOrEmpty(sign)) return true;
             if (dataEntity == null) return false;
+            if (!BehaviourSigns.Require(sign, BehaviourSign, dataEntity.ObjConfig?.Sign, nameof(WaveEntry.WaitWatchSign))) {
+                return false;
+            }
             int current;
             if (Cond.Instance.GetData<IntData>(dataEntity, sign, out IntData intData)) current = intData.Int;
             else if (Cond.Instance.GetData<FloatData>(dataEntity, sign, out FloatData floatData)) current = Mathf.RoundToInt(floatData.Float);
@@ -193,6 +201,7 @@ namespace LazyPan {
 
         public override void Clear() {
             if (Game.instance != null) Game.instance.OnUpdateEvent.RemoveListener(OnUpdate);
+            DetachBehaviourData<WaveManagerData>();
             base.Clear();
         }
     }

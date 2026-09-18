@@ -37,12 +37,12 @@ namespace LazyPan {
     [Serializable]
     public class ParamValueItem {
         [EntitySign]
-        [Header("目标实体 留空写自己")]
-        [Tooltip("要写值的目标实体 Sign，留空=写自己实体的 Data。跨实体联动时填对方 Sign，行为不感知对方类型")]
+        [Header("目标实体 必填 Self=自己")]
+        [Tooltip("要写值的目标实体 Sign，Self=自己实体的 Data。跨实体联动时填对方 Sign，行为不感知对方类型。不允许为空")]
         public string TargetEntitySign;
 
-        [Header("参数标签")]
-        [Tooltip("要写的 Data 标签名，如 MovementStop。目标上不存在时自动创建")]
+        [Header("参数标签 必填")]
+        [Tooltip("要写的 Data 标签名，如 MovementStop。不允许为空，目标上不存在时自动创建")]
         public string ParamSign;
 
         [Header("参数类型")]

@@ -17,8 +17,7 @@ namespace LazyPan {
         private Vector2 input;
 
         public Behaviour_Auto_InputWASDMove(Entity entity, string behaviourSign) : base(entity, behaviourSign) {
-            _moveData = entity.Prefab.AddComponent<InputWASDMoveData>();
-            _moveData.EntityID = entity.ID;
+            _moveData = AttachBehaviourData<InputWASDMoveData>();
             
             InputWASDMoveSetting setting = Loader.LoadAsset<InputWASDMoveSetting>(AssetType.ASSET, settingPath);
 
@@ -82,6 +81,7 @@ namespace LazyPan {
         public override void Clear() {
             InputRegister.Instance.UnLoad(_config.InputControlSign, OnMotion);
             Game.instance.OnUpdateEvent.RemoveListener(OnUpdate);
+            DetachBehaviourData<InputWASDMoveData>();
             base.Clear();
         }
     }

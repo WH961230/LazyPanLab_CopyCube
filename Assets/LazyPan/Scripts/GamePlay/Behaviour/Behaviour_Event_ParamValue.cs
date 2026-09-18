@@ -15,8 +15,7 @@ namespace LazyPan {
         private List<ParamValueData.ParamValueConfig> _configs = new List<ParamValueData.ParamValueConfig>();
 
         public Behaviour_Event_ParamValue(Entity entity, string behaviourSign) : base(entity, behaviourSign) {
-            _paramData = entity.Prefab.AddComponent<ParamValueData>();
-            _paramData.EntityID = entity.ID;
+            _paramData = AttachBehaviourData<ParamValueData>();
 
             ParamValueSetting setting = Loader.LoadAsset<ParamValueSetting>(AssetType.ASSET, settingPath);
 
@@ -54,8 +53,15 @@ namespace LazyPan {
             }
 
             foreach (ParamValueItem item in settingData.Items) {
-                if (item == null || string.IsNullOrEmpty(item.ParamSign)) {
-                    LogUtil.LogErrorFormat("行为:{0} 实体:{1} 存在未配置参数标签的项 已跳过", BehaviourSign, entity.ObjConfig.Sign);
+                if (item == null) {
+                    continue;
+                }
+
+                if (!BehaviourSigns.Require(item.TargetEntitySign, BehaviourSign, entity.ObjConfig?.Sign, nameof(ParamValueItem.TargetEntitySign))) {
+                    continue;
+                }
+
+                if (!BehaviourSigns.Require(item.ParamSign, BehaviourSign, item.TargetEntitySign, nameof(ParamValueItem.ParamSign))) {
                     continue;
                 }
 
@@ -149,23 +155,14 @@ namespace LazyPan {
         }
 
         /// <summary>
-        /// 积木连接 按配置解析要写的实体 空=写自己 非空=按Sign写其他实体的Data 行为不感知对方类型
+        /// 积木连接 按配置解析要写的实体 Self=写自己 其他按Sign写其他实体的Data 行为不感知对方类型
         /// </summary>
         private bool TryGetTargetEntity(string targetEntitySign, out Entity target) {
-            if (string.IsNullOrEmpty(targetEntitySign)) {
-                target = entity;
-                return true;
-            }
-
-            if (!EntityRegister.TryGetEntityBySign(targetEntitySign, out target)) {
-                LogUtil.LogErrorFormat("行为:{0} 未找到目标实体:{1}", BehaviourSign, targetEntitySign);
-                return false;
-            }
-
-            return true;
+            return BehaviourSigns.ResolveEntity(entity, BehaviourSign, nameof(ParamValueItem.TargetEntitySign), targetEntitySign, out target);
         }
 
         public override void Clear() {
+            DetachBehaviourData<ParamValueData>();
             base.Clear();
         }
     }
