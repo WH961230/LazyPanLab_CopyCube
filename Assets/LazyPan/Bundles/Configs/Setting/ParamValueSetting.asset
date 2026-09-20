@@ -71,6 +71,42 @@ MonoBehaviour:
       StringValue: 
       Vector3Value: {x: 0, y: 0, z: 0}
       ApplyOnInit: 1
+    - TargetEntitySign: Obj_Player_SceneC_Player
+      ParamSign: MaxExp
+      ValueType: 2
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: 100
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
+    - TargetEntitySign: Obj_Player_SceneC_Player
+      ParamSign: Exp
+      ValueType: 2
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: 0
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
+    - TargetEntitySign: Obj_Player_SceneC_Player
+      ParamSign: Level
+      ValueType: 1
+      BoolValue: 0
+      IntValue: 1
+      FloatValue: 0
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
+    - TargetEntitySign: Obj_Player_SceneC_Player
+      ParamSign: MaxLevel
+      ValueType: 1
+      BoolValue: 0
+      IntValue: 9999
+      FloatValue: 0
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
   - SourceSign: Obj_Tower_SceneB_Tower
     Items:
     - TargetEntitySign: Obj_Tower_SceneB_Tower

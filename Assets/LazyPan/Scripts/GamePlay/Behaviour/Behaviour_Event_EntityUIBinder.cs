@@ -155,14 +155,14 @@ namespace LazyPan {
                         binding.Slider = ResolveSlider(bound, comp, bind.ComponentSign);
                         break;
                     case UIDataBindComponentType.Text:
-                        ResolveText(bound, comp, bind.ComponentSign, out binding.TMPText, out binding.LegacyText);
+                        binding.TMPText = ResolveText(bound, comp, bind.ComponentSign);
                         break;
                     case UIDataBindComponentType.Image:
                         binding.Image = ResolveImage(bound, comp, bind.ComponentSign);
                         break;
                 }
 
-                if (binding.Slider == null && binding.TMPText == null && binding.LegacyText == null && binding.Image == null) {
+                if (binding.Slider == null && binding.TMPText == null && binding.Image == null) {
                     LogUtil.LogErrorFormat("行为:{0} UI:{1} 未找到组件:{2} 类型:{3} 请检查预制体Comp标签或子物体名",
                         BehaviourSign, item.UIPrefabSign, bind.ComponentSign, bind.ComponentType);
                     continue;
@@ -190,31 +190,19 @@ namespace LazyPan {
             return all.Length > 0 ? all[0] : null;
         }
 
-        private void ResolveText(BoundUI bound, Comp comp, string sign, out TextMeshProUGUI tmpText, out Text legacyText) {
-            tmpText = comp != null ? comp.Get<TextMeshProUGUI>(sign) : null;
+        private TextMeshProUGUI ResolveText(BoundUI bound, Comp comp, string sign) {
+            TextMeshProUGUI tmpText = comp != null ? comp.Get<TextMeshProUGUI>(sign) : null;
             if (tmpText != null) {
-                legacyText = null;
-                return;
-            }
-
-            legacyText = comp != null ? comp.Get<Text>(sign) : null;
-            if (legacyText != null) {
-                return;
+                return tmpText;
             }
 
             foreach (TextMeshProUGUI tmp in bound.Go.GetComponentsInChildren<TextMeshProUGUI>(true)) {
                 if (tmp.gameObject.name == sign) {
-                    tmpText = tmp;
-                    return;
+                    return tmp;
                 }
             }
 
-            foreach (Text tmp in bound.Go.GetComponentsInChildren<Text>(true)) {
-                if (tmp.gameObject.name == sign) {
-                    legacyText = tmp;
-                    return;
-                }
-            }
+            return null;
         }
 
         private Image ResolveImage(BoundUI bound, Comp comp, string sign) {
@@ -299,12 +287,8 @@ namespace LazyPan {
                     }
                     break;
                 case UIDataBindComponentType.Text:
-                    if (TryReadText(binding, out string content)) {
-                        if (binding.TMPText != null) {
-                            binding.TMPText.text = content;
-                        } else if (binding.LegacyText != null) {
-                            binding.LegacyText.text = content;
-                        }
+                    if (binding.TMPText != null && TryReadText(binding, out string content)) {
+                        binding.TMPText.text = content;
                     }
                     break;
             }
@@ -447,7 +431,6 @@ namespace LazyPan {
             public string Format;
             public Slider Slider;
             public TextMeshProUGUI TMPText;
-            public Text LegacyText;
             public Image Image;
             public bool HasLoggedError;
         }

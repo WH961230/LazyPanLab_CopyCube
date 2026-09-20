@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -23,6 +24,20 @@ namespace LazyPan {
         public class DeathConfig {
             [Header("死亡延迟销毁时长")] public float DeathDelay;
             [Header("死亡后处理")] public DeathAction DeathAction;
+            [Header("死亡瞬间要改的参数列表")] public List<DeathParamConfig> OnDeathParams = new List<DeathParamConfig>();
+        }
+
+        [Serializable]
+        public class DeathParamConfig {
+            [Header("被修改实体 Self=自己")] public string TargetEntitySign = BehaviourSigns.Self;
+            [Header("参数标签")] public string ParamSign;
+            [Header("参数类型")] public ParamValueType ValueType;
+            [Header("修改方式 Set直接赋值 Add累加")] public DeathModifyType Modify;
+            [Header("布尔值")] public bool BoolValue;
+            [Header("整数值")] public int IntValue;
+            [Header("浮点值")] public float FloatValue;
+            [Header("字符串值")] public string StringValue;
+            [Header("向量值")] public Vector3 Vector3Value;
         }
 
 #if UNITY_EDITOR

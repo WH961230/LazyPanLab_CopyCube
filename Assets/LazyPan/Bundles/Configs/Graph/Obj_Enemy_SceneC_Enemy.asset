@@ -27,7 +27,7 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -349, y: 351, z: 0}
+  position: {x: -122, y: -36, z: 0}
   scale: {x: 1.3225, y: 1.3225, z: 1}
   references:
     version: 2
@@ -52,6 +52,16 @@ MonoBehaviour:
           SourceSign: Obj_Enemy_SceneC_Enemy
           DeathDelay: 0
           DeathAction: 1
+          OnDeathParams:
+          - TargetEntitySign: Obj_Player_SceneC_Player
+            ParamSign: Exp
+            ValueType: 2
+            Modify: 1
+            BoolValue: 0
+            IntValue: 0
+            FloatValue: 40
+            StringValue: 
+            Vector3Value: {x: 0, y: 0, z: 0}
     - rid: 8263989132141527884
       type: {class: BehaviourNode_TrackingEntity, ns: LazyPan, asm: Assembly-CSharp}
       data:
@@ -157,9 +167,9 @@ MonoBehaviour:
         computeOrder: 4
         position:
           serializedVersion: 2
-          x: 1282
-          y: 80
-          width: 219
+          x: 1337
+          y: 80.00001
+          width: 397
           height: 704
         expanded: 0
         debug: 0
@@ -167,7 +177,7 @@ MonoBehaviour:
         NodeInitialized: 1
         Config:
           SourceSign: Obj_Enemy_SceneC_Enemy
-          CompTriggerSign: 
+          CompTriggerSign: Trigger
           Rules:
           - TriggerEntitySign: Obj_Player_SceneC_Player
             EnterActions: []

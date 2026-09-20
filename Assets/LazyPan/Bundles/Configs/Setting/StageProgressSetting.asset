@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e105b28954da0234cb7c37733edeec26, type: 3}
+  m_Name: StageProgressSetting
+  m_EditorClassIdentifier: 
+  Datas:
+  - SourceSign: Obj_Player_SceneC_Player
+    StageParamSign: Level
+    MaxStageParamSign: MaxLevel
+    ProgressParamSign: Exp
+    MaxProgressParamSign: MaxExp
+    InitialStage: 1
+    MaxStage: 9999
+    FallbackCap: 10000
+    Caps:
+    - Stage: 1
+      Cap: 100
+    - Stage: 2
+      Cap: 150
+    - Stage: 3
+      Cap: 200
+    - Stage: 4
+      Cap: 300
+    - Stage: 5
+      Cap: 450
+    - Stage: 6
+      Cap: 600
+    - Stage: 7
+      Cap: 800
+    - Stage: 8
+      Cap: 1000
+    - Stage: 9
+      Cap: 1500
+    - Stage: 10
+      Cap: 2200

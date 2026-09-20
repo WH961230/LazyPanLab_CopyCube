@@ -16,6 +16,17 @@ MonoBehaviour:
   - SourceSign: Obj_Enemy_SceneC_Enemy
     DeathDelay: 0
     DeathAction: 1
+    OnDeathParams:
+    - TargetEntitySign: Obj_Player_SceneC_Player
+      ParamSign: Exp
+      ValueType: 2
+      Modify: 1
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: 40
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
   - SourceSign: Obj_Player_SceneC_Player
     DeathDelay: 0
     DeathAction: 1
+    OnDeathParams: []

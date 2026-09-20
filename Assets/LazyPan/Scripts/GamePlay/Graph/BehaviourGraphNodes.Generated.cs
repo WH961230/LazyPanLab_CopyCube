@@ -112,4 +112,37 @@ namespace LazyPan {
         public override string BehaviourSign => nameof(Behaviour_Event_TeleportFlow);
     }
 
+    /// <summary>
+    /// 死亡行为节点 对应 DeathSettingData 一条
+    /// </summary>
+    [Serializable]
+    [NodeMenuItem("LazyPan/行为/死亡")]
+    public class BehaviourNode_Death : BehaviourGraphNode {
+        public DeathSettingData Config;
+        public override string name => "死亡";
+        public override string BehaviourSign => nameof(Behaviour_Event_Death);
+    }
+
+    /// <summary>
+    /// 阶段进度行为节点 对应 StageProgressSettingData 一条
+    /// </summary>
+    [Serializable]
+    [NodeMenuItem("LazyPan/行为/阶段进度")]
+    public class BehaviourNode_StageProgress : BehaviourGraphNode {
+        public StageProgressSettingData Config;
+        public override string name => "阶段进度";
+        public override string BehaviourSign => nameof(Behaviour_Event_StageProgress);
+    }
+
+    /// <summary>
+    /// 屏幕状态展示行为节点 对应 UIStatusDisplaySettingData 一条
+    /// </summary>
+    [Serializable]
+    [NodeMenuItem("LazyPan/行为/屏幕状态展示")]
+    public class BehaviourNode_UIStatusDisplay : BehaviourGraphNode {
+        public UIStatusDisplaySettingData Config;
+        public override string name => "屏幕状态展示";
+        public override string BehaviourSign => nameof(Behaviour_Event_UIStatusDisplay);
+    }
+
 }

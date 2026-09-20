@@ -16,16 +16,4 @@ namespace LazyPan {
         [HideInInspector]
         public bool NodeInitialized;
     }
-
-    /// <summary>
-    /// 死亡行为节点 嵌入 DeathSettingData 一条 对应原 DeathSetting.Datas 中的一项
-    /// </summary>
-    [Serializable]
-    [NodeMenuItem("LazyPan/行为/死亡")]
-    public class BehaviourNode_Death : BehaviourGraphNode {
-        public DeathSettingData Config;
-
-        public override string name => "死亡";
-        public override string BehaviourSign => nameof(Behaviour_Event_Death);
-    }
 }

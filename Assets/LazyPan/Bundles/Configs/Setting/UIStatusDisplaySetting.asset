@@ -9,10 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77819a1bce2c4b03a3046288c64f14d7, type: 3}
-  m_Name: LocationInf_SceneC_Tower1 1
+  m_Script: {fileID: 11500000, guid: 7a3f1c2d8e4b4a5f9c6d2e1a0b4c8d3f, type: 3}
+  m_Name: UIStatusDisplaySetting
   m_EditorClassIdentifier: 
-  SettingName: "\u5854"
-  locationInformationDatas:
-  - Position: {x: 0, y: 0, z: 0}
-    Rotation: {x: 0, y: 0, z: 0}
+  Datas: []

@@ -39,6 +39,23 @@ MonoBehaviour:
         DataSign: Health
         MaxDataSign: MaxHealth
         Format: 
+    - UIPrefabSign: UI/UI_ExpBar
+      AttachLabel: UIRoot
+      Offset: {x: 0, y: 0, z: -0.5}
+      Billboard: 0
+      DataBinds:
+      - ComponentSign: Slider
+        ComponentType: 0
+        Mode: 0
+        DataSign: Exp
+        MaxDataSign: MaxExp
+        Format: 
+      - ComponentSign: Level
+        ComponentType: 1
+        Mode: 1
+        DataSign: Level
+        MaxDataSign: MaxLevel
+        Format: 
   - SourceSign: Obj_Tower_SceneB_Tower
     Items:
     - UIPrefabSign: UI/UI_EnergyBar

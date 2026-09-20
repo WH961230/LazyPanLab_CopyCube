@@ -19,6 +19,7 @@ MonoBehaviour:
   - rid: 8263989154599141376
   - rid: 8263989154599141377
   - rid: 8263989181806280859
+  - rid: 8263989226649419856
   edges: []
   groups: []
   stackNodes: []
@@ -27,8 +28,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -548, y: 583, z: 0}
-  scale: {x: 1.15, y: 1.15, z: 1}
+  position: {x: -378, y: 255, z: 0}
+  scale: {x: 1, y: 1, z: 1}
   references:
     version: 2
     RefIds:
@@ -40,7 +41,7 @@ MonoBehaviour:
         computeOrder: 0
         position:
           serializedVersion: 2
-          x: -232
+          x: -202.51042
           y: -260
           width: 247
           height: 297
@@ -62,7 +63,7 @@ MonoBehaviour:
         computeOrder: 1
         position:
           serializedVersion: 2
-          x: 15
+          x: 68.97254
           y: -260
           width: 328
           height: 657
@@ -100,6 +101,42 @@ MonoBehaviour:
             StringValue: 
             Vector3Value: {x: 0, y: 0, z: 0}
             ApplyOnInit: 1
+          - TargetEntitySign: Obj_Player_SceneC_Player
+            ParamSign: MaxExp
+            ValueType: 2
+            BoolValue: 0
+            IntValue: 0
+            FloatValue: 100
+            StringValue: 
+            Vector3Value: {x: 0, y: 0, z: 0}
+            ApplyOnInit: 1
+          - TargetEntitySign: Obj_Player_SceneC_Player
+            ParamSign: Exp
+            ValueType: 2
+            BoolValue: 0
+            IntValue: 0
+            FloatValue: 0
+            StringValue: 
+            Vector3Value: {x: 0, y: 0, z: 0}
+            ApplyOnInit: 1
+          - TargetEntitySign: Obj_Player_SceneC_Player
+            ParamSign: Level
+            ValueType: 1
+            BoolValue: 0
+            IntValue: 1
+            FloatValue: 0
+            StringValue: 
+            Vector3Value: {x: 0, y: 0, z: 0}
+            ApplyOnInit: 1
+          - TargetEntitySign: Obj_Player_SceneC_Player
+            ParamSign: MaxLevel
+            ValueType: 1
+            BoolValue: 0
+            IntValue: 9999
+            FloatValue: 0
+            StringValue: 
+            Vector3Value: {x: 0, y: 0, z: 0}
+            ApplyOnInit: 1
     - rid: 8263989154599141376
       type: {class: BehaviourNode_Death, ns: LazyPan, asm: Assembly-CSharp}
       data:
@@ -108,10 +145,10 @@ MonoBehaviour:
         computeOrder: 2
         position:
           serializedVersion: 2
-          x: 342.82617
+          x: 311.73914
           y: -260
           width: 260
-          height: 204
+          height: 252
         expanded: 1
         debug: 0
         nodeLock: 0
@@ -120,6 +157,7 @@ MonoBehaviour:
           SourceSign: Obj_Player_SceneC_Player
           DeathDelay: 0
           DeathAction: 1
+          OnDeathParams: []
     - rid: 8263989154599141377
       type: {class: BehaviourNode_EntityUIBinder, ns: LazyPan, asm: Assembly-CSharp}
       data:
@@ -128,7 +166,7 @@ MonoBehaviour:
         computeOrder: 3
         position:
           serializedVersion: 2
-          x: 602.8262
+          x: 600.0434
           y: -260
           width: 357
           height: 657
@@ -150,6 +188,23 @@ MonoBehaviour:
               DataSign: Health
               MaxDataSign: MaxHealth
               Format: 
+          - UIPrefabSign: UI/UI_ExpBar
+            AttachLabel: UIRoot
+            Offset: {x: 0, y: 0, z: -0.5}
+            Billboard: 0
+            DataBinds:
+            - ComponentSign: Slider
+              ComponentType: 0
+              Mode: 0
+              DataSign: Exp
+              MaxDataSign: MaxExp
+              Format: 
+            - ComponentSign: Level
+              ComponentType: 1
+              Mode: 1
+              DataSign: Level
+              MaxDataSign: MaxLevel
+              Format: 
     - rid: 8263989181806280859
       type: {class: BehaviourNode_EntityTriggerController, ns: LazyPan, asm: Assembly-CSharp}
       data:
@@ -158,8 +213,8 @@ MonoBehaviour:
         computeOrder: 4
         position:
           serializedVersion: 2
-          x: 1152.1608
-          y: -260
+          x: 996.04346
+          y: -260.00003
           width: 397
           height: 704
         expanded: 0
@@ -186,3 +241,49 @@ MonoBehaviour:
               Max: 100
             ExitActions: []
             OutsideActions: []
+    - rid: 8263989226649419856
+      type: {class: BehaviourNode_StageProgress, ns: LazyPan, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 47d3e20a-6656-4475-beb3-c835b5c40b36
+        computeOrder: 5
+        position:
+          serializedVersion: 2
+          x: 1420.0435
+          y: -260.00003
+          width: 243
+          height: 439
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        NodeInitialized: 1
+        Config:
+          SourceSign: Obj_Player_SceneC_Player
+          StageParamSign: Level
+          MaxStageParamSign: MaxLevel
+          ProgressParamSign: Exp
+          MaxProgressParamSign: MaxExp
+          InitialStage: 1
+          MaxStage: 9999
+          FallbackCap: 10000
+          Caps:
+          - Stage: 1
+            Cap: 100
+          - Stage: 2
+            Cap: 150
+          - Stage: 3
+            Cap: 200
+          - Stage: 4
+            Cap: 300
+          - Stage: 5
+            Cap: 450
+          - Stage: 6
+            Cap: 600
+          - Stage: 7
+            Cap: 800
+          - Stage: 8
+            Cap: 1000
+          - Stage: 9
+            Cap: 1500
+          - Stage: 10
+            Cap: 2200

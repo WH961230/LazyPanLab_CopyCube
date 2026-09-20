@@ -44,7 +44,7 @@ MonoBehaviour:
         Min: 0
         Max: 100
   - SourceSign: Obj_Enemy_SceneC_Enemy
-    CompTriggerSign: 
+    CompTriggerSign: Trigger
     Rules:
     - TriggerEntitySign: Obj_Player_SceneC_Player
       EnterActions: []

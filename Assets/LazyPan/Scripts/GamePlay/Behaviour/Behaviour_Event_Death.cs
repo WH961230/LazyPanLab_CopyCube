@@ -3,7 +3,7 @@ using UnityEngine;
 namespace LazyPan {
     /// <summary>
     /// 行为 - 死亡
-    /// 只做一件事: 监听实体 Health 状态并维护 Dead 标记 执行死亡处理与延迟销毁
+    /// 只做一件事: 监听实体 Health 状态并维护 Dead 标记 死亡瞬间按配置改一批参数 再执行死亡处理与延迟销毁
     /// Health 由其他数值行为修改 本行为不感知伤害来源 不调用其他行为
     /// 配置来源 Setting/DeathSetting 运行时状态写入实体 Data(Dead)
     /// </summary>
@@ -42,6 +42,7 @@ namespace LazyPan {
             _config = _deathData.Config;
             _config.DeathDelay = Mathf.Max(settingData.DeathDelay, 0f);
             _config.DeathAction = settingData.DeathAction;
+            CopyOnDeathParams(settingData);
 
             if (!BindRuntimeData()) {
                 LogUtil.LogErrorFormat("行为:{0} 实体:{1} 缺少 Dead 参数 请在 ParamValueSetting 为该实体配置 Bool 参数 Dead!", BehaviourSign, entity.ObjConfig.Sign);
@@ -54,6 +55,90 @@ namespace LazyPan {
         public override void DelayedExecute() {
         }
 
+        /// <summary>
+        /// 配置资产的参数项拷贝到实体 Data 与配置资产解耦 空标签项直接丢弃
+        /// 老配置 OnDeathParams 为空时直接跳过 不影响原有死亡流程
+        /// </summary>
+        private void CopyOnDeathParams(DeathSettingData settingData) {
+            _config.OnDeathParams.Clear();
+            if (settingData.OnDeathParams == null) {
+                return;
+            }
+
+            foreach (DeathParamItem item in settingData.OnDeathParams) {
+                if (item == null) {
+                    continue;
+                }
+
+                if (!BehaviourSigns.Require(item.TargetEntitySign, BehaviourSign, entity.ObjConfig?.Sign, nameof(DeathParamItem.TargetEntitySign))) {
+                    continue;
+                }
+
+                if (!BehaviourSigns.Require(item.ParamSign, BehaviourSign, item.TargetEntitySign, nameof(DeathParamItem.ParamSign))) {
+                    continue;
+                }
+
+                _config.OnDeathParams.Add(new DeathData.DeathParamConfig() {
+                    TargetEntitySign = item.TargetEntitySign,
+                    ParamSign = item.ParamSign,
+                    ValueType = item.ValueType,
+                    Modify = item.Modify,
+                    BoolValue = item.BoolValue,
+                    IntValue = item.IntValue,
+                    FloatValue = item.FloatValue,
+                    StringValue = item.StringValue,
+                    Vector3Value = item.Vector3Value,
+                });
+            }
+        }
+
+        /// <summary>
+        /// 死亡瞬间执行一次 按配置改一批参数 单项失败不影响其余项
+        /// Set=直接赋值 Add=在原值上累加(只对 Int/Float/Vector3 有意义)
+        /// </summary>
+        private void ApplyOnDeathParams() {
+            foreach (DeathData.DeathParamConfig config in _config.OnDeathParams) {
+                if (!BehaviourSigns.ResolveEntity(entity, BehaviourSign, nameof(DeathParamItem.TargetEntitySign), config.TargetEntitySign, out Entity target)) {
+                    continue;
+                }
+
+                switch (config.ValueType) {
+                    case ParamValueType.Bool:
+                        if (Cond.Instance.TryGetData(target, config.ParamSign, out BoolData boolData)) {
+                            boolData.Bool = config.BoolValue;
+                        }
+
+                        break;
+                    case ParamValueType.Int:
+                        if (Cond.Instance.TryGetData(target, config.ParamSign, out IntData intData)) {
+                            intData.Int = config.Modify == DeathModifyType.Add ? intData.Int + config.IntValue : config.IntValue;
+                        }
+
+                        break;
+                    case ParamValueType.Float:
+                        if (Cond.Instance.TryGetData(target, config.ParamSign, out FloatData floatData)) {
+                            floatData.Float = config.Modify == DeathModifyType.Add ? floatData.Float + config.FloatValue : config.FloatValue;
+                        }
+
+                        break;
+                    case ParamValueType.String:
+                        if (Cond.Instance.TryGetData(target, config.ParamSign, out StringData stringData)) {
+                            stringData.String = config.StringValue;
+                        }
+
+                        break;
+                    case ParamValueType.Vector3:
+                        if (Cond.Instance.TryGetData(target, config.ParamSign, out Vector3Data vector3Data)) {
+                            vector3Data.Vector3 = config.Modify == DeathModifyType.Add ? vector3Data.Vector3 + config.Vector3Value : config.Vector3Value;
+                        }
+
+                        break;
+                    default:
+                        LogUtil.LogErrorFormat("行为:{0} 不支持的参数类型:{1}", BehaviourSign, config.ValueType);
+                        break;
+                }
+            }
+        }
         /// <summary>
         /// 绑定实体 Data 标签 Health/MaxHealth/Dead。
         /// Health 与 MaxHealth 用于状态读取，Dead 由本行为维护。
@@ -102,9 +187,10 @@ namespace LazyPan {
         }
 
         /// <summary>
-        /// 死亡处理 同步状态与事件 延迟销毁交由 OnUpdate 计时
+        /// 死亡处理 先按配置改一批参数 再做销毁/失活 延迟销毁交由 OnUpdate 计时
         /// </summary>
         private void Die() {
+            ApplyOnDeathParams();
             switch (_config.DeathAction) {
                 case DeathAction.DestroyEntity:
                     if (_config.DeathDelay > 0f) {
