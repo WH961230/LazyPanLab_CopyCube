@@ -145,4 +145,15 @@ namespace LazyPan {
         public override string BehaviourSign => nameof(Behaviour_Event_UIStatusDisplay);
     }
 
+    /// <summary>
+    /// UI三选一行为节点 对应 UIPickOneOfThreeSettingData 一条
+    /// </summary>
+    [Serializable]
+    [NodeMenuItem("LazyPan/行为/UI三选一")]
+    public class BehaviourNode_UIPickOneOfThree : BehaviourGraphNode {
+        public UIPickOneOfThreeSettingData Config;
+        public override string name => "UI三选一";
+        public override string BehaviourSign => nameof(Behaviour_Event_UIPickOneOfThree);
+    }
+
 }

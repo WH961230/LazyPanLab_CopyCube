@@ -38,7 +38,10 @@ namespace LazyPan {
         private LazyPanTool _tool;
         private float _areaX;
         private int _index;
-        //数据
+        //数据 全量(与 csv 一一对应 改写 csv 只认它)
+        private List<MyBehaviourData> allBehaviourDatas = new List<MyBehaviourData>();
+        private List<MyBehaviourGenerateData> allBehaviourGenerateDatas = new List<MyBehaviourGenerateData>();
+        //数据 当前显示(可能是模糊搜索过滤后的子集 存的是同一批对象引用 改它等于改全量)
         private List<MyBehaviourData> behaviourDatas = new List<MyBehaviourData>();
         private List<MyBehaviourGenerateData> behaviourGenerateDatas = new List<MyBehaviourGenerateData>();
         //记录列表
@@ -183,12 +186,19 @@ namespace LazyPan {
             reorderableList.onReorderCallback = (ReorderableList list) => {
             };
             reorderableList.onAddCallback = (ReorderableList list) => {
-                behaviourDatas.Add(new MyBehaviourData(new string[3]));
+                MyBehaviourData fresh = new MyBehaviourData(new string[3]);
+                behaviourDatas.Add(fresh);
+                //新行必须进全量 否则它永远写不进 csv(搜过滤时尤其如此)
+                if (!allBehaviourDatas.Contains(fresh)) {
+                    allBehaviourDatas.Add(fresh);
+                }
             };
             reorderableList.onRemoveCallback = (ReorderableList list) => {
-                // 确保索引有效
+                // 确保索引有效 显示与全量一起删 否则删完重读又回来
                 if (list.index >= 0 && list.index < list.list.Count) {
+                    MyBehaviourData removed = behaviourDatas[list.index];
                     list.list.RemoveAt(list.index);  // 移除当前选中的元素
+                    allBehaviourDatas.Remove(removed);
                 }
             };
             reorderableList.onChangedCallback = (ReorderableList list) => {
@@ -265,12 +275,18 @@ namespace LazyPan {
             generateReorderableList.onReorderCallback = (ReorderableList list) => {
             };
             generateReorderableList.onAddCallback = (ReorderableList list) => {
-                behaviourGenerateDatas.Add(new MyBehaviourGenerateData(new string[5], -1));
+                MyBehaviourGenerateData fresh = new MyBehaviourGenerateData(new string[5], -1);
+                behaviourGenerateDatas.Add(fresh);
+                if (!allBehaviourGenerateDatas.Contains(fresh)) {
+                    allBehaviourGenerateDatas.Add(fresh);
+                }
             };
             generateReorderableList.onRemoveCallback = (ReorderableList list) => {
-                // 确保索引有效
+                // 确保索引有效 显示与全量一起删 否则删完重读又回来
                 if (list.index >= 0 && list.index < list.list.Count) {
+                    MyBehaviourGenerateData removed = behaviourGenerateDatas[list.index];
                     list.list.RemoveAt(list.index);  // 移除当前选中的元素
+                    allBehaviourGenerateDatas.Remove(removed);
                 }
             };
             generateReorderableList.onChangedCallback = (ReorderableList list) => {
@@ -280,58 +296,12 @@ namespace LazyPan {
         }
 
         private void WriteBehaviourGenerateData() {
-            ReadCSV.Instance.Read("BehaviourGenerate", out string content, out string[] lines);
-            try {
-                Queue<MyBehaviourGenerateData> behaviourGenerateDataQue = new Queue<MyBehaviourGenerateData>(behaviourGenerateDatas);
-                int newLength = -1;
-                for (int i = 0; i < lines.Length; i++) {
-                    if (i > 2) {
-                        string[] linesStr = lines[i].Split(',');
-                        if (behaviourGenerateDataQue.Count == 0) {
-                            newLength = i;
-                            break;
-                        }
-
-                        MyBehaviourGenerateData data = behaviourGenerateDataQue.Dequeue();
-                        if (data != null) {
-                            for (int j = 0; j < data.Infos.Length; j++) {
-                                linesStr[j] = data.Infos[j];
-                            }
-
-                            lines[i] = string.Join(",", linesStr);
-                        }
-                    }
-                }
-                
-                string[] newLines;
-                if (newLength > -1) {
-                    //需要裁剪
-                    newLines = new string[newLength];
-                    Array.Copy(lines, newLines, newLength);
-                    ReadCSV.Instance.Write("BehaviourGenerate", newLines);
-                } else {
-                    newLines = new string[behaviourGenerateDataQue.Count];
-                    int index = 0;
-                    while (behaviourGenerateDataQue.Count > 0) {
-                        MyBehaviourGenerateData data = behaviourGenerateDataQue.Dequeue();
-                        if (data != null) {
-                            string[] linesStr = new string[6];
-                            for (int j = 0; j < data.Infos.Length; j++) {
-                                linesStr[j] = data.Infos[j];
-                            }
-                
-                            newLines[index] = string.Join(",", linesStr);
-                            index++;
-                        }
-                    }
-                    ReadCSV.Instance.Write("BehaviourGenerate", lines.Concat(newLines).ToArray());
-                }
-            } catch {
-                UnityEngine.Debug.LogError("录入错误");
-            }
+            //按第1列键名回写 模糊过滤后改某行不会串到别的行 新增追加 删除跟删
+            WriteKeyedCsv("BehaviourGenerate", allBehaviourGenerateDatas.ConvertAll(d => d.Infos));
         }
 
         private void ReadBehaviourGenerateData(string fuzzyContent) {
+            allBehaviourGenerateDatas.Clear();
             behaviourGenerateDatas.Clear();
             ReadCSV.Instance.Read("BehaviourGenerate", out string content, out string[] lines);
             if (lines != null && lines.Length > 0) {
@@ -339,16 +309,12 @@ namespace LazyPan {
                     if (i > 2) {
                         string[] lineStr = lines[i].Split(",");
                         if (lineStr.Length > 0) {
-                            bool hasFuzzyContent = false;
-                            for (int j = 0; j <= 2; j++) {
+                            bool hasFuzzyContent = string.IsNullOrEmpty(fuzzyContent);
+                            for (int j = 0; j <= 2 && !hasFuzzyContent; j++) {
                                 if (lineStr[j].Contains(fuzzyContent)) {
                                     hasFuzzyContent = true;
                                     break;
                                 }
-                            }
-
-                            if (!hasFuzzyContent) {
-                                continue;
                             }
 
                             //实体数据
@@ -365,7 +331,10 @@ namespace LazyPan {
                                 }
                             }
                             MyBehaviourGenerateData instanceBehaviourData = new MyBehaviourGenerateData(lineInfo, index);
-                            behaviourGenerateDatas.Add(instanceBehaviourData);
+                            allBehaviourGenerateDatas.Add(instanceBehaviourData);
+                            if (hasFuzzyContent) {
+                                behaviourGenerateDatas.Add(instanceBehaviourData);
+                            }
                         }
                     }
                 }
@@ -426,7 +395,7 @@ namespace LazyPan {
                         }
                     }
 
-                    //配置增加
+                    //配置增加 显示与全量一起加 否则搜过滤时加完写不进 csv
                     if (!isExitConfig) {
                         MyBehaviourData instanceData = new MyBehaviourData(new string[] {
                             behaviourName,
@@ -434,6 +403,9 @@ namespace LazyPan {
                             infos[1],
                         });
                         behaviourDatas.Add(instanceData);
+                        if (!allBehaviourDatas.Contains(instanceData)) {
+                            allBehaviourDatas.Add(instanceData);
+                        }
                         WriteBehaviourData();
                     }
                 }
@@ -526,59 +498,84 @@ namespace LazyPan {
             generateOperationNameOptions.Add("行为操作步骤三文本");
         }
         
-        private void WriteBehaviourData() {
-            ReadCSV.Instance.Read("BehaviourConfig", out string content, out string[] lines);
+        /// <summary>
+        /// 按第1列键名回写 csv 通用版: 找到键才写 找不到的追加 列表里没了的跟删
+        /// 模糊过滤后改某行不会串位 Sign 为空的行跳过 Sign 重复只认第一条
+        /// </summary>
+        private void WriteKeyedCsv(string csvName, List<string[]> rows) {
+            ReadCSV.Instance.Read(csvName, out string content, out string[] lines);
             try {
-                Queue<MyBehaviourData> behaviourDataQue = new Queue<MyBehaviourData>(behaviourDatas);
-                int newLength = -1;
+                List<string[]> validRows = new List<string[]>();
+                foreach (string[] infos in rows) {
+                    if (infos == null || infos.Length <= 0 || string.IsNullOrWhiteSpace(infos[0])) {
+                        continue;
+                    }
+
+                    validRows.Add(infos);
+                }
+
+                HashSet<string[]> written = new HashSet<string[]>();
                 for (int i = 0; i < lines.Length; i++) {
-                    if (i > 2) {
-                        string[] linesStr = lines[i].Split(',');
-                        if (behaviourDataQue.Count == 0) {
-                            newLength = i;
+                    if (i <= 2) {
+                        continue;
+                    }
+
+                    string[] linesStr = lines[i].Split(',');
+                    if (linesStr.Length == 0 || string.IsNullOrWhiteSpace(linesStr[0])) {
+                        continue;
+                    }
+
+                    string[] match = null;
+                    foreach (string[] infos in validRows) {
+                        if (!written.Contains(infos) && infos[0].Trim() == linesStr[0].Trim()) {
+                            match = infos;
                             break;
                         }
+                    }
 
-                        MyBehaviourData data = behaviourDataQue.Dequeue();
-                        if (data != null) {
-                            for (int j = 0; j < data.Infos.Length; j++) {
-                                linesStr[j] = data.Infos[j];
-                            }
+                    if (match == null) {
+                        //csv 里有但列表里没了=用户删了这行 跟着删掉
+                        lines[i] = null;
+                        continue;
+                    }
 
-                            lines[i] = string.Join(",", linesStr);
-                        }
+                    for (int j = 0; j < match.Length && j < linesStr.Length; j++) {
+                        linesStr[j] = match[j];
+                    }
+
+                    lines[i] = string.Join(",", linesStr);
+                    written.Add(match);
+                }
+
+                List<string> outLines = new List<string>();
+                foreach (string line in lines) {
+                    if (line != null) {
+                        outLines.Add(line);
                     }
                 }
-                
-                string[] newLines;
-                if (newLength > -1) {
-                    //需要裁剪
-                    newLines = new string[newLength];
-                    Array.Copy(lines, newLines, newLength);
-                    ReadCSV.Instance.Write("BehaviourConfig", newLines);
-                } else {
-                    newLines = new string[behaviourDataQue.Count];
-                    int index = 0;
-                    while (behaviourDataQue.Count > 0) {
-                        MyBehaviourData data = behaviourDataQue.Dequeue();
-                        if (data != null) {
-                            string[] linesStr = new string[6];
-                            for (int j = 0; j < data.Infos.Length; j++) {
-                                linesStr[j] = data.Infos[j];
-                            }
-                
-                            newLines[index] = string.Join(",", linesStr);
-                            index++;
-                        }
+
+                //列表里有但 csv 里没有=新增 追加到末尾
+                foreach (string[] infos in validRows) {
+                    if (written.Contains(infos)) {
+                        continue;
                     }
-                    ReadCSV.Instance.Write("BehaviourConfig", lines.Concat(newLines).ToArray());
+
+                    outLines.Add(string.Join(",", infos));
                 }
+
+                ReadCSV.Instance.Write(csvName, outLines.ToArray());
             } catch {
                 UnityEngine.Debug.LogError("录入错误");
             }
         }
 
+        private void WriteBehaviourData() {
+            //按第1列键名回写 模糊过滤后改某行不会串到别的行 新增追加 删除跟删
+            WriteKeyedCsv("BehaviourConfig", allBehaviourDatas.ConvertAll(d => d.Infos));
+        }
+
         private void ReadBehaviourData(string fuzzyContent) {
+            allBehaviourDatas.Clear();
             behaviourDatas.Clear();
             ReadCSV.Instance.Read("BehaviourConfig", out string content, out string[] lines);
             if (lines != null && lines.Length > 0) {
@@ -586,16 +583,12 @@ namespace LazyPan {
                     if (i > 2) {
                         string[] lineStr = lines[i].Split(",");
                         if (lineStr.Length > 0) {
-                            bool hasFuzzyContent = false;
-                            for (int j = 0; j <= 2; j++) {
+                            bool hasFuzzyContent = string.IsNullOrEmpty(fuzzyContent);
+                            for (int j = 0; j <= 2 && !hasFuzzyContent; j++) {
                                 if (lineStr[j].Contains(fuzzyContent)) {
                                     hasFuzzyContent = true;
                                     break;
                                 }
-                            }
-
-                            if (!hasFuzzyContent) {
-                                continue;
                             }
 
                             //实体数据
@@ -604,7 +597,10 @@ namespace LazyPan {
                                 lineInfo[j] = lineStr[j];
                             }
                             MyBehaviourData instanceBehaviourData = new MyBehaviourData(lineInfo);
-                            behaviourDatas.Add(instanceBehaviourData);
+                            allBehaviourDatas.Add(instanceBehaviourData);
+                            if (hasFuzzyContent) {
+                                behaviourDatas.Add(instanceBehaviourData);
+                            }
                         }
                     }
                 }

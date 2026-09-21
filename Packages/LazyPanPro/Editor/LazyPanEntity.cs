@@ -58,7 +58,9 @@ namespace LazyPan {
             "实体预览标题操作",
         };
 
-        //数据
+        //数据 全量(与 csv 一一对应 改写 csv 只认它)
+        private List<MyEntityData> allEntityDatas = new List<MyEntityData>();
+        //数据 当前显示(可能是模糊搜索过滤后的子集 存的是同一批对象引用 改它等于改全量)
         private List<MyEntityData> entityDatas = new List<MyEntityData>();
         //模糊搜索数据
         private List<MyEntityData> fuzzyEntityDatas = new List<MyEntityData>();
@@ -77,7 +79,6 @@ namespace LazyPan {
         private string textName = "模糊搜索控件";
 
         private LazyPanTool _tool;
-        private string behaviourValidationMessage;
 
         public void OnStart(LazyPanTool tool) {
             _tool = tool;
@@ -262,12 +263,19 @@ namespace LazyPan {
                 int sceneIndex = -1;
                 List<string> bindBehaviour = new List<string> { behaviourNames.Length > 0 ? behaviourNames[0] : string.Empty };
                 bool[] behaviourName = new bool[behaviourNames.Length];
-                entityDatas.Add(new MyEntityData(infos, sceneIndex, bindBehaviour, behaviourName));
+                MyEntityData fresh = new MyEntityData(infos, sceneIndex, bindBehaviour, behaviourName);
+                entityDatas.Add(fresh);
+                //新行必须进全量 否则它永远写不进 csv(搜过滤时尤其如此)
+                if (!allEntityDatas.Contains(fresh)) {
+                    allEntityDatas.Add(fresh);
+                }
             };
             reorderableList.onRemoveCallback = (ReorderableList list) => {
-                // 确保索引有效
+                // 确保索引有效 显示与全量一起删 否则删完重读又回来
                 if (list.index >= 0 && list.index < list.list.Count) {
+                    MyEntityData removed = entityDatas[list.index];
                     list.list.RemoveAt(list.index);  // 移除当前选中的元素
+                    allEntityDatas.Remove(removed);
                 }
             };
             reorderableList.onChangedCallback = (ReorderableList list) => {
@@ -458,6 +466,7 @@ namespace LazyPan {
         }
 
         private void ReadEntityData(string fuzzyContent) {
+            allEntityDatas.Clear();
             entityDatas.Clear();
             ReadCSV.Instance.Read("ObjConfig", out string content, out string[] lines);
             if (lines != null && lines.Length > 0) {
@@ -465,25 +474,18 @@ namespace LazyPan {
                     if (i > 2) {
                         string[] lineStr = lines[i].Split(",");
                         if (lineStr.Length > 0) {
-                            bool hasFuzzyContent = false;
-                            for (int j = 0; j <= 5; j++) {
+                            bool hasFuzzyContent = string.IsNullOrEmpty(fuzzyContent);
+                            for (int j = 0; j <= 5 && !hasFuzzyContent; j++) {
                                 if (lineStr[j].Contains(fuzzyContent)) {
                                     hasFuzzyContent = true;
                                     break;
                                 }
                             }
 
-                            if (!hasFuzzyContent) {
-                                continue;
-                            }
-
-                            //实体数据
+                            //实体数据 空行为允许 原样保留 不回填默认行为
                             string[] lineInfo = new string[6];
                             for (int j = 0; j <= 5; j++) {
                                 lineInfo[j] = lineStr[j];
-                            }
-                            if (string.IsNullOrWhiteSpace(lineInfo[5])) {
-                                lineInfo[5] = behaviourNames.Length > 0 ? behaviourNames[0] : string.Empty;
                             }
                             //场景数据
                             string[] sceneIndex = sceneNameOptions.ToArray();
@@ -509,12 +511,15 @@ namespace LazyPan {
                             }
 
                             if (string.IsNullOrWhiteSpace(lineInfo[5])) {
-                                behaviourBindName = new[] { behaviourNames.Length > 0 ? behaviourNames[0] : string.Empty };
+                                behaviourBindName = new string[0];
                             }
 
                             MyEntityData instanceEntityData = new MyEntityData(lineInfo, selectScene,
                                 behaviourBindName.ToList(), selectBehaviour);
-                            entityDatas.Add(instanceEntityData);
+                            allEntityDatas.Add(instanceEntityData);
+                            if (string.IsNullOrEmpty(fuzzyContent) || hasFuzzyContent) {
+                                entityDatas.Add(instanceEntityData);
+                            }
                         }
                     }
                 }
@@ -527,77 +532,79 @@ namespace LazyPan {
 
         private void WriteEntityData() {
             ReadCSV.Instance.Read("ObjConfig", out string content, out string[] lines);
-            if (!ValidateBehaviourConfiguration()) {
-                return;
+            //空行为允许 只有 Sign 为空的行才跳过 不拦别人
+            //按 Sign 键名回写 不按位置 模糊搜索过滤后改某行不会串到别的行
+            List<MyEntityData> validDatas = new List<MyEntityData>();
+            foreach (MyEntityData tmp in allEntityDatas) {
+                if (tmp?.Infos == null || tmp.Infos.Length <= 0 || string.IsNullOrWhiteSpace(tmp.Infos[0])) {
+                    continue;
+                }
+
+                validDatas.Add(tmp);
             }
+
             try {
-                Queue<MyEntityData> entityDataQue = new Queue<MyEntityData>(entityDatas);
-                int newLength = -1;
+                HashSet<MyEntityData> written = new HashSet<MyEntityData>();
                 for (int i = 0; i < lines.Length; i++) {
-                    if (i > 2) {
-                        string[] linesStr = lines[i].Split(',');
-                        if (entityDataQue.Count == 0) {
-                            newLength = i;
+                    if (i <= 2) {
+                        continue;
+                    }
+
+                    string[] linesStr = lines[i].Split(',');
+                    if (linesStr.Length == 0 || string.IsNullOrWhiteSpace(linesStr[0])) {
+                        continue;
+                    }
+
+                    MyEntityData match = null;
+                    foreach (MyEntityData tmp in validDatas) {
+                        if (!written.Contains(tmp) && tmp.Infos[0].Trim() == linesStr[0].Trim()) {
+                            match = tmp;
                             break;
                         }
+                    }
 
-                        MyEntityData data = entityDataQue.Dequeue();
-                        if (data != null) {
-                            for (int j = 0; j < data.Infos.Length; j++) {
-                                linesStr[j] = data.Infos[j];
-                            }
+                    if (match == null) {
+                        //csv 里有但列表里没了=用户删了这行 跟着删掉
+                        lines[i] = null;
+                        continue;
+                    }
 
-                            lines[i] = string.Join(",", linesStr);
-                        }
+                    for (int j = 0; j < match.Infos.Length && j < linesStr.Length; j++) {
+                        linesStr[j] = match.Infos[j];
+                    }
+
+                    lines[i] = string.Join(",", linesStr);
+                    written.Add(match);
+                }
+
+                List<string> outLines = new List<string>();
+                foreach (string line in lines) {
+                    if (line != null) {
+                        outLines.Add(line);
                     }
                 }
-                
-                string[] newLines;
-                if (newLength > -1) {
-                    //需要裁剪
-                    newLines = new string[newLength];
-                    Array.Copy(lines, newLines, newLength);
-                    ReadCSV.Instance.Write("ObjConfig", newLines);
-                } else {
-                    newLines = new string[entityDataQue.Count];
-                    int index = 0;
-                    while (entityDataQue.Count > 0) {
-                        MyEntityData data = entityDataQue.Dequeue();
-                        if (data != null) {
-                            string[] linesStr = new string[6];
-                            for (int j = 0; j < data.Infos.Length; j++) {
-                                linesStr[j] = data.Infos[j];
-                            }
-                
-                            newLines[index] = string.Join(",", linesStr);
-                            index++;
-                        }
+
+                //列表里有但 csv 里没有=新增 追加到末尾
+                foreach (MyEntityData tmp in validDatas) {
+                    if (written.Contains(tmp)) {
+                        continue;
                     }
-                    ReadCSV.Instance.Write("ObjConfig", lines.Concat(newLines).ToArray());
+
+                    string[] linesStr = new string[6];
+                    for (int j = 0; j < tmp.Infos.Length && j < 6; j++) {
+                        linesStr[j] = tmp.Infos[j];
+                    }
+
+                    outLines.Add(string.Join(",", linesStr));
                 }
+
+                ReadCSV.Instance.Write("ObjConfig", outLines.ToArray());
             } catch {
                 Debug.LogError("录入错误");
             }
         }
 
-        private bool ValidateBehaviourConfiguration() {
-            behaviourValidationMessage = null;
-            for (int i = 0; i < entityDatas.Count; i++) {
-                MyEntityData data = entityDatas[i];
-                if (data?.Infos == null || data.Infos.Length <= 5 || string.IsNullOrWhiteSpace(data.Infos[5])) {
-                    behaviourValidationMessage = $"实体配置第 {i + 1} 行必须配置行为。";
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
         private void PreviewEntityConfigData() {
-            if (!ValidateBehaviourConfiguration()) {
-                EditorGUILayout.HelpBox(behaviourValidationMessage, MessageType.Error);
-            }
-
             isFoldoutData = EditorGUILayout.Foldout(isFoldoutData, LazyPanTool.GetText("实体预览实体配置数据展开文本"), true);
             Rect rect = GUILayoutUtility.GetLastRect();
             float height = 0;
@@ -945,7 +952,11 @@ namespace LazyPan {
                 return;
             }
             string newSign = string.Concat("Obj_", _instanceTypeName, "_", _instanceFlowName, "_", _instanceObjName);
-            string sourcePath = "Packages/evoreek.lazypan/Runtime/Bundles/Prefabs/Obj/Obj_Sample_Sample.prefab"; // 替换为你的预制体源文件路径
+            string sourcePath = ResolveSamplePrefabPath();
+            if (string.IsNullOrEmpty(sourcePath)) {
+                Debug.LogError("创建预制体失败: 找不到样板预制体 Obj_Sample_Sample.prefab 请检查包内 Runtime/Bundles/Prefabs/Obj/ 下是否存在");
+                return;
+            }
             string targetFolderPath = $"Assets/LazyPan/Bundles/Prefabs/Obj/{_instanceFlowName}";
             // 目标已存在直接提示 不覆盖
             string existPath = $"{targetFolderPath}/{newSign}.prefab";
@@ -976,7 +987,47 @@ namespace LazyPan {
                 AssetDatabase.RenameAsset(targetPath, newSign);
                 AssetDatabase.Refresh();
                 Debug.Log($"预制体已创建: {targetFolderPath}/{newSign}.prefab");
+            } else {
+                Debug.LogError($"创建预制体失败: 样板预制体加载失败 路径:{sourcePath}");
             }
+        }
+
+        /// <summary>
+        /// 样板预制体按文件名全局搜 不写死包名 本地 LazyPanPro 与拉取后 evoreek.lazypan 都能命中
+        /// </summary>
+        private string ResolveSamplePrefabPath() {
+            string[] guids = AssetDatabase.FindAssets("Obj_Sample_Sample t:Prefab");
+            if (guids == null || guids.Length == 0) {
+                return null;
+            }
+
+            //优先用本编辑器脚本所在的包 避免机器上同时装两个包时串包
+            string selfScriptPath = AssetDatabase.GetAssetPath(MonoScript.FromScriptableObject(this));
+            string selfPackage = null;
+            if (!string.IsNullOrEmpty(selfScriptPath) && selfScriptPath.StartsWith("Packages/")) {
+                string[] segments = selfScriptPath.Split('/');
+                if (segments.Length >= 2) {
+                    selfPackage = string.Concat(segments[0], "/", segments[1], "/");
+                }
+            }
+
+            string fallback = null;
+            foreach (string guid in guids) {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                if (string.IsNullOrEmpty(path)) {
+                    continue;
+                }
+
+                if (fallback == null) {
+                    fallback = path;
+                }
+
+                if (!string.IsNullOrEmpty(selfPackage) && path.StartsWith(selfPackage)) {
+                    return path;
+                }
+            }
+
+            return fallback;
         }
 
         /// <summary>

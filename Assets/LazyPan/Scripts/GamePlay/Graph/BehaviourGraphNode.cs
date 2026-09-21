@@ -15,5 +15,9 @@ namespace LazyPan {
         /// <summary>配置是否已初始化 已初始化后不再从Setting回填</summary>
         [HideInInspector]
         public bool NodeInitialized;
+
+        /// <summary>上次同步进 Setting 的 SourceSign 改名时靠它找到旧条目清掉 不然 Setting 越攒越多</summary>
+        [HideInInspector]
+        public string LastSyncedSign = "";
     }
 }

@@ -29,7 +29,7 @@ namespace LazyPan {
     }
 
     [Serializable]
-    public struct UIStatusDisplaySettingData {
+    public class UIStatusDisplaySettingData {
         [EntitySign]
         [Header("挂这个行为的实体类型 SourceSign")]
         [Tooltip("挂这个行为的实体类型，必须与 ObjConfig.Sign 一致，如 Obj_Player_SceneC_Player。行为挂谁身上，刷新就由谁驱动")]
@@ -46,8 +46,20 @@ namespace LazyPan {
         [Tooltip("屏幕UI名，如 UI_SceneC。留空=自动取当前流程的 GetUI()，一般留空就行。填了就按名字去 UI.Instance.Get 取")]
         public string UIName;
 
+        [Header("HUD预制体标识 为空=直接绑主界面")]
+        [Tooltip("HUD预制体标识，Bundles/Prefabs 下相对路径，如 UI/UI_HUD_Status。填了=实例化到主界面挂点下再绑，组件从预制体Comp里拿。留空=老路，直接绑主界面Comp")]
+        public string UIPrefabSign;
+
+        [Header("挂点标签 Root=主界面根")]
+        [Tooltip("HUD预制体挂到主界面哪个Transform下。Root=主界面根节点，其他填主界面Comp里配置的Transform Sign。仅 UIPrefabSign 填了才用")]
+        public string MountSign = BehaviourSigns.Root;
+
+        [Header("实例名 为空=用预制体名")]
+        [Tooltip("实例化出来的HUD物体名，方便层级里找。留空=用预制体文件名。仅 UIPrefabSign 填了才用")]
+        public string InstanceSign;
+
         [Header("数值绑定列表")]
-        [Tooltip("数值绑定列表，组件从屏幕UI的Comp按标签取，数值从任意实体Data按标签取")]
+        [Tooltip("数值绑定列表。注入模式下组件从HUD预制体Comp按标签取，老路下从屏幕UI的Comp按标签取，数值都从任意实体Data按标签取")]
         public List<UIStatusDisplayBind> DataBinds = new List<UIStatusDisplayBind>();
     }
 

@@ -1,4 +1,4 @@
-Sign,Flow,Type,Name,SetUpLocationInformationSign,SetUpBehaviourName
+﻿Sign,Flow,Type,Name,SetUpLocationInformationSign,SetUpBehaviourName
 string,string,string,string,string,string
 标识,流程,类型,名称,创建绑定的位置信息,创建绑定行为名字
 Obj_Logo_SceneA_BeginLogo,场景A,Logo,开头Logo,,开头Logo|实体参数值|传送流程
@@ -15,3 +15,5 @@ Obj_Terrain_SceneC_Terrain,场景C,Terrain,地形C,LocationInf_SceneC_Terrain1,
 Obj_Camera_SceneC_Camera,场景C,Camera,相机C,,
 Obj_Generate_SceneC_EnemyGenerate,场景C,Generate,敌人生成器,,延时生成实体
 Obj_Wave_SceneC_WaveManager,场景C,Wave,波数管理器,,波数管理器
+Obj_UI_SceneC_HUD,场景C,UI,HUD,,UI状态展示
+Obj_UI_SceneC_PickOneOfThree,场景C,UI,三选一,,UI三选一

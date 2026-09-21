@@ -127,6 +127,8 @@ MonoBehaviour:
       StringValue: 
       Vector3Value: {x: 0, y: 0, z: 0}
       ApplyOnInit: 1
+  - SourceSign: Obj_Tower_SceneC_Tower
+    Items: []
   - SourceSign: Obj_Logo_SceneA_BeginLogo
     Items:
     - TargetEntitySign: Obj_Logo_SceneA_BeginLogo
@@ -147,5 +149,3 @@ MonoBehaviour:
       StringValue: 
       Vector3Value: {x: 0, y: 0, z: 0}
       ApplyOnInit: 1
-  - SourceSign: Obj_Tower_SceneC_Tower
-    Items: []

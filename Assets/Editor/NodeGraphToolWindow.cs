@@ -9,9 +9,6 @@ using GraphProcessor;
 namespace LazyPan {
     public class NodeGraphToolWindow : BaseGraphWindow {
         const string graphFolder = "Assets/LazyPan/Bundles/Configs/Graph";
-        const double autoSaveDelay = 0.8;
-
-        double lastDirtyTime;
 
         [InitializeOnLoadMethod]
         static void RegisterHook() {
@@ -45,42 +42,12 @@ namespace LazyPan {
         }
 
         /// <summary>
-        /// ObjConfig 为准重建图: 删除清单里没有的节点 补上清单里缺的节点
+        /// ObjConfig 为准补节点: 只补清单里缺的 打开时绝不删节点
+        /// 删节点只走保存时的弹窗确认(SyncRemovedNodes) 确认后才同步移除 csv 与 Setting
         /// 节点参数从对应 Setting 资产中按 SourceSign == 实体Sign 的那条加载
         /// </summary>
         static void RebuildGraphFromObjConfig(BaseGraph graph, string entitySign, string[] behaviourNames) {
-            RemoveExtraNodes(graph, entitySign, behaviourNames);
             AddBehaviourNodes(graph, entitySign, behaviourNames);
-        }
-
-        /// <summary>
-        /// 删除图中多余节点: ObjConfig 清单里没有的行为直接删 不弹窗
-        /// 对应 Setting 条目同步删除 保证三处一致
-        /// </summary>
-        static void RemoveExtraNodes(BaseGraph graph, string entitySign, string[] behaviourNames) {
-            var wantedSigns = BehaviourSignsOf(behaviourNames);
-            var nameToSign = new Dictionary<string, string>();
-            foreach (var sign in BehaviourConfig.GetKeys()) {
-                var cfg = BehaviourConfig.Get(sign);
-                if (cfg != null && !string.IsNullOrEmpty(cfg.Name))
-                    nameToSign[cfg.Name] = sign;
-            }
-
-            var nodesToRemove = new List<BehaviourGraphNode>();
-            foreach (var node in graph.nodes.OfType<BehaviourGraphNode>()) {
-                if (!wantedSigns.Contains(node.BehaviourSign)) {
-                    nodesToRemove.Add(node);
-                }
-            }
-
-            foreach (var node in nodesToRemove) {
-                graph.RemoveNode(node);
-                foreach (var name in nameToSign.Where(kv => kv.Value == node.BehaviourSign).Select(kv => kv.Key)) {
-                    confirmedRemoves.Remove(entitySign + "|" + node.BehaviourSign);
-                }
-
-                RemoveSettingEntryBySign(node.BehaviourSign, entitySign);
-            }
         }
 
         /// <summary>行为中文名数组转 BehaviourSign 集合</summary>
@@ -201,6 +168,21 @@ namespace LazyPan {
             bool ok = (bool) tryGet.Invoke(setting, args);
             if (ok && args[1] != null) {
                 configField.SetValue(node, args[1]);
+                return;
+            }
+
+            //Setting 里没这条 且 Config 是 class(默认 null) 先 new 一个出来 不然节点上啥都填不了
+            //struct 自带默认值不用管 class 必须手动实例化(struct 改 class 后新节点常见)
+            if (!configField.FieldType.IsValueType && configField.GetValue(node) == null) {
+                try {
+                    object fresh = Activator.CreateInstance(configField.FieldType);
+                    var signField = configField.FieldType.GetField("SourceSign");
+                    if (signField != null && string.IsNullOrEmpty(signField.GetValue(fresh) as string))
+                        signField.SetValue(fresh, entitySign);
+                    configField.SetValue(node, fresh);
+                } catch (Exception e) {
+                    LogUtil.LogErrorFormat("节点 Config 自动实例化失败 类型:{0} 原因:{1}", configField.FieldType.Name, e.Message);
+                }
             }
         }
 
@@ -235,9 +217,30 @@ namespace LazyPan {
                 Type settingType = FindSettingTypeByDataType(configField.FieldType);
                 if (settingType == null)
                     continue;
-                changed |= SyncSettingData(GetSettingAssetFileName(settingType), entitySign, configField.GetValue(node));
+                string assetName = GetSettingAssetFileName(settingType);
+                object graphData = configField.GetValue(node);
+                //改名搬家: SourceSign 变了就把旧键名下的残留条目清掉 不然 Setting 越攒越多
+                string nodeSign = GetSourceSign(graphData);
+                if (!string.IsNullOrEmpty(node.LastSyncedSign) && node.LastSyncedSign != nodeSign) {
+                    RemoveSettingEntry(assetName, node.LastSyncedSign);
+                    changed = true;
+                }
+
+                changed |= SyncSettingData(assetName, entitySign, graphData);
+                node.LastSyncedSign = nodeSign;
+                //struct 类型是拷贝语义 把归一化后的值写回节点 否则节点与 Setting 会分叉
+                configField.SetValue(node, graphData);
             }
             return changed;
+        }
+
+        static string GetSourceSign(object graphData) {
+            if (graphData == null)
+                return "";
+            var sourceField = graphData.GetType().GetField("SourceSign");
+            if (sourceField == null)
+                return "";
+            return sourceField.GetValue(graphData) as string ?? "";
         }
 
         /// <summary>
@@ -288,8 +291,7 @@ namespace LazyPan {
         }
 
         /// <summary>
-        /// 按 Setting 类型加载资产 资产名一般即类型名 兼容 DelayGenerateSetting 这类文件名与类型名不一致的旧资产
-        /// 资产缺失不报错 允许生成器稍后补建
+        /// 按 Setting 类型加载资产 找不到就按类型名自动新建 保证图里配完 Setting 一定有地方写
         /// </summary>
         static Setting LoadSettingByType(Type settingType) {
             string assetName = GetSettingAssetFileName(settingType);
@@ -297,7 +299,22 @@ namespace LazyPan {
                 return null;
             }
 
-            return AssetDatabase.LoadAssetAtPath<Setting>($"Assets/LazyPan/Bundles/Configs/Setting/{assetName}.asset");
+            string path = $"Assets/LazyPan/Bundles/Configs/Setting/{assetName}.asset";
+            var setting = AssetDatabase.LoadAssetAtPath<Setting>(path);
+            if (setting != null) {
+                return setting;
+            }
+
+            setting = ScriptableObject.CreateInstance(settingType) as Setting;
+            if (setting == null) {
+                LogUtil.LogErrorFormat("Setting 资产自动创建失败 类型:{0}", settingType.Name);
+                return null;
+            }
+
+            AssetDatabase.CreateAsset(setting, path);
+            AssetDatabase.SaveAssets();
+            Debug.Log($"Setting 资产不存在已自动创建: {path}");
+            return setting;
         }
 
         /// <summary>
@@ -327,6 +344,20 @@ namespace LazyPan {
             }
 
             return settingType.Name;
+        }
+
+        /// <summary>
+        /// 按资产文件名反查 Setting 类型 供资产缺失自动补建用
+        /// </summary>
+        static Type FindSettingTypeByAssetName(string assetName) {
+            if (string.IsNullOrEmpty(assetName))
+                return null;
+            foreach (Type type in TypeCache.GetTypesDerivedFrom<Setting>()) {
+                if (!type.IsAbstract && type.Name == assetName)
+                    return type;
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -360,63 +391,68 @@ namespace LazyPan {
         }
 
         static bool SyncSettingData(string assetName, string entitySign, object graphData) {
-            if (graphData == null)
+            if (graphData == null || string.IsNullOrEmpty(entitySign)) {
+                if (graphData == null)
+                    LogUtil.LogErrorFormat("Setting 回写跳过 实体:{0} 资产:{1} 节点 Config 为空(struct 改 class 后新节点常见) 请删节点重建", entitySign, assetName);
                 return false;
+            }
             var setting = LoadSetting<Setting>(assetName);
+            if (setting == null) {
+                //LoadSetting 按名直连拿不到时 按类型自动建一个 新行为第一次配会走到这里
+                setting = LoadSettingByType(FindSettingTypeByAssetName(assetName));
+                if (setting == null) {
+                    LogUtil.LogErrorFormat("Setting 回写失败 实体:{0} 资产:{1} 加载不到也建不出来", entitySign, assetName);
+                    return false;
+                }
+            }
             var listField = setting?.GetType().GetField("Datas");
             var list = listField?.GetValue(setting) as System.Collections.IList;
             var sourceField = graphData.GetType().GetField("SourceSign");
-            if (list == null || sourceField == null)
+            if (list == null || sourceField == null || setting == null)
                 return false;
 
-            string nodeSign = sourceField.GetValue(graphData) as string;
+            //图为准全量覆盖: 以节点里的 SourceSign 为键 本键旧条目全清后只写当前这一条
+            //SourceSign 为空则回落到图的实体名 允许用户显式改归属 不再强制掰回
+            string key = sourceField.GetValue(graphData) as string;
+            if (string.IsNullOrEmpty(key)) {
+                key = entitySign;
+                sourceField.SetValue(graphData, key);
+            }
 
-            // 1) 按"图的实体Sign"定位(稳定身份 正常情况走这里)
-            int index = FindIndexBySign(list, sourceField, entitySign);
-            // 2) 退化: 按节点当前Sign定位(Sign被改成别的实体时)
-            if (index < 0 && !string.IsNullOrEmpty(nodeSign))
-                index = FindIndexBySign(list, sourceField, nodeSign);
-            // 3) 再退化: 节点Sign为空时 若列表里只剩一条空Sign条目 视为本图的镜像
-            if (index < 0 && string.IsNullOrEmpty(nodeSign))
-                index = FindSingleEmptyIndex(list, sourceField);
+            for (int i = list.Count - 1; i >= 0; i--) {
+                var item = list[i];
+                if (item == null || ReferenceEquals(item, graphData))
+                    continue;
+                var signField = item.GetType().GetField("SourceSign");
+                if (signField == null)
+                    continue;
+                string itemSign = signField.GetValue(item) as string;
+                if (itemSign == key || itemSign == entitySign)
+                    list.RemoveAt(i);
+            }
 
-            if (index >= 0) {
-                list[index] = graphData;
+            if (ReferenceEquals(list.Count > 0 ? list[list.Count - 1] : null, graphData)) {
                 EditorUtility.SetDirty(setting);
                 return true;
             }
 
-            // 4) 都定位不到 且节点有有效Sign 才新增条目(空Sign时无法安全识别 跳过避免重复)
-            if (string.IsNullOrEmpty(nodeSign))
-                return false;
-            var addMethod = list.GetType().GetMethod("Add");
-            if (addMethod == null)
-                return false;
-            addMethod.Invoke(list, new[] { graphData });
+            bool alreadyIn = false;
+            foreach (var item in list) {
+                if (ReferenceEquals(item, graphData)) {
+                    alreadyIn = true;
+                    break;
+                }
+            }
+
+            if (!alreadyIn) {
+                var addMethod = list.GetType().GetMethod("Add");
+                if (addMethod == null)
+                    return false;
+                addMethod.Invoke(list, new[] { graphData });
+            }
+
             EditorUtility.SetDirty(setting);
             return true;
-        }
-
-        static int FindIndexBySign(System.Collections.IList list, System.Reflection.FieldInfo sourceField, string sign) {
-            for (int i = 0; i < list.Count; i++) {
-                var item = list[i];
-                if (item != null && sourceField.GetValue(item) as string == sign)
-                    return i;
-            }
-            return -1;
-        }
-
-        static int FindSingleEmptyIndex(System.Collections.IList list, System.Reflection.FieldInfo sourceField) {
-            int found = -1;
-            for (int i = 0; i < list.Count; i++) {
-                var item = list[i];
-                if (item == null || !string.IsNullOrEmpty(sourceField.GetValue(item) as string))
-                    continue;
-                if (found >= 0)
-                    return -1; // 多条空Sign 无法安全识别
-                found = i;
-            }
-            return found;
         }
 
         static void SaveGraph(BaseGraph graph) {
@@ -507,8 +543,6 @@ namespace LazyPan {
             if (string.IsNullOrEmpty(entitySign))
                 return;
             var names = GetBehaviourNames(entitySign);
-            if (names == null || names.Length == 0)
-                return;
             var graphSigns = graph.nodes.OfType<BehaviourGraphNode>()
                 .Select(n => n.BehaviourSign).Where(s => !string.IsNullOrEmpty(s)).ToHashSet();
             var nameToSign = new Dictionary<string, string>();
@@ -517,6 +551,7 @@ namespace LazyPan {
                 if (cfg != null && !string.IsNullOrEmpty(cfg.Name))
                     nameToSign[cfg.Name] = sign;
             }
+            //清单里有但图上没了的 弹窗确认后才删 csv 与 Setting 一起移除
             foreach (var name in names) {
                 if (!nameToSign.TryGetValue(name, out var sign))
                     continue;
@@ -530,12 +565,24 @@ namespace LazyPan {
                         "确定删除", "取消恢复");
                     if (!confirm) {
                         RestoreNode(graph, entitySign, sign);
+                        graphSigns.Add(sign);
                         continue;
                     }
                     confirmedRemoves.Add(key);
                 }
                 RemoveBehaviourFromObjConfig(entitySign, name);
                 RemoveSettingEntryBySign(sign, entitySign);
+            }
+            //清单里没有图上也没有的残留 Setting 条目一起扫掉(图为准 无节点即无条目)
+            foreach (var type in TypeCache.GetTypesDerivedFrom<BehaviourGraphNode>()) {
+                if (type.IsAbstract)
+                    continue;
+                var probe = Activator.CreateInstance(type) as BehaviourGraphNode;
+                if (probe == null || string.IsNullOrEmpty(probe.BehaviourSign))
+                    continue;
+                if (graphSigns.Contains(probe.BehaviourSign))
+                    continue;
+                RemoveSettingEntryBySign(probe.BehaviourSign, entitySign);
             }
         }
 
@@ -682,25 +729,52 @@ namespace LazyPan {
         }
 
         /// <summary>
-        /// 实时存储: 图资产有脏标记后延迟片刻自动落盘 覆盖字段编辑/加删节点/连线等所有改动路径
+        /// 实时存储: 节点 Config 是内嵌对象 改参数经常不触发 graph 脏标记
+        /// 所以每帧对全图 Config 做快照比对 变了就落盘 覆盖字段编辑/加删节点/连线等所有改动路径
         /// </summary>
+        string lastConfigSnapshot;
+
+        static string BuildConfigSnapshot(BaseGraph graph) {
+            if (graph == null)
+                return "";
+            var sb = new System.Text.StringBuilder();
+            sb.Append(graph.nodes.Count);
+            sb.Append(';');
+            foreach (var node in graph.nodes.OfType<BehaviourGraphNode>()) {
+                sb.Append(node.BehaviourSign);
+                sb.Append('|');
+                var configField = node.GetType().GetField("Config");
+                try {
+                    object val = configField != null ? configField.GetValue(node) : null;
+                    sb.Append(val != null ? JsonUtility.ToJson(val) : "null");
+                } catch {
+                    sb.Append("err");
+                }
+
+                sb.Append(';');
+            }
+
+            return sb.ToString();
+        }
+
         protected override void Update() {
             base.Update();
 
-            if (graph == null || !EditorUtility.IsDirty(graph)) {
-                lastDirtyTime = 0;
+            if (graph == null) {
+                lastConfigSnapshot = null;
                 return;
             }
 
-            if (lastDirtyTime == 0) {
-                lastDirtyTime = EditorApplication.timeSinceStartup;
-                return;
-            }
-
-            if (EditorApplication.timeSinceStartup - lastDirtyTime > autoSaveDelay) {
-                lastDirtyTime = 0;
+            if (EditorUtility.IsDirty(graph)) {
                 SaveGraph(graph);
+                lastConfigSnapshot = BuildConfigSnapshot(graph);
+                return;
             }
+
+            string snapshot = BuildConfigSnapshot(graph);
+            if (lastConfigSnapshot != null && snapshot != lastConfigSnapshot)
+                SaveGraph(graph);
+            lastConfigSnapshot = snapshot;
         }
 
         protected override void OnDestroy() {

@@ -12,4 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a3f1c2d8e4b4a5f9c6d2e1a0b4c8d3f, type: 3}
   m_Name: UIStatusDisplaySetting
   m_EditorClassIdentifier: 
-  Datas: []
+  Datas:
+  - SourceSign: Obj_UI_SceneC_HUD
+    Displays:
+    - UIName: 
+      UIPrefabSign: UI/UI_HUDStatus
+      MountSign: Root
+      InstanceSign: HUD
+      DataBinds:
+      - ComponentSign: "\u7ECF\u9A8C\u503C"
+        ComponentType: 1
+        Mode: 1
+        SourceEntitySign: Obj_Player_SceneC_Player
+        DataSign: Level
+        MaxDataSign: MaxLevel
+        Format: 
+      - ComponentSign: "\u7ECF\u9A8C\u503C\u6761"
+        ComponentType: 0
+        Mode: 0
+        SourceEntitySign: Obj_Player_SceneC_Player
+        DataSign: Exp
+        MaxDataSign: MaxExp
+        Format: 

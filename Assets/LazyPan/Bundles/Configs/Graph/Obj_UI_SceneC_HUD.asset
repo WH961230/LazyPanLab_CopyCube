@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31390c44c9f3a3d40b424bf6821999a2, type: 3}
+  m_Name: Obj_UI_SceneC_HUD
+  m_EditorClassIdentifier: 
+  serializedNodes: []
+  nodes:
+  - rid: 8263989245788553220
+  edges: []
+  groups: []
+  stackNodes: []
+  pinnedElements: []
+  exposedParameters: []
+  serializedParameterList: []
+  stickyNotes: []
+  nodeInspectorReference: {fileID: 0}
+  position: {x: -146, y: -273, z: 0}
+  scale: {x: 1, y: 1, z: 1}
+  references:
+    version: 2
+    RefIds:
+    - rid: 8263989245788553220
+      type: {class: BehaviourNode_UIStatusDisplay, ns: LazyPan, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 6c8f3901-128c-4725-925d-43ff389f6cbc
+        computeOrder: 0
+        position:
+          serializedVersion: 2
+          x: 420.8104
+          y: 372.8117
+          width: 240
+          height: 100
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        NodeInitialized: 1
+        LastSyncedSign: Obj_UI_SceneC_HUD
+        Config:
+          SourceSign: Obj_UI_SceneC_HUD
+          Displays:
+          - UIName: 
+            UIPrefabSign: UI/UI_HUDStatus
+            MountSign: Root
+            InstanceSign: HUD
+            DataBinds:
+            - ComponentSign: "\u7ECF\u9A8C\u503C"
+              ComponentType: 1
+              Mode: 1
+              SourceEntitySign: Obj_Player_SceneC_Player
+              DataSign: Level
+              MaxDataSign: MaxLevel
+              Format: 
+            - ComponentSign: "\u7ECF\u9A8C\u503C\u6761"
+              ComponentType: 0
+              Mode: 0
+              SourceEntitySign: Obj_Player_SceneC_Player
+              DataSign: Exp
+              MaxDataSign: MaxExp
+              Format: 

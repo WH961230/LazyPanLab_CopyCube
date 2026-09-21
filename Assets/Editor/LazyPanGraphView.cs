@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.UIElements;
 using GraphProcessor;
 using LazyPan;
@@ -12,7 +13,40 @@ using LazyPan;
 public class LazyPanGraphView : BaseGraphView {
     static List<(string path, Type type)> cachedEntries;
 
+    const float minNodeWidth = 240f;
+    const float maxNodeWidth = 640f;
+
     public LazyPanGraphView(EditorWindow window) : base(window) {
+        //内容自适应宽度: 库里节点宽度是固定值 内容再多也不撑开 这里定时按实际渲染宽度回写
+        schedule.Execute(AutoFitNodeWidths).Every(350);
+    }
+
+    /// <summary>
+    /// 节点宽度跟内容走: 首次把宽度设为 Auto 让它按内容撑开 之后每轮把渲染宽度写回 position.width
+    /// 只在差值超过阈值时写 避免布局抖动 用户手拖调整后按手动值持久化 不再强行覆盖
+    /// </summary>
+    void AutoFitNodeWidths() {
+        if (nodeViews == null)
+            return;
+        foreach (var view in nodeViews) {
+            if (view == null || view.nodeTarget == null)
+                continue;
+            if (!(view.userData is bool autoWidth) || !autoWidth) {
+                view.style.width = new StyleLength(StyleKeyword.Auto);
+                view.userData = true;
+            }
+
+            float renderedWidth = view.resolvedStyle.width;
+            if (float.IsNaN(renderedWidth) || renderedWidth <= 0f)
+                continue;
+            var pos = view.nodeTarget.position;
+            float target = Mathf.Clamp(renderedWidth + 8f, minNodeWidth, maxNodeWidth);
+            if (Mathf.Abs(target - pos.width) > 2f) {
+                pos.width = target;
+                view.nodeTarget.position = pos;
+                EditorUtility.SetDirty(graph);
+            }
+        }
     }
 
     public override IEnumerable<(string path, Type type)> FilterCreateNodeMenuEntries() {
