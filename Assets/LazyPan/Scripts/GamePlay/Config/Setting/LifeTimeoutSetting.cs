@@ -30,5 +30,9 @@ namespace LazyPan {
         [Header("实体 SourceSign")]
         [Tooltip("实体 Sign，与 ObjConfig.Sign 一致")]
         public string SourceSign;
+
+        [Header("存活秒数")]
+        [Tooltip("0=一直活；Data 有 LifeTime 时以 Data（传话包）为准")]
+        public float LifeTime = 3f;
     }
 }

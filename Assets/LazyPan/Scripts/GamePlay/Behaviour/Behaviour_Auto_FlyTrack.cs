@@ -16,12 +16,13 @@ namespace LazyPan {
 
         //runtime
         private Vector3 direction = Vector3.forward;
+        private float settingSpeed = 10f;
         private bool isConfigValid;
 
         public Behaviour_Auto_FlyTrack(Entity entity, string behaviourSign) : base(entity, behaviourSign) {
             FlyTrackSetting setting = Loader.LoadAsset<FlyTrackSetting>(AssetType.ASSET, "Setting/FlyTrackSetting");
-            if (setting != null) {
-                setting.TryGet(entity.ObjConfig.Sign, out FlyTrackSettingData _);
+            if (setting != null && setting.TryGet(entity.ObjConfig.Sign, out FlyTrackSettingData data)) {
+                settingSpeed = data.Speed;
             }
 
             Transform root = MoveRoot();
@@ -42,7 +43,7 @@ namespace LazyPan {
             }
 
             Cond.Instance.TryGetData(entity, "Speed", out FloatData speed);
-            float spd = speed != null ? speed.Float : 0f;
+            float spd = speed != null ? speed.Float : settingSpeed;
             if (spd <= 0f) {
                 return;
             }

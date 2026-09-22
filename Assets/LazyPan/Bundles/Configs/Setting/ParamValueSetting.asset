@@ -147,118 +147,6 @@ MonoBehaviour:
       StringValue: 
       Vector3Value: {x: 0, y: 0, z: 0}
       ApplyOnInit: 1
-  - SourceSign: Obj_Bullet_SceneC_Ring
-    Items:
-    - TargetEntitySign: Obj_Bullet_SceneC_Ring
-      ParamSign: MaxRadius
-      ValueType: 2
-      BoolValue: 0
-      IntValue: 0
-      FloatValue: 5
-      StringValue: 
-      Vector3Value: {x: 0, y: 0, z: 0}
-      ApplyOnInit: 1
-    - TargetEntitySign: Obj_Bullet_SceneC_Ring
-      ParamSign: ExpandSpeed
-      ValueType: 2
-      BoolValue: 0
-      IntValue: 0
-      FloatValue: 3
-      StringValue: 
-      Vector3Value: {x: 0, y: 0, z: 0}
-      ApplyOnInit: 1
-    - TargetEntitySign: Obj_Bullet_SceneC_Ring
-      ParamSign: Damage
-      ValueType: 2
-      BoolValue: 0
-      IntValue: 0
-      FloatValue: 30
-      StringValue: 
-      Vector3Value: {x: 0, y: 0, z: 0}
-      ApplyOnInit: 1
-    - TargetEntitySign: Obj_Bullet_SceneC_Ring
-      ParamSign: DamageRadius
-      ValueType: 2
-      BoolValue: 0
-      IntValue: 0
-      FloatValue: 0
-      StringValue: 
-      Vector3Value: {x: 0, y: 0, z: 0}
-      ApplyOnInit: 1
-    - TargetEntitySign: Obj_Bullet_SceneC_Ring
-      ParamSign: HitCooldown
-      ValueType: 2
-      BoolValue: 0
-      IntValue: 0
-      FloatValue: -1
-      StringValue: 
-      Vector3Value: {x: 0, y: 0, z: 0}
-      ApplyOnInit: 1
-    - TargetEntitySign: Obj_Bullet_SceneC_Ring
-      ParamSign: MaxHits
-      ValueType: 1
-      BoolValue: 0
-      IntValue: 0
-      FloatValue: 0
-      StringValue: 
-      Vector3Value: {x: 0, y: 0, z: 0}
-      ApplyOnInit: 1
-    - TargetEntitySign: Obj_Bullet_SceneC_Ring
-      ParamSign: Dead
-      ValueType: 0
-      BoolValue: 0
-      IntValue: 0
-      FloatValue: 0
-      StringValue: 
-      Vector3Value: {x: 0, y: 0, z: 0}
-      ApplyOnInit: 1
-  - SourceSign: Obj_Bullet_SceneC_OrbitFollow
-    Items:
-    - TargetEntitySign: Obj_Bullet_SceneC_OrbitFollow
-      ParamSign: Damage
-      ValueType: 2
-      BoolValue: 0
-      IntValue: 0
-      FloatValue: 10
-      StringValue: 
-      Vector3Value: {x: 0, y: 0, z: 0}
-      ApplyOnInit: 1
-    - TargetEntitySign: Obj_Bullet_SceneC_OrbitFollow
-      ParamSign: DamageRadius
-      ValueType: 2
-      BoolValue: 0
-      IntValue: 0
-      FloatValue: 0.6
-      StringValue: 
-      Vector3Value: {x: 0, y: 0, z: 0}
-      ApplyOnInit: 1
-    - TargetEntitySign: Obj_Bullet_SceneC_OrbitFollow
-      ParamSign: HitCooldown
-      ValueType: 2
-      BoolValue: 0
-      IntValue: 0
-      FloatValue: 1
-      StringValue: 
-      Vector3Value: {x: 0, y: 0, z: 0}
-      ApplyOnInit: 1
-    - TargetEntitySign: Obj_Bullet_SceneC_OrbitFollow
-      ParamSign: MaxHits
-      ValueType: 1
-      BoolValue: 0
-      IntValue: 0
-      FloatValue: 0
-      StringValue: 
-      Vector3Value: {x: 0, y: 0, z: 0}
-      ApplyOnInit: 1
-    - TargetEntitySign: Obj_Bullet_SceneC_OrbitFollow
-      ParamSign: Dead
-      ValueType: 0
-      BoolValue: 0
-      IntValue: 0
-      FloatValue: 0
-      StringValue: 
-      Vector3Value: {x: 0, y: 0, z: 0}
-      ApplyOnInit: 1
   - SourceSign: Obj_Bullet_SceneC_Bullet
     Items:
     - TargetEntitySign: Obj_Bullet_SceneC_Bullet
@@ -316,6 +204,118 @@ MonoBehaviour:
       Vector3Value: {x: 0, y: 0, z: 0}
       ApplyOnInit: 1
     - TargetEntitySign: Obj_Bullet_SceneC_Bullet
+      ParamSign: Dead
+      ValueType: 0
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: 0
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
+  - SourceSign: Obj_Bullet_SceneC_OrbitFollow
+    Items:
+    - TargetEntitySign: Obj_Bullet_SceneC_OrbitFollow
+      ParamSign: Damage
+      ValueType: 2
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: 10
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
+    - TargetEntitySign: Obj_Bullet_SceneC_OrbitFollow
+      ParamSign: DamageRadius
+      ValueType: 2
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: 0.6
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
+    - TargetEntitySign: Obj_Bullet_SceneC_OrbitFollow
+      ParamSign: HitCooldown
+      ValueType: 2
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: 1
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
+    - TargetEntitySign: Obj_Bullet_SceneC_OrbitFollow
+      ParamSign: MaxHits
+      ValueType: 1
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: 0
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
+    - TargetEntitySign: Obj_Bullet_SceneC_OrbitFollow
+      ParamSign: Dead
+      ValueType: 0
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: 0
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
+  - SourceSign: Obj_Bullet_SceneC_Ring
+    Items:
+    - TargetEntitySign: Obj_Bullet_SceneC_Ring
+      ParamSign: MaxRadius
+      ValueType: 2
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: 5
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
+    - TargetEntitySign: Obj_Bullet_SceneC_Ring
+      ParamSign: ExpandSpeed
+      ValueType: 2
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: 3
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
+    - TargetEntitySign: Obj_Bullet_SceneC_Ring
+      ParamSign: Damage
+      ValueType: 2
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: 30
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
+    - TargetEntitySign: Obj_Bullet_SceneC_Ring
+      ParamSign: DamageRadius
+      ValueType: 2
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: 0
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
+    - TargetEntitySign: Obj_Bullet_SceneC_Ring
+      ParamSign: HitCooldown
+      ValueType: 2
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: -1
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
+    - TargetEntitySign: Obj_Bullet_SceneC_Ring
+      ParamSign: MaxHits
+      ValueType: 1
+      BoolValue: 0
+      IntValue: 0
+      FloatValue: 0
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      ApplyOnInit: 1
+    - TargetEntitySign: Obj_Bullet_SceneC_Ring
       ParamSign: Dead
       ValueType: 0
       BoolValue: 0

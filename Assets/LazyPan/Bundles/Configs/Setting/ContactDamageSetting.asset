@@ -14,3 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Datas:
   - SourceSign: Obj_Bullet_SceneC_Bullet
+    Damage: 10
+    DamageRadius: 0
+    HitCooldown: -1
+    MaxHits: 0
+  - SourceSign: Obj_Bullet_SceneC_OrbitFollow
+    Damage: 10
+    DamageRadius: 0
+    HitCooldown: -1
+    MaxHits: 0
+  - SourceSign: Obj_Bullet_SceneC_Ring
+    Damage: 10
+    DamageRadius: 0
+    HitCooldown: -1
+    MaxHits: 0

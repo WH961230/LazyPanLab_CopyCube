@@ -23,7 +23,7 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -68, y: 243, z: 0}
+  position: {x: -168, y: 34, z: 0}
   scale: {x: 1.15, y: 1.15, z: 1}
   references:
     version: 2
@@ -45,9 +45,11 @@ MonoBehaviour:
         nodeLock: 0
         NodeInitialized: 1
         LastSyncedSign: Obj_Tower_SceneC_Tower
+        "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Event_WeaponFire\u3011\u9700\u914D
+          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n\u65E0 RequiredPayload\uFF0C\u672C\u884C\u4E3A\u65E0\u5916\u90E8\u53C2\u6570\u3002\r\n"
         Config:
           SourceSign: Obj_Tower_SceneC_Tower
-          DefaultWeaponID: "\u51B2\u950B\u67AA"
+          DefaultWeaponID: "\u73AF\u7ED5\u7403"
           Weapons:
           - WeaponID: "\u51B2\u950B\u67AA"
             WeaponName: "\u51B2\u950B\u67AA"
@@ -137,15 +139,15 @@ MonoBehaviour:
             Kind: 1
             TargetType: Enemy
             Range: 20
-            Interval: 2
+            Interval: 0.5
             SpawnSign: Obj_Bullet_SceneC_OrbitFollow
-            SpawnCount: 3
+            SpawnCount: 1
             SpreadAngle: 120
             Payload:
             - ParamSign: OrbitCount
               ValueType: 1
               BoolValue: 0
-              IntValue: 3
+              IntValue: 1
               FloatValue: 0
               StringValue: 
               Vector3Value: {x: 0, y: 0, z: 0}

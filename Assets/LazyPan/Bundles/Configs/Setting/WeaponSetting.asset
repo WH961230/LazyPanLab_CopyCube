@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Datas:
   - SourceSign: Obj_Tower_SceneC_Tower
-    DefaultWeaponID: "\u51B2\u950B\u67AA"
+    DefaultWeaponID: "\u73AF\u7ED5\u7403"
     Weapons:
     - WeaponID: "\u51B2\u950B\u67AA"
       WeaponName: "\u51B2\u950B\u67AA"
@@ -104,15 +104,15 @@ MonoBehaviour:
       Kind: 1
       TargetType: Enemy
       Range: 20
-      Interval: 2
+      Interval: 0.5
       SpawnSign: Obj_Bullet_SceneC_OrbitFollow
-      SpawnCount: 3
+      SpawnCount: 1
       SpreadAngle: 120
       Payload:
       - ParamSign: OrbitCount
         ValueType: 1
         BoolValue: 0
-        IntValue: 3
+        IntValue: 1
         FloatValue: 0
         StringValue: 
         Vector3Value: {x: 0, y: 0, z: 0}

@@ -26,12 +26,19 @@ namespace LazyPan {
         //runtime
         private Dictionary<int, float> hurtTime = new Dictionary<int, float>();
         private int hitCount;
+        private float settingDamage;
+        private float settingRadius;
+        private float settingCooldown = -1f;
+        private int settingMaxHits;
         private bool isConfigValid;
 
         public Behaviour_Auto_ContactDamage(Entity entity, string behaviourSign) : base(entity, behaviourSign) {
             ContactDamageSetting setting = Loader.LoadAsset<ContactDamageSetting>(AssetType.ASSET, "Setting/ContactDamageSetting");
-            if (setting != null) {
-                setting.TryGet(entity.ObjConfig.Sign, out ContactDamageSettingData _);
+            if (setting != null && setting.TryGet(entity.ObjConfig.Sign, out ContactDamageSettingData data)) {
+                settingDamage = data.Damage;
+                settingRadius = data.DamageRadius;
+                settingCooldown = data.HitCooldown;
+                settingMaxHits = data.MaxHits;
             }
 
             isConfigValid = true;
@@ -51,7 +58,7 @@ namespace LazyPan {
             Cond.Instance.TryGetData(entity, "HitCooldown", out FloatData hitCooldown);
             Cond.Instance.TryGetData(entity, "MaxHits", out IntData maxHits);
             Cond.Instance.TryGetData(entity, DataLabels.TargetType, out StringData targetType);
-            float amount = damage != null ? damage.Float : 0f;
+            float amount = damage != null ? damage.Float : settingDamage;
             if (amount <= 0f) {
                 return;
             }
@@ -61,9 +68,10 @@ namespace LazyPan {
                 return;
             }
 
-            float hitR = damageRadius != null ? Mathf.Max(damageRadius.Float, 0.1f) : 0.5f;
-            float cooldown = hitCooldown != null ? hitCooldown.Float : -1f;
-            int max = maxHits != null ? Mathf.Max(maxHits.Int, 0) : 0;
+            float hitR = damageRadius != null ? Mathf.Max(damageRadius.Float, 0.1f)
+                : (settingRadius > 0f ? Mathf.Max(settingRadius, 0.1f) : 0.5f);
+            float cooldown = hitCooldown != null ? hitCooldown.Float : settingCooldown;
+            int max = maxHits != null ? Mathf.Max(maxHits.Int, 0) : Mathf.Max(settingMaxHits, 0);
 
             Vector3 selfPos = MoveRoot().position;
             if (!EntityRegister.TryGetEntitiesWithinDistance(type, selfPos, hitR, out List<Entity> touched)) {

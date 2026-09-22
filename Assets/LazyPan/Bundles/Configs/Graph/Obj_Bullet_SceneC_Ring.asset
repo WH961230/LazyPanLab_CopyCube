@@ -26,55 +26,17 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -156, y: -308, z: 0}
+  position: {x: -116, y: -103, z: 0}
   scale: {x: 1.3225, y: 1.3225, z: 1}
   references:
     version: 2
     RefIds:
-    - rid: 8263989268591411210
-      type: {class: BehaviourNode_BodyExpand, ns: LazyPan, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: 
-        GUID: b7c87cdd-63a1-7c20-d120-4e173b199aa4
-        computeOrder: 0
-        position:
-          serializedVersion: 2
-          x: 493
-          y: 275
-          width: 240
-          height: 100
-        expanded: 1
-        debug: 0
-        nodeLock: 0
-        NodeInitialized: 1
-        LastSyncedSign: Obj_Bullet_SceneC_Ring
-        Config:
-          SourceSign: Obj_Bullet_SceneC_Ring
-    - rid: 8263989268591411211
-      type: {class: BehaviourNode_ContactDamage, ns: LazyPan, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: 
-        GUID: c8d98dee-74b2-8d31-e231-5f284c200bb5
-        computeOrder: 1
-        position:
-          serializedVersion: 2
-          x: 253
-          y: 275
-          width: 240
-          height: 100
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        NodeInitialized: 1
-        LastSyncedSign: Obj_Bullet_SceneC_Ring
-        Config:
-          SourceSign: Obj_Bullet_SceneC_Ring
     - rid: 8263989268591411208
       type: {class: BehaviourNode_Death, ns: LazyPan, asm: Assembly-CSharp}
       data:
         nodeCustomName: 
         GUID: f8ee90cf-7637-5d5a-97f7-3f8e20757d3f
-        computeOrder: 1
+        computeOrder: 0
         position:
           serializedVersion: 2
           x: 753
@@ -86,6 +48,8 @@ MonoBehaviour:
         nodeLock: 0
         NodeInitialized: 1
         LastSyncedSign: Obj_Bullet_SceneC_Ring
+        "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Event_Death\u3011\u9700\u914D
+          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n\u65E0 RequiredPayload\uFF0C\u672C\u884C\u4E3A\u65E0\u5916\u90E8\u53C2\u6570\u3002\r\n"
         Config:
           SourceSign: Obj_Bullet_SceneC_Ring
           DeathDelay: 0
@@ -96,18 +60,20 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: e05d49ff-20d0-6f96-e896-1be0ce068dd0
-        computeOrder: 2
+        computeOrder: 1
         position:
           serializedVersion: 2
-          x: 233
+          x: 1053.4159
           y: 275
           width: 240
-          height: 300
+          height: 657
         expanded: 0
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
         LastSyncedSign: Obj_Bullet_SceneC_Ring
+        "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Event_ParamValue\u3011\u9700\u914D
+          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n\u65E0 RequiredPayload\uFF0C\u672C\u884C\u4E3A\u65E0\u5916\u90E8\u53C2\u6570\u3002\r\n"
         Config:
           SourceSign: Obj_Bullet_SceneC_Ring
           Items:
@@ -174,3 +140,55 @@ MonoBehaviour:
             StringValue: 
             Vector3Value: {x: 0, y: 0, z: 0}
             ApplyOnInit: 1
+    - rid: 8263989268591411210
+      type: {class: BehaviourNode_BodyExpand, ns: LazyPan, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: b7c87cdd-63a1-7c20-d120-4e173b199aa4
+        computeOrder: 2
+        position:
+          serializedVersion: 2
+          x: 493
+          y: 275
+          width: 240
+          height: 100
+        expanded: 1
+        debug: 0
+        nodeLock: 0
+        NodeInitialized: 1
+        LastSyncedSign: Obj_Bullet_SceneC_Ring
+        "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Auto_BodyExpand\u3011\u9700\u914D
+          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n- MaxRadius : Float\uFF08\u9ED8\u8BA4
+          5\uFF09\r\n- ExpandSpeed : Float\uFF08\u9ED8\u8BA4 3\uFF09\r\n\u4F9D\u8D56\u6A21\u5757\uFF1A\u6B7B\u4EA1\r\n"
+        Config:
+          SourceSign: Obj_Bullet_SceneC_Ring
+          MaxRadius: 5
+          ExpandSpeed: 3
+    - rid: 8263989268591411211
+      type: {class: BehaviourNode_ContactDamage, ns: LazyPan, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: c8d98dee-74b2-8d31-e231-5f284c200bb5
+        computeOrder: 3
+        position:
+          serializedVersion: 2
+          x: 253
+          y: 275
+          width: 240
+          height: 100
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        NodeInitialized: 1
+        LastSyncedSign: Obj_Bullet_SceneC_Ring
+        "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Auto_ContactDamage\u3011\u9700\u914D
+          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n- Damage : Float\uFF08\u9ED8\u8BA4
+          10\uFF09\r\n- DamageRadius : Float\uFF08\u9ED8\u8BA4 0.5\uFF09\r\n- HitCooldown
+          : Float\uFF08\u9ED8\u8BA4 -1\uFF09\r\n- MaxHits : Int\uFF08\u9ED8\u8BA4
+          0\uFF09\r\n\u4F9D\u8D56\u6A21\u5757\uFF1A\u6B7B\u4EA1\r\n"
+        Config:
+          SourceSign: Obj_Bullet_SceneC_Ring
+          Damage: 10
+          DamageRadius: 0
+          HitCooldown: -1
+          MaxHits: 0

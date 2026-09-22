@@ -30,5 +30,17 @@ namespace LazyPan {
         [Header("实体 SourceSign")]
         [Tooltip("实体 Sign，与 ObjConfig.Sign 一致")]
         public string SourceSign;
+
+        [Header("环绕半径")]
+        [Tooltip("Data 有有效值时以 Data 为准")]
+        public float OrbitRadius = 2f;
+
+        [Header("环绕速度（度/秒）")]
+        [Tooltip("Data 有有效值时以 Data 为准")]
+        public float OrbitSpeed = 180f;
+
+        [Header("初始角度")]
+        [Tooltip("Data 有 OrbitAngle 时以 Data 为准，否则用这个")]
+        public float OrbitAngle;
     }
 }

@@ -30,5 +30,13 @@ namespace LazyPan {
         [Header("实体 SourceSign")]
         [Tooltip("实体 Sign，与 ObjConfig.Sign 一致")]
         public string SourceSign;
+
+        [Header("扩散到多大停（半径）")]
+        [Tooltip("长到这个半径就停下并走死亡；<=0 时回退读 Data 的 MaxRadius")]
+        public float MaxRadius = 5f;
+
+        [Header("每秒长大多少")]
+        [Tooltip("每秒半径增量；<=0 时回退读 Data 的 ExpandSpeed")]
+        public float ExpandSpeed = 3f;
     }
 }

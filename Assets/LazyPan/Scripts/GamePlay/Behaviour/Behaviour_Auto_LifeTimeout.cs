@@ -24,13 +24,14 @@ namespace LazyPan {
         private bool isConfigValid;
 
         public Behaviour_Auto_LifeTimeout(Entity entity, string behaviourSign) : base(entity, behaviourSign) {
+            float settingLife = 0f;
             LifeTimeoutSetting setting = Loader.LoadAsset<LifeTimeoutSetting>(AssetType.ASSET, "Setting/LifeTimeoutSetting");
-            if (setting != null) {
-                setting.TryGet(entity.ObjConfig.Sign, out LifeTimeoutSettingData _);
+            if (setting != null && setting.TryGet(entity.ObjConfig.Sign, out LifeTimeoutSettingData data)) {
+                settingLife = data.LifeTime;
             }
 
             Cond.Instance.TryGetData(entity, "LifeTime", out FloatData lifeTime);
-            remain = lifeTime != null ? lifeTime.Float : 0f;
+            remain = lifeTime != null ? lifeTime.Float : settingLife;
             if (remain <= 0f) {
                 return;
             }

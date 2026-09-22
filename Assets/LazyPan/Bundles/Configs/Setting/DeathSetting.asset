@@ -30,15 +30,15 @@ MonoBehaviour:
     DeathDelay: 0
     DeathAction: 1
     OnDeathParams: []
-  - SourceSign: Obj_Bullet_SceneC_Ring
-    DeathDelay: 0
+  - SourceSign: Obj_Bullet_SceneC_Bullet
+    DeathDelay: 1
     DeathAction: 1
     OnDeathParams: []
   - SourceSign: Obj_Bullet_SceneC_OrbitFollow
     DeathDelay: 0
     DeathAction: 0
     OnDeathParams: []
-  - SourceSign: Obj_Bullet_SceneC_Bullet
-    DeathDelay: 1
+  - SourceSign: Obj_Bullet_SceneC_Ring
+    DeathDelay: 0
     DeathAction: 1
     OnDeathParams: []

@@ -61,6 +61,7 @@ namespace LazyPan {
 
                 sb.AppendLine("    /// <summary>");
                 sb.AppendLine($"    /// {cnName}行为节点 对应 {dataMatch.Groups[1].Value} 一条");
+                sb.AppendLine($"    /// 参数便签见 BehaviourPayloadDoc.Get(nameof({behaviourSign}))，节点身上只读显示");
                 sb.AppendLine("    /// </summary>");
                 sb.AppendLine("    [Serializable]");
                 sb.AppendLine($"    [NodeMenuItem(\"LazyPan/行为/{cnName}\")]");

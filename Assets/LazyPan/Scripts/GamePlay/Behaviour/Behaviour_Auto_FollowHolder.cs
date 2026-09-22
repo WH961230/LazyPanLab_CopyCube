@@ -18,16 +18,21 @@ namespace LazyPan {
 
         //runtime
         private float angle;
+        private float settingRadius = 2f;
+        private float settingSpeed = 180f;
         private bool isConfigValid;
 
         public Behaviour_Auto_FollowHolder(Entity entity, string behaviourSign) : base(entity, behaviourSign) {
             FollowHolderSetting setting = Loader.LoadAsset<FollowHolderSetting>(AssetType.ASSET, "Setting/FollowHolderSetting");
-            if (setting != null) {
-                setting.TryGet(entity.ObjConfig.Sign, out FollowHolderSettingData _);
+            if (setting != null && setting.TryGet(entity.ObjConfig.Sign, out FollowHolderSettingData data)) {
+                settingRadius = data.OrbitRadius;
+                settingSpeed = data.OrbitSpeed;
+                angle = data.OrbitAngle;
             }
 
-            Cond.Instance.TryGetData(entity, "OrbitAngle", out FloatData angleData);
-            angle = angleData != null ? angleData.Float : 0f;
+            if (Cond.Instance.TryGetData(entity, "OrbitAngle", out FloatData angleData)) {
+                angle = angleData.Float;
+            }
 
             isConfigValid = true;
             Game.instance.OnUpdateEvent.AddListener(OnUpdate);
@@ -49,8 +54,8 @@ namespace LazyPan {
 
             Cond.Instance.TryGetData(entity, "OrbitRadius", out FloatData radius);
             Cond.Instance.TryGetData(entity, "OrbitSpeed", out FloatData speed);
-            float r = radius != null ? Mathf.Max(radius.Float, 0.5f) : 2f;
-            float deg = speed != null ? speed.Float : 180f;
+            float r = Mathf.Max(radius != null ? radius.Float : (settingRadius > 0f ? settingRadius : 2f), 0.5f);
+            float deg = speed != null ? speed.Float : settingSpeed;
 
             angle += deg * Time.deltaTime;
             Transform holderRoot = Cond.Instance.Get<Transform>(holder, Label.BODY);

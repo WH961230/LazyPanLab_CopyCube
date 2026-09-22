@@ -30,5 +30,9 @@ namespace LazyPan {
         [Header("实体 SourceSign")]
         [Tooltip("实体 Sign，与 ObjConfig.Sign 一致")]
         public string SourceSign;
+
+        [Header("飞行速度")]
+        [Tooltip("<=0 睡觉；Data 有 Speed 时以 Data（传话包）为准")]
+        public float Speed = 10f;
     }
 }
