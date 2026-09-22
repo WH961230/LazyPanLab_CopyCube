@@ -24,15 +24,15 @@ namespace LazyPan {
         public class DeathConfig {
             [Header("死亡延迟销毁时长")] public float DeathDelay;
             [Header("死亡后处理")] public DeathAction DeathAction;
-            [Header("死亡瞬间要改的参数列表")] public List<DeathParamConfig> OnDeathParams = new List<DeathParamConfig>();
+            [Header("死亡瞬间要改的参数列表")] public List<ParamModifyConfig> OnDeathParams = new List<ParamModifyConfig>();
         }
 
         [Serializable]
-        public class DeathParamConfig {
+        public class ParamModifyConfig {
             [Header("被修改实体 Self=自己")] public string TargetEntitySign = BehaviourSigns.Self;
             [Header("参数标签")] public string ParamSign;
             [Header("参数类型")] public ParamValueType ValueType;
-            [Header("修改方式 Set直接赋值 Add累加")] public DeathModifyType Modify;
+            [Header("修改方式 Set直接赋值 Add累加")] public ParamModifyType Modify;
             [Header("布尔值")] public bool BoolValue;
             [Header("整数值")] public int IntValue;
             [Header("浮点值")] public float FloatValue;
@@ -50,7 +50,7 @@ namespace LazyPan {
 
             if (keyboard.digit1Key.wasPressedThisFrame) {
                 if (EntityRegister.TryGetEntityByID(EntityID, out Entity target)) {
-                    if (Cond.Instance.TryGetData(target, Behaviour_Event_Death.HEALTH_LABEL, out FloatData health)) {
+                    if (Cond.Instance.TryGetData(target, DataLabels.Health, out FloatData health)) {
                         health.Float = 0f;
                     }
                 }

@@ -86,8 +86,8 @@ namespace LazyPan {
         [Tooltip("数据标签，取数实体Data里的Sign，如 Health / Level / WaveIndex")]
         public string DataSign;
 
-        [Header("最大值数据标签 比例模式用 如MaxHealth")]
         [Tooltip("比例模式的最大值标签，如 MaxHealth。Direct 模式可空")]
+        [ShowIf("Mode", UIDataBindValueMode.Ratio, "最大值数据标签 比例模式用 如MaxHealth")]
         public string MaxDataSign;
 
         [Header("文本格式 F0整数 F1一位小数 空则F0")]

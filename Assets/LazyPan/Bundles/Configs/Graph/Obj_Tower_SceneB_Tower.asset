@@ -26,8 +26,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 973, y: 178, z: 0}
-  scale: {x: 1.3225, y: 1.3225, z: 1}
+  position: {x: -544, y: 119, z: 0}
+  scale: {x: 1, y: 1, z: 1}
   references:
     version: 2
     RefIds:
@@ -41,12 +41,13 @@ MonoBehaviour:
           serializedVersion: 2
           x: -208
           y: -6
-          width: 397
+          width: 405
           height: 704
         expanded: 1
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
+        LastSyncedSign: Obj_Tower_SceneB_Tower
         Config:
           SourceSign: Obj_Tower_SceneB_Tower
           CompTriggerSign: Trigger
@@ -88,12 +89,13 @@ MonoBehaviour:
           serializedVersion: 2
           x: 929.19135
           y: -6.000016
-          width: 221
+          width: 323
           height: 657
         expanded: 1
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
+        LastSyncedSign: Obj_Tower_SceneB_Tower
         Config:
           SourceSign: Obj_Tower_SceneB_Tower
           Items:
@@ -123,14 +125,15 @@ MonoBehaviour:
         computeOrder: 2
         position:
           serializedVersion: 2
-          x: 387.8299
-          y: -6.0000014
-          width: 357
+          x: 507.13052
+          y: -19.913034
+          width: 240
           height: 657
         expanded: 1
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
+        LastSyncedSign: Obj_Tower_SceneB_Tower
         Config:
           SourceSign: Obj_Tower_SceneB_Tower
           Items:
@@ -155,12 +158,13 @@ MonoBehaviour:
           serializedVersion: 2
           x: 1315.7864
           y: -33.685394
-          width: 280
+          width: 288
           height: 911
         expanded: 0
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
+        LastSyncedSign: Obj_Tower_SceneB_Tower
         Config:
           SourceSign: Obj_Tower_SceneB_Tower
           TargetSceneSign: SceneC

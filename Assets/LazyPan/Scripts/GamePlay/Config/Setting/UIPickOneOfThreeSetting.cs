@@ -42,8 +42,16 @@ namespace LazyPan {
         [Tooltip("面板挂到主界面哪个Transform下。Root=主界面根节点，其他填主界面Comp里配置的Transform Sign")]
         public string MountSign;
 
-        [Header("测试自动开奖秒数 0=关")]
-        [Tooltip("测试开关，进场景多少秒后自动弹一次，验证面板用。正式接升级调用后填0关闭")]
+        [Header("触发旗标签 空=不监听")]
+        [Tooltip("触发旗 Bool 标签名，别的实体把它置 true 就开奖，开奖前自动重置 false。默认 WantPick，升级事件立的就是这面旗。留空=不监听，只走手动 Open")]
+        public string WatchSign = DataLabels.WantPick;
+
+        [Header("测试自动开奖开关")]
+        [Tooltip("打开后进场景自动弹一次，验证面板用。正式接升级调用后关掉")]
+        public bool EnableTestAutoOpen;
+
+        [Tooltip("进场景多少秒后自动弹一次。正式接升级调用后把开关关掉")]
+        [ShowIf("EnableTestAutoOpen", true, "测试自动开奖秒数")]
         public float AutoOpenDelay;
 
         [Header("奖池 一张卡=一行")]
@@ -87,26 +95,26 @@ namespace LazyPan {
 
         [Header("修改方式")]
         [Tooltip("Set=直接赋值，Add=在原值上累加增量(只对 Int/Float/Vector3 有意义)")]
-        public DeathModifyType Modify;
+        public ParamModifyType Modify;
 
-        [Header("布尔值")]
         [Tooltip("ValueType=Bool 时写入的值")]
+        [ShowIf("ValueType", ParamValueType.Bool, "布尔值")]
         public bool BoolValue;
 
-        [Header("整数值")]
         [Tooltip("ValueType=Int 时的值(Set)或增量(Add)")]
+        [ShowIf("ValueType", ParamValueType.Int, "整数值")]
         public int IntValue;
 
-        [Header("浮点值")]
         [Tooltip("ValueType=Float 时的值(Set)或增量(Add)")]
+        [ShowIf("ValueType", ParamValueType.Float, "浮点值")]
         public float FloatValue;
 
-        [Header("字符串值")]
         [Tooltip("ValueType=String 时写入的值(只支持 Set)")]
+        [ShowIf("ValueType", ParamValueType.String, "字符串值")]
         public string StringValue;
 
-        [Header("向量值")]
         [Tooltip("ValueType=Vector3 时的值(Set)或增量(Add)")]
+        [ShowIf("ValueType", ParamValueType.Vector3, "向量值")]
         public Vector3 Vector3Value;
     }
 }

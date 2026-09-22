@@ -29,6 +29,7 @@ namespace LazyPan {
             [Header("满级阶段 掐顶")] public int MaxStage = 99999;
             [Header("兜底上限")] public float FallbackCap = 100f;
             [Header("阶段上限表")] public List<StageCapConfig> Caps = new List<StageCapConfig>();
+            [Header("升阶事件 升1级触发1次")] public List<DeathData.ParamModifyConfig> StageUpEvents = new List<DeathData.ParamModifyConfig>();
         }
 
         [Serializable]

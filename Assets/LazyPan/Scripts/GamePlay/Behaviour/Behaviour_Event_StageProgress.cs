@@ -71,6 +71,35 @@ namespace LazyPan {
             _config.MaxStage = Mathf.Max(settingData.MaxStage, _config.InitialStage);
             _config.FallbackCap = Mathf.Max(settingData.FallbackCap, 1f);
             _config.Caps.Clear();
+            _config.StageUpEvents.Clear();
+
+            if (settingData.StageUpEvents != null) {
+                foreach (ParamModifyItem item in settingData.StageUpEvents) {
+                    if (item == null) {
+                        continue;
+                    }
+
+                    if (!BehaviourSigns.Require(item.TargetEntitySign, BehaviourSign, entity.ObjConfig?.Sign, nameof(ParamModifyItem.TargetEntitySign))) {
+                        continue;
+                    }
+
+                    if (!BehaviourSigns.Require(item.ParamSign, BehaviourSign, item.TargetEntitySign, nameof(ParamModifyItem.ParamSign))) {
+                        continue;
+                    }
+
+                    _config.StageUpEvents.Add(new DeathData.ParamModifyConfig() {
+                        TargetEntitySign = item.TargetEntitySign,
+                        ParamSign = item.ParamSign,
+                        ValueType = item.ValueType,
+                        Modify = item.Modify,
+                        BoolValue = item.BoolValue,
+                        IntValue = item.IntValue,
+                        FloatValue = item.FloatValue,
+                        StringValue = item.StringValue,
+                        Vector3Value = item.Vector3Value,
+                    });
+                }
+            }
 
             if (settingData.Caps == null) {
                 return;
@@ -235,6 +264,7 @@ namespace LazyPan {
             }
 
             int guard = 0;
+            int stageBefore = _stageIntData.Int;
             while (_progressFloatData.Float >= GetCap(_stageIntData.Int)) {
                 if (_stageIntData.Int >= _config.MaxStage) {
                     _progressFloatData.Float = GetCap(_stageIntData.Int);
@@ -248,6 +278,59 @@ namespace LazyPan {
                 if (guard > 100000) {
                     LogUtil.LogErrorFormat("行为:{0} 实体:{1} 升阶次数过多 已强制中断 请检查阶段表!", BehaviourSign, entity.ObjConfig?.Sign);
                     break;
+                }
+            }
+
+            //升了几级触发几次事件(只改数 不调行为 目标不存在单项跳过)
+            int gained = _stageIntData.Int - stageBefore;
+            for (int i = 0; i < gained; i++) {
+                ApplyStageUpEvents();
+            }
+        }
+
+        /// <summary>
+        /// 升阶事件执行一次 按配置改一批参数 单项失败不影响其余项 与死亡结算一个语义
+        /// </summary>
+        private void ApplyStageUpEvents() {
+            foreach (DeathData.ParamModifyConfig config in _config.StageUpEvents) {
+                if (!BehaviourSigns.ResolveEntity(entity, BehaviourSign, nameof(ParamModifyItem.TargetEntitySign), config.TargetEntitySign, out Entity target)) {
+                    continue;
+                }
+
+                switch (config.ValueType) {
+                    case ParamValueType.Bool:
+                        if (Cond.Instance.TryGetData(target, config.ParamSign, out BoolData boolData)) {
+                            boolData.Bool = config.BoolValue;
+                        }
+
+                        break;
+                    case ParamValueType.Int:
+                        if (Cond.Instance.TryGetData(target, config.ParamSign, out IntData intData)) {
+                            intData.Int = config.Modify == ParamModifyType.Add ? intData.Int + config.IntValue : config.IntValue;
+                        }
+
+                        break;
+                    case ParamValueType.Float:
+                        if (Cond.Instance.TryGetData(target, config.ParamSign, out FloatData floatData)) {
+                            floatData.Float = config.Modify == ParamModifyType.Add ? floatData.Float + config.FloatValue : config.FloatValue;
+                        }
+
+                        break;
+                    case ParamValueType.String:
+                        if (Cond.Instance.TryGetData(target, config.ParamSign, out StringData stringData)) {
+                            stringData.String = config.StringValue;
+                        }
+
+                        break;
+                    case ParamValueType.Vector3:
+                        if (Cond.Instance.TryGetData(target, config.ParamSign, out Vector3Data vector3Data)) {
+                            vector3Data.Vector3 = config.Modify == ParamModifyType.Add ? vector3Data.Vector3 + config.Vector3Value : config.Vector3Value;
+                        }
+
+                        break;
+                    default:
+                        LogUtil.LogErrorFormat("行为:{0} 不支持的参数类型:{1}", BehaviourSign, config.ValueType);
+                        break;
                 }
             }
         }

@@ -13,24 +13,6 @@ MonoBehaviour:
   m_Name: TeleportFlowSetting
   m_EditorClassIdentifier: 
   Datas:
-  - SourceSign: Obj_Tower_SceneB_Tower
-    TargetSceneSign: SceneC
-    Once: 1
-    Condition:
-      LeftEntitySign: Obj_Tower_SceneB_Tower
-      LeftParamSign: Energy
-      LeftValueType: 2
-      Compare: 2
-      RightIsEntityParam: 1
-      RightEntitySign: Obj_Tower_SceneB_Tower
-      RightParamSign: MaxEnergy
-      RightValueType: 2
-      RightBoolValue: 0
-      RightIntValue: 0
-      RightConstValue: 0
-      RightStringValue: 
-      RightVector3Value: {x: 0, y: 0, z: 0}
-      RightConstType: 2
   - SourceSign: Obj_Logo_SceneA_BeginLogo
     TargetSceneSign: SceneB
     Once: 1
@@ -42,6 +24,24 @@ MonoBehaviour:
       RightIsEntityParam: 0
       RightEntitySign: Self
       RightParamSign: None
+      RightValueType: 2
+      RightBoolValue: 0
+      RightIntValue: 0
+      RightConstValue: 0
+      RightStringValue: 
+      RightVector3Value: {x: 0, y: 0, z: 0}
+      RightConstType: 2
+  - SourceSign: Obj_Tower_SceneB_Tower
+    TargetSceneSign: SceneC
+    Once: 1
+    Condition:
+      LeftEntitySign: Obj_Tower_SceneB_Tower
+      LeftParamSign: Energy
+      LeftValueType: 2
+      Compare: 2
+      RightIsEntityParam: 1
+      RightEntitySign: Obj_Tower_SceneB_Tower
+      RightParamSign: MaxEnergy
       RightValueType: 2
       RightBoolValue: 0
       RightIntValue: 0

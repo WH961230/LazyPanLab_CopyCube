@@ -23,7 +23,9 @@ namespace LazyPan {
         public class UIPickOneOfThreeConfig {
             [Header("面板预制体标识")] public string PanelPrefabSign;
             [Header("挂点标签")] public string MountSign;
-            [Header("测试自动开奖秒数 0=关")] public float AutoOpenDelay;
+            [Header("触发旗标签 空=不监听")] public string WatchSign;
+            [Header("测试自动开奖开关")] public bool EnableTestAutoOpen;
+            [Header("测试自动开奖秒数")] public float AutoOpenDelay;
             [Header("奖池")] public List<PickCardItem> Pool = new List<PickCardItem>();
             [Header("本轮三张卡下标 调试用")] public List<int> CurrentPicks = new List<int>();
             [Header("面板是否打开 调试用")] public bool IsOpen;

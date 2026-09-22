@@ -28,8 +28,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -378, y: 255, z: 0}
-  scale: {x: 1, y: 1, z: 1}
+  position: {x: 204, y: 372, z: 0}
+  scale: {x: 1.3225, y: 1.3225, z: 1}
   references:
     version: 2
     RefIds:
@@ -43,12 +43,13 @@ MonoBehaviour:
           serializedVersion: 2
           x: -202.51042
           y: -260
-          width: 247
+          width: 255
           height: 297
         expanded: 1
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
+        LastSyncedSign: Obj_Player_SceneC_Player
         Config:
           SourceSign: Obj_Player_SceneC_Player
           InputControlSign: Player/Motion
@@ -65,12 +66,13 @@ MonoBehaviour:
           serializedVersion: 2
           x: 68.97254
           y: -260
-          width: 328
+          width: 336
           height: 657
         expanded: 1
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
+        LastSyncedSign: Obj_Player_SceneC_Player
         Config:
           SourceSign: Obj_Player_SceneC_Player
           Items:
@@ -147,12 +149,13 @@ MonoBehaviour:
           serializedVersion: 2
           x: 311.73914
           y: -260
-          width: 260
+          width: 268
           height: 252
         expanded: 1
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
+        LastSyncedSign: Obj_Player_SceneC_Player
         Config:
           SourceSign: Obj_Player_SceneC_Player
           DeathDelay: 0
@@ -168,12 +171,13 @@ MonoBehaviour:
           serializedVersion: 2
           x: 600.0434
           y: -260
-          width: 357
+          width: 364
           height: 657
         expanded: 1
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
+        LastSyncedSign: Obj_Player_SceneC_Player
         Config:
           SourceSign: Obj_Player_SceneC_Player
           Items:
@@ -213,14 +217,15 @@ MonoBehaviour:
         computeOrder: 4
         position:
           serializedVersion: 2
-          x: 996.04346
-          y: -260.00003
-          width: 397
+          x: 977.85254
+          y: -260
+          width: 248
           height: 704
         expanded: 0
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
+        LastSyncedSign: Obj_Player_SceneC_Player
         Config:
           SourceSign: Obj_Player_SceneC_Player
           CompTriggerSign: Trigger
@@ -249,14 +254,15 @@ MonoBehaviour:
         computeOrder: 5
         position:
           serializedVersion: 2
-          x: 1420.0435
-          y: -260.00003
-          width: 243
-          height: 439
+          x: 1401.8525
+          y: -260
+          width: 323
+          height: 486
         expanded: 0
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
+        LastSyncedSign: Obj_Player_SceneC_Player
         Config:
           SourceSign: Obj_Player_SceneC_Player
           StageParamSign: Level
@@ -287,3 +293,13 @@ MonoBehaviour:
             Cap: 1500
           - Stage: 10
             Cap: 2200
+          StageUpEvents:
+          - TargetEntitySign: Obj_UI_SceneC_PickOneOfThree
+            ParamSign: TriggerPick
+            ValueType: 0
+            Modify: 0
+            BoolValue: 1
+            IntValue: 0
+            FloatValue: 0
+            StringValue: 
+            Vector3Value: {x: 0, y: 0, z: 0}

@@ -57,6 +57,8 @@ namespace LazyPan {
                 string cnName = cn;
                 string nodeName = "BehaviourNode_" + Regex.Replace(behaviourSign, @"^Behaviour_(Auto|Event|Trigger)_", "");
 
+                EnsureSettingAsset(settingMatch.Groups[1].Value);
+
                 sb.AppendLine("    /// <summary>");
                 sb.AppendLine($"    /// {cnName}行为节点 对应 {dataMatch.Groups[1].Value} 一条");
                 sb.AppendLine("    /// </summary>");

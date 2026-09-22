@@ -60,6 +60,10 @@ namespace LazyPan {
         [Header("阶段上限表")]
         [Tooltip("阶段对照上限表，一行=一个阶段装满是多少。如 1->100，2->150。表里没写的阶段用兜底上限")]
         public List<StageCapItem> Caps = new List<StageCapItem>();
+
+        [Header("升阶事件 升1级触发1次")]
+        [Tooltip("升阶事件，每升1级按配置改一批参数，单项失败不影响其余。如目标=三选一实体 参数=WantPick 改法=Set 值=true，升级就立旗。连升N级触发N次")]
+        public List<ParamModifyItem> StageUpEvents = new List<ParamModifyItem>();
     }
 
     [Serializable]

@@ -42,3 +42,13 @@ MonoBehaviour:
       Cap: 1500
     - Stage: 10
       Cap: 2200
+    StageUpEvents:
+    - TargetEntitySign: Obj_UI_SceneC_PickOneOfThree
+      ParamSign: TriggerPick
+      ValueType: 0
+      Modify: 0
+      BoolValue: 1
+      IntValue: 0
+      FloatValue: 0
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}

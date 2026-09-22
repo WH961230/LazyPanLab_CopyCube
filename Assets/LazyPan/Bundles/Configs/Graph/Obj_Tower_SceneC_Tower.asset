@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   serializedNodes: []
   nodes:
-  - rid: 8499330833404658244
+  - rid: 8263989268591411204
   edges: []
   groups: []
   stackNodes: []
@@ -23,27 +23,150 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 561, y: 50, z: 0}
-  scale: {x: 1.7490063, y: 1.7490063, z: 1}
+  position: {x: -68, y: 243, z: 0}
+  scale: {x: 1.15, y: 1.15, z: 1}
   references:
     version: 2
     RefIds:
-    - rid: 8499330833404658244
-      type: {class: BehaviourNode_ParamValue, ns: LazyPan, asm: Assembly-CSharp}
+    - rid: 8263989268591411204
+      type: {class: BehaviourNode_WeaponFire, ns: LazyPan, asm: Assembly-CSharp}
       data:
         nodeCustomName: 
-        GUID: b9759768-9743-4525-afce-084f6bc79730
+        GUID: e9a7cd60-f6e3-4f39-84f9-38697ef4dea8
         computeOrder: 0
         position:
           serializedVersion: 2
-          x: 60
+          x: 298
           y: 80
-          width: 100
-          height: 100
+          width: 640
+          height: 799
         expanded: 0
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
+        LastSyncedSign: Obj_Tower_SceneC_Tower
         Config:
           SourceSign: Obj_Tower_SceneC_Tower
-          Items: []
+          DefaultWeaponID: "\u51B2\u950B\u67AA"
+          Weapons:
+          - WeaponID: "\u51B2\u950B\u67AA"
+            WeaponName: "\u51B2\u950B\u67AA"
+            Kind: 0
+            TargetType: Enemy
+            Range: 9999
+            Interval: 0.3
+            SpawnSign: Obj_Bullet_SceneC_Bullet
+            SpawnCount: 1
+            SpreadAngle: 0
+            Payload:
+            - ParamSign: Speed
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 50
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: Damage
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 50
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: DamageRadius
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 0.5
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: HitCooldown
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: -1
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: MaxHits
+              ValueType: 1
+              BoolValue: 0
+              IntValue: 1
+              FloatValue: 0
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: LifeTime
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 200
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+          - WeaponID: "\u5706\u73AF"
+            WeaponName: "\u5706\u73AF"
+            Kind: 2
+            TargetType: Enemy
+            Range: 20
+            Interval: 2
+            SpawnSign: Obj_Bullet_SceneC_Ring
+            SpawnCount: 1
+            SpreadAngle: 0
+            Payload:
+            - ParamSign: MaxRadius
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 5
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: ExpandSpeed
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 3
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: Damage
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 30
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+          - WeaponID: "\u73AF\u7ED5\u7403"
+            WeaponName: "\u73AF\u7ED5\u7403"
+            Kind: 1
+            TargetType: Enemy
+            Range: 20
+            Interval: 2
+            SpawnSign: Obj_Bullet_SceneC_OrbitFollow
+            SpawnCount: 3
+            SpreadAngle: 120
+            Payload:
+            - ParamSign: OrbitCount
+              ValueType: 1
+              BoolValue: 0
+              IntValue: 3
+              FloatValue: 0
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: OrbitRadius
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 10
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: OrbitSpeed
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 180
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: Damage
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 10
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}

@@ -14,6 +14,61 @@ namespace LazyPan {
     }
 
     /// <summary>
+    /// 体型扩散行为节点 对应 BodyExpandSettingData 一条(占位挂钩 参数走 Data)
+    /// </summary>
+    [Serializable]
+    [NodeMenuItem("LazyPan/行为/体型扩散")]
+    public class BehaviourNode_BodyExpand : BehaviourGraphNode {
+        public BodyExpandSettingData Config;
+        public override string name => "体型扩散";
+        public override string BehaviourSign => nameof(Behaviour_Auto_BodyExpand);
+    }
+
+    /// <summary>
+    /// 接触伤害行为节点 对应 ContactDamageSettingData 一条(占位挂钩 参数走 Data)
+    /// </summary>
+    [Serializable]
+    [NodeMenuItem("LazyPan/行为/接触伤害")]
+    public class BehaviourNode_ContactDamage : BehaviourGraphNode {
+        public ContactDamageSettingData Config;
+        public override string name => "接触伤害";
+        public override string BehaviourSign => nameof(Behaviour_Auto_ContactDamage);
+    }
+
+    /// <summary>
+    /// 寿命行为节点 对应 LifeTimeoutSettingData 一条(占位挂钩 参数走 Data)
+    /// </summary>
+    [Serializable]
+    [NodeMenuItem("LazyPan/行为/寿命")]
+    public class BehaviourNode_LifeTimeout : BehaviourGraphNode {
+        public LifeTimeoutSettingData Config;
+        public override string name => "寿命";
+        public override string BehaviourSign => nameof(Behaviour_Auto_LifeTimeout);
+    }
+
+    /// <summary>
+    /// 跟随主人行为节点 对应 FollowHolderSettingData 一条(占位挂钩 参数走 Data)
+    /// </summary>
+    [Serializable]
+    [NodeMenuItem("LazyPan/行为/跟随主人")]
+    public class BehaviourNode_FollowHolder : BehaviourGraphNode {
+        public FollowHolderSettingData Config;
+        public override string name => "跟随主人";
+        public override string BehaviourSign => nameof(Behaviour_Auto_FollowHolder);
+    }
+
+    /// <summary>
+    /// 飞行追踪行为节点 对应 FlyTrackSettingData 一条(占位挂钩 参数走 Data)
+    /// </summary>
+    [Serializable]
+    [NodeMenuItem("LazyPan/行为/飞行追踪")]
+    public class BehaviourNode_FlyTrack : BehaviourGraphNode {
+        public FlyTrackSettingData Config;
+        public override string name => "飞行追踪";
+        public override string BehaviourSign => nameof(Behaviour_Auto_FlyTrack);
+    }
+
+    /// <summary>
     /// 延时生成实体行为节点 对应 DelayGenerateEntitySettingData 一条
     /// </summary>
     [Serializable]
@@ -154,6 +209,17 @@ namespace LazyPan {
         public UIPickOneOfThreeSettingData Config;
         public override string name => "UI三选一";
         public override string BehaviourSign => nameof(Behaviour_Event_UIPickOneOfThree);
+    }
+
+    /// <summary>
+    /// 开火行为节点 对应 WeaponSettingData 一条(持有者的军火库)
+    /// </summary>
+    [Serializable]
+    [NodeMenuItem("LazyPan/行为/开火")]
+    public class BehaviourNode_WeaponFire : BehaviourGraphNode {
+        public WeaponSettingData Config;
+        public override string name => "开火";
+        public override string BehaviourSign => nameof(Behaviour_Event_WeaponFire);
     }
 
 }

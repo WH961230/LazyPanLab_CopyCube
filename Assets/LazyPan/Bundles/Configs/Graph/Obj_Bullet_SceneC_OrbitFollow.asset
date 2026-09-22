@@ -1,0 +1,158 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31390c44c9f3a3d40b424bf6821999a2, type: 3}
+  m_Name: Obj_Bullet_SceneC_OrbitFollow
+  m_EditorClassIdentifier: 
+  serializedNodes: []
+  nodes:
+  - rid: 8263989268591411209
+  - rid: 8263989268591411210
+  - rid: 8263989268591411211
+  - rid: 8263989268591411212
+  edges: []
+  groups: []
+  stackNodes: []
+  pinnedElements: []
+  exposedParameters: []
+  serializedParameterList: []
+  stickyNotes: []
+  nodeInspectorReference: {fileID: 0}
+  position: {x: -417, y: -67, z: 0}
+  scale: {x: 1.3225, y: 1.3225, z: 1}
+  references:
+    version: 2
+    RefIds:
+    - rid: 8263989268591411210
+      type: {class: BehaviourNode_FollowHolder, ns: LazyPan, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: d9e09eff-85c3-9e41-f342-6a395d311cc6
+        computeOrder: 0
+        position:
+          serializedVersion: 2
+          x: 490
+          y: 201
+          width: 240
+          height: 100
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        NodeInitialized: 1
+        LastSyncedSign: Obj_Bullet_SceneC_OrbitFollow
+        Config:
+          SourceSign: Obj_Bullet_SceneC_OrbitFollow
+    - rid: 8263989268591411211
+      type: {class: BehaviourNode_ContactDamage, ns: LazyPan, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: eae10f00-96d4-af52-0743-7b4a622d77e7
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 250
+          y: 201
+          width: 240
+          height: 100
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        NodeInitialized: 1
+        LastSyncedSign: Obj_Bullet_SceneC_OrbitFollow
+        Config:
+          SourceSign: Obj_Bullet_SceneC_OrbitFollow
+    - rid: 8263989268591411212
+      type: {class: BehaviourNode_ParamValue, ns: LazyPan, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: fbf21a11-a7e5-b063-1854-8c5b733e88f8
+        computeOrder: 2
+        position:
+          serializedVersion: 2
+          x: 10
+          y: 201
+          width: 240
+          height: 300
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        NodeInitialized: 1
+        LastSyncedSign: Obj_Bullet_SceneC_OrbitFollow
+        Config:
+          SourceSign: Obj_Bullet_SceneC_OrbitFollow
+          Items:
+          - TargetEntitySign: Obj_Bullet_SceneC_OrbitFollow
+            ParamSign: Damage
+            ValueType: 2
+            BoolValue: 0
+            IntValue: 0
+            FloatValue: 10
+            StringValue: 
+            Vector3Value: {x: 0, y: 0, z: 0}
+            ApplyOnInit: 1
+          - TargetEntitySign: Obj_Bullet_SceneC_OrbitFollow
+            ParamSign: DamageRadius
+            ValueType: 2
+            BoolValue: 0
+            IntValue: 0
+            FloatValue: 0.6
+            StringValue: 
+            Vector3Value: {x: 0, y: 0, z: 0}
+            ApplyOnInit: 1
+          - TargetEntitySign: Obj_Bullet_SceneC_OrbitFollow
+            ParamSign: HitCooldown
+            ValueType: 2
+            BoolValue: 0
+            IntValue: 0
+            FloatValue: 1
+            StringValue: 
+            Vector3Value: {x: 0, y: 0, z: 0}
+            ApplyOnInit: 1
+          - TargetEntitySign: Obj_Bullet_SceneC_OrbitFollow
+            ParamSign: MaxHits
+            ValueType: 1
+            BoolValue: 0
+            IntValue: 0
+            FloatValue: 0
+            StringValue: 
+            Vector3Value: {x: 0, y: 0, z: 0}
+            ApplyOnInit: 1
+          - TargetEntitySign: Obj_Bullet_SceneC_OrbitFollow
+            ParamSign: Dead
+            ValueType: 0
+            BoolValue: 0
+            IntValue: 0
+            FloatValue: 0
+            StringValue: 
+            Vector3Value: {x: 0, y: 0, z: 0}
+            ApplyOnInit: 1
+    - rid: 8263989268591411209
+      type: {class: BehaviourNode_Death, ns: LazyPan, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 4e3d2e33-26b8-4e87-89a5-88d00e6e5200
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 747
+          y: 201
+          width: 240
+          height: 252
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        NodeInitialized: 1
+        LastSyncedSign: Obj_Bullet_SceneC_OrbitFollow
+        Config:
+          SourceSign: Obj_Bullet_SceneC_OrbitFollow
+          DeathDelay: 0
+          DeathAction: 0
+          OnDeathParams: []

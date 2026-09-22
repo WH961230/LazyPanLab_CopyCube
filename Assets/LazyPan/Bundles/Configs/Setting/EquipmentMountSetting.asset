@@ -12,13 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d358e493926c1e4587b34b18b2f1765, type: 3}
   m_Name: EquipmentMountSetting
   m_EditorClassIdentifier: 
-  Datas:
-  - SourceSign: Obj_Tower_SceneB_Tower
-    InitialMount: 1
-    Mounts:
-    - SlotSign: Skill1
-      EquipmentPrefabSign: Virtual
-      MountPointLabel: Root
-      OffsetPosition: {x: 0, y: 0, z: 0}
-      OffsetRotation: {x: 0, y: 0, z: 0}
-      OffsetScale: {x: 0, y: 0, z: 0}
+  Datas: []

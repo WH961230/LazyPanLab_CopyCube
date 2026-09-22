@@ -46,10 +46,25 @@ namespace LazyPan {
 
             _config = _pickData.Config;
             CopySetting(settingData);
+            Game.instance.OnUpdateEvent.AddListener(OnWatchFlag);
 
             //测试开关开了就计时 进场景几秒后自动弹一次 正式接升级调用后填0关闭
             if (_config.AutoOpenDelay > 0f) {
                 Game.instance.OnUpdateEvent.AddListener(OnTestTick);
+            }
+        }
+
+        /// <summary>
+        /// 看旗 旗立起来就拔旗开奖 面板开着时不重入 关面板后旗还在会接着弹(连升排队)
+        /// </summary>
+        private void OnWatchFlag() {
+            if (_config.IsOpen || string.IsNullOrEmpty(_config.WatchSign)) {
+                return;
+            }
+
+            if (Cond.Instance.TryGetData(entity, _config.WatchSign, out BoolData flag) && flag.Bool) {
+                flag.Bool = false;
+                Open();
             }
         }
 
@@ -63,6 +78,8 @@ namespace LazyPan {
         private void CopySetting(UIPickOneOfThreeSettingData settingData) {
             _config.PanelPrefabSign = settingData.PanelPrefabSign;
             _config.MountSign = string.IsNullOrEmpty(settingData.MountSign) ? BehaviourSigns.Root : settingData.MountSign;
+            _config.WatchSign = string.IsNullOrEmpty(settingData.WatchSign) ? "" : settingData.WatchSign.Trim();
+            _config.EnableTestAutoOpen = settingData.EnableTestAutoOpen;
             _config.AutoOpenDelay = settingData.AutoOpenDelay;
             _config.Pool.Clear();
             _config.CurrentPicks.Clear();
@@ -321,12 +338,12 @@ namespace LazyPan {
                         break;
                     case ParamValueType.Int:
                         if (Cond.Instance.TryGetData(target, effect.ParamSign, out IntData intData)) {
-                            intData.Int = effect.Modify == DeathModifyType.Add ? intData.Int + effect.IntValue : effect.IntValue;
+                            intData.Int = effect.Modify == ParamModifyType.Add ? intData.Int + effect.IntValue : effect.IntValue;
                         }
                         break;
                     case ParamValueType.Float:
                         if (Cond.Instance.TryGetData(target, effect.ParamSign, out FloatData floatData)) {
-                            floatData.Float = effect.Modify == DeathModifyType.Add ? floatData.Float + effect.FloatValue : effect.FloatValue;
+                            floatData.Float = effect.Modify == ParamModifyType.Add ? floatData.Float + effect.FloatValue : effect.FloatValue;
                         }
                         break;
                     case ParamValueType.String:
@@ -336,7 +353,7 @@ namespace LazyPan {
                         break;
                     case ParamValueType.Vector3:
                         if (Cond.Instance.TryGetData(target, effect.ParamSign, out Vector3Data vector3Data)) {
-                            vector3Data.Vector3 = effect.Modify == DeathModifyType.Add ? vector3Data.Vector3 + effect.Vector3Value : effect.Vector3Value;
+                            vector3Data.Vector3 = effect.Modify == ParamModifyType.Add ? vector3Data.Vector3 + effect.Vector3Value : effect.Vector3Value;
                         }
                         break;
                     default:
@@ -367,6 +384,7 @@ namespace LazyPan {
 
         public override void Clear() {
             if (Game.instance != null) {
+                Game.instance.OnUpdateEvent.RemoveListener(OnWatchFlag);
                 Game.instance.OnUpdateEvent.RemoveListener(OnTestTick);
             }
             Close();

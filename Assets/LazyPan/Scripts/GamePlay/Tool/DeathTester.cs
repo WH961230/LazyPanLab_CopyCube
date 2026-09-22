@@ -55,7 +55,7 @@ namespace LazyPan {
                 return;
             }
 
-            if (Cond.Instance.TryGetData(targetEntity, Behaviour_Event_Death.HEALTH_LABEL, out FloatData health)) {
+            if (Cond.Instance.TryGetData(targetEntity, DataLabels.Health, out FloatData health)) {
                 health.Float = 0f;
             }
         }
@@ -77,8 +77,8 @@ namespace LazyPan {
             }
 
             bool hasHealth = Cond.Instance.TryGetData(targetEntity, Behaviour_Event_Death.HEALTH_LABEL, out FloatData health);
-            bool hasMaxHealth = Cond.Instance.TryGetData(targetEntity, Behaviour_Event_Death.MAXHEALTH_LABEL, out FloatData maxHealth);
-            bool hasDead = Cond.Instance.TryGetData(targetEntity, Behaviour_Event_Death.DEAD_LABEL, out BoolData dead);
+            bool hasMaxHealth = Cond.Instance.TryGetData(targetEntity, DataLabels.MaxHealth, out FloatData maxHealth);
+            bool hasDead = Cond.Instance.TryGetData(targetEntity, DataLabels.Dead, out BoolData dead);
 
             if (hasHealth && hasMaxHealth && hasDead) {
                 LogUtil.LogFormat("[测试] 实体:{0} Data读取 血量:{1}/{2} 死亡:{3}",

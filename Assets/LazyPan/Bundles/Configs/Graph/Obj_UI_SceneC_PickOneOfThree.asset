@@ -23,8 +23,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -306, y: -285, z: 0}
-  scale: {x: 1, y: 1, z: 1}
+  position: {x: -492, y: -524, z: 0}
+  scale: {x: 1.520875, y: 1.520875, z: 1}
   references:
     version: 2
     RefIds:
@@ -49,7 +49,9 @@ MonoBehaviour:
           SourceSign: Obj_UI_SceneC_PickOneOfThree
           PanelPrefabSign: UI/UI_PickOneOfThree
           MountSign: Root
-          AutoOpenDelay: 3
+          WatchSign: TriggerPick
+          EnableTestAutoOpen: 0
+          AutoOpenDelay: 0
           Pool:
           - Title: A
             Description: "\u8840\u91CF\u4E0A\u9650+100"
@@ -89,4 +91,30 @@ MonoBehaviour:
               IntValue: 0
               FloatValue: 300
               StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+          - Title: D
+            Description: 换冲锋枪
+            IconName: 
+            Effects:
+            - TargetEntitySign: Obj_Tower_SceneC_Tower
+              ParamSign: CurrentWeapon
+              ValueType: 3
+              Modify: 0
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 0
+              StringValue: smg01
+              Vector3Value: {x: 0, y: 0, z: 0}
+          - Title: E
+            Description: 换圆环
+            IconName: 
+            Effects:
+            - TargetEntitySign: Obj_Tower_SceneC_Tower
+              ParamSign: CurrentWeapon
+              ValueType: 3
+              Modify: 0
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 0
+              StringValue: smg02
               Vector3Value: {x: 0, y: 0, z: 0}
