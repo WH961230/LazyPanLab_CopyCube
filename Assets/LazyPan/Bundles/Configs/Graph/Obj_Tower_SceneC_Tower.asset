@@ -15,7 +15,6 @@ MonoBehaviour:
   serializedNodes: []
   nodes:
   - rid: 8263989268591411204
-  - rid: 8263989290281993197
   edges: []
   groups: []
   stackNodes: []
@@ -173,21 +172,3 @@ MonoBehaviour:
               FloatValue: 10
               StringValue: 
               Vector3Value: {x: 0, y: 0, z: 0}
-    - rid: 8263989290281993197
-      type: {class: MemoNode, ns: LazyPan, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: 
-        GUID: 384cdbd7-d066-438b-bc99-65e79551e335
-        computeOrder: 1
-        position:
-          serializedVersion: 2
-          x: 298
-          y: -240
-          width: 515
-          height: 100
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        "\u5BF9\u5E94\u884C\u4E3ASign": Behaviour_Event_WeaponFire
-        "\u8BF4\u660E\u6587\u5B57": "\u3010Behaviour_Event_WeaponFire\u3011\u9700\u914D
-          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n\u65E0 RequiredPayload\uFF0C\u672C\u884C\u4E3A\u65E0\u5916\u90E8\u53C2\u6570\u3002\r\n"

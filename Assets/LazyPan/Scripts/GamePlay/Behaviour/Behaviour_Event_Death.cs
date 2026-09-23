@@ -33,6 +33,7 @@ namespace LazyPan {
         //config
         private DeathData _deathData;
         private DeathData.DeathConfig _config;
+        private HealthAttr _health;
 
         //runtime
         private float deathDelayRemainTime;
@@ -62,6 +63,9 @@ namespace LazyPan {
             _deathData.MaxHealth = settingData.MaxHealth;
             _deathData.Dead = false;
             BindRuntimeData();
+            //实体级注册：死亡行为是 Health 唯一生产者，其余行为只消费
+            _health = new HealthAttr() { Current = _deathData.Health, Max = _deathData.MaxHealth };
+            EntityAttrRegistry.RegisterHealth(entity, _health);
 
             Game.instance.OnUpdateEvent.AddListener(OnUpdate);
         }
@@ -192,6 +196,12 @@ namespace LazyPan {
         }
 
         private void OnUpdate() {
+            //行为私有参数不同步到实体前，先把外部对实体的改动收拢：实体的血以注册表为准
+            if (_health != null) {
+                _deathData.Health = _health.Current;
+                _deathData.MaxHealth = _health.Max;
+                hasHealthBar = _health.HasBar;
+            }
             if (hasHealthBar) {
                 if (!_deathData.Dead && _deathData.Health <= 0f) {
                     SetDead();
@@ -274,6 +284,7 @@ namespace LazyPan {
 
         public override void Clear() {
             Game.instance.OnUpdateEvent.RemoveListener(OnUpdate);
+            EntityAttrRegistry.Unregister(entity);
             DetachBehaviourData<DeathData>();
             base.Clear();
         }

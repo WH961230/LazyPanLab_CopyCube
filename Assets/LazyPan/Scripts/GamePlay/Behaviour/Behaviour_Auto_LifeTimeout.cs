@@ -53,8 +53,10 @@ namespace LazyPan {
                 return;
             }
 
-            if (Cond.Instance.TryGetData(entity, DataLabels.Dead, out BoolData dead)) {
-                dead.Bool = true;
+            if (entity.GetBehaviourData<DeathData>(out DeathData death)) {
+                death.Dead = true;
+            } else {
+                LogUtil.LogErrorFormat("行为:{0} 实体:{1} 未挂死亡行为，寿命到点无法喊死", BehaviourSign, entity.ObjConfig?.Sign);
             }
 
             if (Game.instance != null) {

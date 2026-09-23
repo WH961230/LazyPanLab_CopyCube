@@ -54,22 +54,7 @@ namespace LazyPan {
         }
 
 #if UNITY_EDITOR
-
-        private void Update() {
-            Keyboard keyboard = Keyboard.current;
-            if (keyboard == null || Game.instance == null) {
-                return;
-            }
-
-            if (keyboard.digit1Key.wasPressedThisFrame) {
-                if (EntityRegister.TryGetEntityByID(EntityID, out Entity target)) {
-                    if (target.GetBehaviourData<DeathData>(out DeathData death)) {
-                        death.Health = 0f;
-                    }
-                }
-            }
-        }
-
+        //调试入口统一走 DeathTester，Data 里不再监听按键，避免双入口打架。
 #endif
     }
 }

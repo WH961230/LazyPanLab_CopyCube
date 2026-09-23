@@ -92,10 +92,13 @@ namespace LazyPan {
                 }
 
                 hurtTime[candidate.ID] = Time.time;
-                if (candidate.GetBehaviourData<DeathData>(out DeathData targetDeath)) {
+                //实体级消费：只找注册表，不自建；找不到说明对方没挂死亡，直接报错跳过
+                if (EntityAttrRegistry.TryGetHealth(candidate, out HealthAttr attr)) {
+                    attr.Damage(amount);
+                } else if (candidate.GetBehaviourData<DeathData>(out DeathData targetDeath)) {
                     targetDeath.Damage(amount);
-                } else if (Cond.Instance.TryGetData(candidate, DataLabels.Health, out FloatData health)) {
-                    health.Float -= amount;
+                } else {
+                    LogUtil.LogErrorFormat("行为:{0} 目标:{1} 未注册Health，请给它挂死亡行为", BehaviourSign, candidate.ObjConfig?.Sign);
                 }
 
                 hitCount++;

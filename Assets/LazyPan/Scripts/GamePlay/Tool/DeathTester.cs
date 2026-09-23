@@ -55,8 +55,10 @@ namespace LazyPan {
                 return;
             }
 
-            if (Cond.Instance.TryGetData(targetEntity, DataLabels.Health, out FloatData health)) {
-                health.Float = 0f;
+            if (EntityAttrRegistry.TryGetHealth(targetEntity, out HealthAttr attr)) {
+                attr.Current = 0f;
+            } else {
+                LogUtil.LogErrorFormat("[测试] 实体:{0} 未注册Health", targetEntity.ObjConfig.Sign);
             }
         }
 
@@ -69,22 +71,19 @@ namespace LazyPan {
         }
 
         /// <summary>
-        /// 状态打印走实体 Data 展示零行为依赖的读取方式
+        /// 状态打印走实体注册表，零行为依赖的读取方式
         /// </summary>
         private void PrintStatus() {
             if (!EntityRegister.TryGetRandEntityByType(TARGET_TYPE, out Entity targetEntity)) {
                 return;
             }
 
-            bool hasHealth = Cond.Instance.TryGetData(targetEntity, Behaviour_Event_Death.HEALTH_LABEL, out FloatData health);
-            bool hasMaxHealth = Cond.Instance.TryGetData(targetEntity, DataLabels.MaxHealth, out FloatData maxHealth);
-            bool hasDead = Cond.Instance.TryGetData(targetEntity, DataLabels.Dead, out BoolData dead);
-
-            if (hasHealth && hasMaxHealth && hasDead) {
-                LogUtil.LogFormat("[测试] 实体:{0} Data读取 血量:{1}/{2} 死亡:{3}",
-                    targetEntity.ObjConfig.Sign, health.Float, maxHealth.Float, dead.Bool);
+            if (EntityAttrRegistry.TryGetHealth(targetEntity, out HealthAttr attr)
+                && targetEntity.GetBehaviourData<DeathData>(out DeathData death)) {
+                LogUtil.LogFormat("[测试] 实体:{0} 注册表读取 血量:{1}/{2} 死亡:{3}",
+                    targetEntity.ObjConfig.Sign, attr.Current, attr.Max, death.Dead);
             } else {
-                LogUtil.LogErrorFormat("[测试] 实体:{0} 未初始化生命参数 请检查 ParamValueSetting", targetEntity.ObjConfig.Sign);
+                LogUtil.LogErrorFormat("[测试] 实体:{0} 未初始化生命参数 请检查是否挂了死亡行为", targetEntity.ObjConfig.Sign);
             }
         }
     }
