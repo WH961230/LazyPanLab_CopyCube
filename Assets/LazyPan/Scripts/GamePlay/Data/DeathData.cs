@@ -10,6 +10,19 @@ namespace LazyPan {
     public class DeathData : Data {
         [Header("死亡行为参数")] public DeathConfig Config = new DeathConfig();
 
+        [Header("当前血量")] public float Health;
+        [Header("最大血量 0=无血条(子弹/特效靠外部置Dead)")] public float MaxHealth;
+        [Header("死亡标记")] public bool Dead;
+
+        public bool HasHealthBar => MaxHealth > 0f;
+
+        public void Damage(float amount) {
+            if (!HasHealthBar || Dead) {
+                return;
+            }
+            Health -= amount;
+        }
+
         public override bool Get<T>(string sign, out T t) {
             if (typeof(T) == typeof(DeathConfig)) {
                 t = (T) Convert.ChangeType(Config, typeof(T));
@@ -50,8 +63,8 @@ namespace LazyPan {
 
             if (keyboard.digit1Key.wasPressedThisFrame) {
                 if (EntityRegister.TryGetEntityByID(EntityID, out Entity target)) {
-                    if (Cond.Instance.TryGetData(target, DataLabels.Health, out FloatData health)) {
-                        health.Float = 0f;
+                    if (target.GetBehaviourData<DeathData>(out DeathData death)) {
+                        death.Health = 0f;
                     }
                 }
             }

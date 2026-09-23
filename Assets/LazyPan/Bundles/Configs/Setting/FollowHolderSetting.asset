@@ -14,3 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Datas:
   - SourceSign: Obj_Bullet_SceneC_OrbitFollow
+    OrbitRadius: 2
+    OrbitSpeed: 180
+    OrbitAngle: 0

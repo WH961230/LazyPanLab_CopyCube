@@ -22,17 +22,30 @@ namespace LazyPan {
                 return null;
             }
 
+            if (entity.GetBehaviourData<T>(out T cached) && cached != null) {
+                cached.EntityID = entity.ID;
+                return cached;
+            }
+
             T data = entity.Prefab.GetComponent<T>();
             if (data == null) {
                 data = entity.Prefab.AddComponent<T>();
             }
 
             data.EntityID = entity.ID;
+            entity.SetBehaviourDataCache(data);
             return data;
         }
 
         protected void DetachBehaviourData<T>() where T : Data {
             if (entity == null || entity.Prefab == null) {
+                return;
+            }
+
+            entity.GetBehaviourData<T>(out T cached);
+            entity.RemoveBehaviourDataCache<T>();
+            if (cached != null) {
+                Object.Destroy(cached);
                 return;
             }
 

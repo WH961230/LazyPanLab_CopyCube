@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LazyPan {
     /// <summary>
-    /// 行为参数便签：反射读 Behaviour 头上的 RequiredPayload / RequiredModules，
+    /// 行为参数便签：反射读 Behaviour 头上的 MemoDoc（完整用户说明优先显示）/ RequiredPayload / RequiredModules，
     /// 图节点 tooltip 直接显示，不看源码、不手写文档。
     /// </summary>
     public static class BehaviourPayloadDoc {
@@ -19,25 +19,49 @@ namespace LazyPan {
             if (t == null) {
                 return $"参数便签：找不到行为 {behaviourSign}";
             }
+
+            // 标题用人话（BehaviourConfig.csv 的中文名），取不到才回退类名
+            string displayName = behaviourSign;
+            try {
+                BehaviourConfig.GetKeys();
+                BehaviourConfig cfg = BehaviourConfig.Get(behaviourSign);
+                if (cfg != null && !string.IsNullOrEmpty(cfg.Name)) {
+                    displayName = cfg.Name.Trim();
+                }
+            } catch { }
+
             var sb = new StringBuilder();
-            sb.AppendLine($"【{behaviourSign}】需配 Data（去 ParamValue 里配）：");
+            sb.AppendLine($"【{displayName}】");
+
+            FieldInfo memo = t.GetField("MemoDoc", BindingFlags.Public | BindingFlags.Static);
+            string memoText = memo?.GetValue(null) as string;
+            if (!string.IsNullOrEmpty(memoText)) {
+                sb.AppendLine(memoText.Trim());
+                sb.AppendLine();
+            }
+
             FieldInfo payload = t.GetField("RequiredPayload", BindingFlags.Public | BindingFlags.Static);
             object[] defs = payload?.GetValue(null) as object[];
             if (defs == null || defs.Length == 0) {
-                sb.AppendLine("无 RequiredPayload，本行为无外部参数。");
+                sb.AppendLine("— 外部参数 —");
+                sb.AppendLine("无，本行为开箱即用，无需配置。");
             } else {
+                sb.AppendLine("— 需配参数（去 ParamValue 里配）—");
                 foreach (object d in defs) {
                     if (d is PayloadContractDef c) {
-                        sb.AppendLine($"- {c.Sign} : {c.ValueType}（默认 {DefaultOf(c)}）");
+                        sb.AppendLine($"- {c.Sign}：{c.ValueType}，默认 {DefaultOf(c)}");
                     }
                 }
             }
+
             FieldInfo mods = t.GetField("RequiredModules", BindingFlags.Public | BindingFlags.Static);
             string[] m = mods?.GetValue(null) as string[];
             if (m != null && m.Length > 0) {
-                sb.AppendLine("依赖模块：" + string.Join("、", m));
+                sb.AppendLine();
+                sb.AppendLine("— 依赖模块 —");
+                sb.AppendLine(string.Join("、", m));
             }
-            return sb.ToString();
+            return sb.ToString().TrimEnd();
         }
 
         static string DefaultOf(PayloadContractDef c) {

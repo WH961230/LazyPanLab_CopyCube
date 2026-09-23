@@ -16,7 +16,6 @@ MonoBehaviour:
   nodes:
   - rid: 8263989154599141378
   - rid: 8499330833404657944
-  - rid: 8499330833404658017
   edges: []
   groups: []
   stackNodes: []
@@ -25,8 +24,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 86, y: 95, z: 0}
-  scale: {x: 1, y: 1, z: 1}
+  position: {x: 147, y: 94, z: 0}
+  scale: {x: 1.520875, y: 1.520875, z: 1}
   references:
     version: 2
     RefIds:
@@ -47,6 +46,8 @@ MonoBehaviour:
         nodeLock: 0
         NodeInitialized: 1
         LastSyncedSign: Obj_Logo_SceneA_BeginLogo
+        "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Event_BeginLogo\u3011\u9700\u914D
+          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n\u65E0 RequiredPayload\uFF0C\u672C\u884C\u4E3A\u65E0\u5916\u90E8\u53C2\u6570\u3002\r\n"
         Config:
           SourceSign: Obj_Logo_SceneA_BeginLogo
           UIParentPrefabSign: UI/UI_SceneA
@@ -60,15 +61,17 @@ MonoBehaviour:
         computeOrder: 1
         position:
           serializedVersion: 2
-          x: 733.02484
-          y: 80.99995
+          x: 539.69025
+          y: 81
           width: 240
-          height: 249
+          height: 347
         expanded: 0
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
         LastSyncedSign: Obj_Logo_SceneA_BeginLogo
+        "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Event_TeleportFlow\u3011\u9700\u914D
+          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n\u65E0 RequiredPayload\uFF0C\u672C\u884C\u4E3A\u65E0\u5916\u90E8\u53C2\u6570\u3002\r\n"
         Config:
           SourceSign: Obj_Logo_SceneA_BeginLogo
           TargetSceneSign: SceneB
@@ -88,41 +91,3 @@ MonoBehaviour:
             RightStringValue: 
             RightVector3Value: {x: 0, y: 0, z: 0}
             RightConstType: 2
-    - rid: 8499330833404658017
-      type: {class: BehaviourNode_ParamValue, ns: LazyPan, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: 
-        GUID: ef200687-ea1d-4b30-8f88-6a30f2ec8aec
-        computeOrder: 2
-        position:
-          serializedVersion: 2
-          x: 354.08694
-          y: 80
-          width: 336
-          height: 657
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        NodeInitialized: 1
-        LastSyncedSign: Obj_Logo_SceneA_BeginLogo
-        Config:
-          SourceSign: Obj_Logo_SceneA_BeginLogo
-          Items:
-          - TargetEntitySign: Obj_Logo_SceneA_BeginLogo
-            ParamSign: LogoRemainTime
-            ValueType: 2
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: 8
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1
-          - TargetEntitySign: Obj_Logo_SceneA_BeginLogo
-            ParamSign: TeleportRequest
-            ValueType: 0
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: 0
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1

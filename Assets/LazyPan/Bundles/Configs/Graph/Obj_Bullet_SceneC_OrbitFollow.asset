@@ -26,8 +26,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 551, y: -197, z: 0}
-  scale: {x: 1.7490063, y: 1.7490063, z: 1}
+  position: {x: 437, y: -165, z: 0}
+  scale: {x: 1.3225, y: 1.3225, z: 1}
   references:
     version: 2
     RefIds:
@@ -41,7 +41,7 @@ MonoBehaviour:
           serializedVersion: 2
           x: 758.02045
           y: 192.14127
-          width: 240
+          width: 360
           height: 350
         expanded: 0
         debug: 0
@@ -55,6 +55,8 @@ MonoBehaviour:
           DeathDelay: 0
           DeathAction: 0
           OnDeathParams: []
+          Health: 0
+          MaxHealth: 0
     - rid: 8263989268591411210
       type: {class: BehaviourNode_FollowHolder, ns: LazyPan, asm: Assembly-CSharp}
       data:
@@ -65,7 +67,7 @@ MonoBehaviour:
           serializedVersion: 2
           x: 469.00003
           y: 201
-          width: 240
+          width: 394
           height: 207
         expanded: 0
         debug: 0
@@ -78,6 +80,9 @@ MonoBehaviour:
           180\uFF09\r\n- OrbitAngle : Float\uFF08\u9ED8\u8BA4 0\uFF09\r\n"
         Config:
           SourceSign: Obj_Bullet_SceneC_OrbitFollow
+          OrbitRadius: 2
+          OrbitSpeed: 180
+          OrbitAngle: 0
     - rid: 8263989268591411211
       type: {class: BehaviourNode_ContactDamage, ns: LazyPan, asm: Assembly-CSharp}
       data:
@@ -88,7 +93,7 @@ MonoBehaviour:
           serializedVersion: 2
           x: 216.13446
           y: 208.72664
-          width: 240
+          width: 423
           height: 207
         expanded: 1
         debug: 0
@@ -102,6 +107,10 @@ MonoBehaviour:
           0\uFF09\r\n\u4F9D\u8D56\u6A21\u5757\uFF1A\u6B7B\u4EA1\r\n"
         Config:
           SourceSign: Obj_Bullet_SceneC_OrbitFollow
+          Damage: 10
+          DamageRadius: 0
+          HitCooldown: -1
+          MaxHits: 0
     - rid: 8263989268591411212
       type: {class: BehaviourNode_ParamValue, ns: LazyPan, asm: Assembly-CSharp}
       data:
@@ -110,9 +119,9 @@ MonoBehaviour:
         computeOrder: 3
         position:
           serializedVersion: 2
-          x: -78.00003
-          y: 201
-          width: 252
+          x: -128.88605
+          y: 209
+          width: 386
           height: 755
         expanded: 0
         debug: 0

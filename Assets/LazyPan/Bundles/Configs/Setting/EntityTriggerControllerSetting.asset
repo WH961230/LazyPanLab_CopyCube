@@ -13,6 +13,36 @@ MonoBehaviour:
   m_Name: EntityTriggerControllerSetting
   m_EditorClassIdentifier: 
   Datas:
+  - SourceSign: Obj_Tower_SceneB_Tower
+    CompTriggerSign: Trigger
+    Rules:
+    - TriggerEntitySign: Obj_Player_SceneB_Player
+      EnterActions: []
+      StayActions:
+      - TargetEntitySign: Self
+        ParamSign: Energy
+        ValueType: 2
+        Modify: 2
+        BoolValue: 0
+        IntValue: 0
+        FloatValue: 20
+        StringValue: 
+        Vector3Value: {x: 0, y: 0, z: 0}
+        Min: 0
+        Max: 100
+      ExitActions: []
+      OutsideActions:
+      - TargetEntitySign: Obj_Tower_SceneB_Tower
+        ParamSign: Energy
+        ValueType: 2
+        Modify: 2
+        BoolValue: 0
+        IntValue: 0
+        FloatValue: -30
+        StringValue: 
+        Vector3Value: {x: 0, y: 0, z: 0}
+        Min: 0
+        Max: 100
   - SourceSign: Obj_Enemy_SceneC_Enemy
     CompTriggerSign: Trigger
     Rules:
@@ -51,33 +81,3 @@ MonoBehaviour:
         Max: 100
       ExitActions: []
       OutsideActions: []
-  - SourceSign: Obj_Tower_SceneB_Tower
-    CompTriggerSign: Trigger
-    Rules:
-    - TriggerEntitySign: Obj_Player_SceneB_Player
-      EnterActions: []
-      StayActions:
-      - TargetEntitySign: Self
-        ParamSign: Energy
-        ValueType: 2
-        Modify: 2
-        BoolValue: 0
-        IntValue: 0
-        FloatValue: 20
-        StringValue: 
-        Vector3Value: {x: 0, y: 0, z: 0}
-        Min: 0
-        Max: 100
-      ExitActions: []
-      OutsideActions:
-      - TargetEntitySign: Obj_Tower_SceneB_Tower
-        ParamSign: Energy
-        ValueType: 2
-        Modify: 2
-        BoolValue: 0
-        IntValue: 0
-        FloatValue: -30
-        StringValue: 
-        Vector3Value: {x: 0, y: 0, z: 0}
-        Min: 0
-        Max: 100

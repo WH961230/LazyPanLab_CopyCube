@@ -2,3 +2,8 @@
 {
     background-color: #101010;
 }
+
+/* 图上所有字统一加粗（含 Label / 输入框文字） */
+#graphRootView * {
+    -unity-font-style: bold;
+}

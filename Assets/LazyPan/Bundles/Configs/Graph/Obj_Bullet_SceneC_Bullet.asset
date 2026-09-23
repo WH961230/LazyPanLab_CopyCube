@@ -15,7 +15,6 @@ MonoBehaviour:
   serializedNodes: []
   nodes:
   - rid: 8263989268591411202
-  - rid: 8263989268591411206
   - rid: 8263989268591411323
   - rid: 8263989268591411324
   - rid: 8263989268591411325
@@ -27,7 +26,7 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -467, y: -284, z: 0}
+  position: {x: 138, y: -17, z: 0}
   scale: {x: 1.3225, y: 1.3225, z: 1}
   references:
     version: 2
@@ -40,103 +39,22 @@ MonoBehaviour:
         computeOrder: 0
         position:
           serializedVersion: 2
-          x: 470.84512
-          y: 285
+          x: 792.36115
+          y: 80
           width: 268
-          height: 252
+          height: 850
         expanded: 0
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
         LastSyncedSign: Obj_Bullet_SceneC_Bullet
+        "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Event_Death\u3011\u9700\u914D
+          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n\u65E0 RequiredPayload\uFF0C\u672C\u884C\u4E3A\u65E0\u5916\u90E8\u53C2\u6570\u3002\r\n"
         Config:
           SourceSign: Obj_Bullet_SceneC_Bullet
           DeathDelay: 1
           DeathAction: 1
           OnDeathParams: []
-    - rid: 8263989268591411206
-      type: {class: BehaviourNode_ParamValue, ns: LazyPan, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: 
-        GUID: d94c38ee-19cf-5e85-d785-0ad9bd957cc9
-        computeOrder: 1
-        position:
-          serializedVersion: 2
-          x: 10
-          y: 285.00003
-          width: 336
-          height: 300
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        NodeInitialized: 1
-        LastSyncedSign: Obj_Bullet_SceneC_Bullet
-        Config:
-          SourceSign: Obj_Bullet_SceneC_Bullet
-          Items:
-          - TargetEntitySign: Obj_Bullet_SceneC_Bullet
-            ParamSign: Speed
-            ValueType: 2
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: 12
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1
-          - TargetEntitySign: Obj_Bullet_SceneC_Bullet
-            ParamSign: Damage
-            ValueType: 2
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: 10
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1
-          - TargetEntitySign: Obj_Bullet_SceneC_Bullet
-            ParamSign: DamageRadius
-            ValueType: 2
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: 0.5
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1
-          - TargetEntitySign: Obj_Bullet_SceneC_Bullet
-            ParamSign: HitCooldown
-            ValueType: 2
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: -1
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1
-          - TargetEntitySign: Obj_Bullet_SceneC_Bullet
-            ParamSign: MaxHits
-            ValueType: 1
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: 0
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1
-          - TargetEntitySign: Obj_Bullet_SceneC_Bullet
-            ParamSign: LifeTime
-            ValueType: 2
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: 15
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1
-          - TargetEntitySign: Obj_Bullet_SceneC_Bullet
-            ParamSign: Dead
-            ValueType: 0
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: 0
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1
     - rid: 8263989268591411323
       type: {class: BehaviourNode_FlyTrack, ns: LazyPan, asm: Assembly-CSharp}
       data:
@@ -154,8 +72,12 @@ MonoBehaviour:
         nodeLock: 0
         NodeInitialized: 1
         LastSyncedSign: Obj_Bullet_SceneC_Bullet
+        "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Auto_FlyTrack\u3011\u9700\u914D
+          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n- Speed : Float\uFF08\u9ED8\u8BA4
+          10\uFF09\r\n"
         Config:
           SourceSign: Obj_Bullet_SceneC_Bullet
+          Speed: 10
     - rid: 8263989268591411324
       type: {class: BehaviourNode_ContactDamage, ns: LazyPan, asm: Assembly-CSharp}
       data:
@@ -173,8 +95,17 @@ MonoBehaviour:
         nodeLock: 0
         NodeInitialized: 1
         LastSyncedSign: Obj_Bullet_SceneC_Bullet
+        "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Auto_ContactDamage\u3011\u9700\u914D
+          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n- Damage : Float\uFF08\u9ED8\u8BA4
+          10\uFF09\r\n- DamageRadius : Float\uFF08\u9ED8\u8BA4 0.5\uFF09\r\n- HitCooldown
+          : Float\uFF08\u9ED8\u8BA4 -1\uFF09\r\n- MaxHits : Int\uFF08\u9ED8\u8BA4
+          0\uFF09\r\n\u4F9D\u8D56\u6A21\u5757\uFF1A\u6B7B\u4EA1\r\n"
         Config:
           SourceSign: Obj_Bullet_SceneC_Bullet
+          Damage: 10
+          DamageRadius: 0
+          HitCooldown: -1
+          MaxHits: 0
     - rid: 8263989268591411325
       type: {class: BehaviourNode_LifeTimeout, ns: LazyPan, asm: Assembly-CSharp}
       data:
@@ -192,5 +123,9 @@ MonoBehaviour:
         nodeLock: 0
         NodeInitialized: 1
         LastSyncedSign: Obj_Bullet_SceneC_Bullet
+        "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Auto_LifeTimeout\u3011\u9700\u914D
+          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n- LifeTime : Float\uFF08\u9ED8\u8BA4
+          3\uFF09\r\n\u4F9D\u8D56\u6A21\u5757\uFF1A\u6B7B\u4EA1\r\n"
         Config:
           SourceSign: Obj_Bullet_SceneC_Bullet
+          LifeTime: 3

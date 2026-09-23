@@ -48,6 +48,18 @@ namespace LazyPan {
 
         #endregion
 
+        #region 查行为数据(新路径 无GetComponent走实体字典缓存)
+
+        public bool GetBehaviourData<T>(Entity entity, out T data) where T : Data {
+            data = null;
+            if (entity == null) {
+                return false;
+            }
+            return entity.GetBehaviourData(out data);
+        }
+
+        #endregion
+
         #region 查标签数据
 
         public bool GetData<T>(Entity entity, string label, out T t) {

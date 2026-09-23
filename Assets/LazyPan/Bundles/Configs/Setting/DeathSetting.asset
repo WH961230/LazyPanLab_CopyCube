@@ -13,6 +13,18 @@ MonoBehaviour:
   m_Name: DeathSetting
   m_EditorClassIdentifier: 
   Datas:
+  - SourceSign: Obj_Bullet_SceneC_Ring
+    DeathDelay: 0
+    DeathAction: 1
+    OnDeathParams: []
+    Health: 0
+    MaxHealth: 0
+  - SourceSign: Obj_Bullet_SceneC_Bullet
+    DeathDelay: 1
+    DeathAction: 1
+    OnDeathParams: []
+    Health: 0
+    MaxHealth: 0
   - SourceSign: Obj_Enemy_SceneC_Enemy
     DeathDelay: 0
     DeathAction: 1
@@ -26,19 +38,17 @@ MonoBehaviour:
       FloatValue: 40
       StringValue: 
       Vector3Value: {x: 0, y: 0, z: 0}
-  - SourceSign: Obj_Player_SceneC_Player
-    DeathDelay: 0
-    DeathAction: 1
-    OnDeathParams: []
-  - SourceSign: Obj_Bullet_SceneC_Bullet
-    DeathDelay: 1
-    DeathAction: 1
-    OnDeathParams: []
+    Health: 0
+    MaxHealth: 0
   - SourceSign: Obj_Bullet_SceneC_OrbitFollow
     DeathDelay: 0
     DeathAction: 0
     OnDeathParams: []
-  - SourceSign: Obj_Bullet_SceneC_Ring
+    Health: 0
+    MaxHealth: 0
+  - SourceSign: Obj_Player_SceneC_Player
     DeathDelay: 0
-    DeathAction: 1
+    DeathAction: 0
     OnDeathParams: []
+    Health: 0
+    MaxHealth: 0

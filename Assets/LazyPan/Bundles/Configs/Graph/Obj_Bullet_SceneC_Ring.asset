@@ -15,7 +15,6 @@ MonoBehaviour:
   serializedNodes: []
   nodes:
   - rid: 8263989268591411208
-  - rid: 8263989268591411209
   - rid: 8263989268591411210
   - rid: 8263989268591411211
   edges: []
@@ -55,91 +54,6 @@ MonoBehaviour:
           DeathDelay: 0
           DeathAction: 1
           OnDeathParams: []
-    - rid: 8263989268591411209
-      type: {class: BehaviourNode_ParamValue, ns: LazyPan, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: 
-        GUID: e05d49ff-20d0-6f96-e896-1be0ce068dd0
-        computeOrder: 1
-        position:
-          serializedVersion: 2
-          x: 1053.4159
-          y: 275
-          width: 240
-          height: 657
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        NodeInitialized: 1
-        LastSyncedSign: Obj_Bullet_SceneC_Ring
-        "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Event_ParamValue\u3011\u9700\u914D
-          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n\u65E0 RequiredPayload\uFF0C\u672C\u884C\u4E3A\u65E0\u5916\u90E8\u53C2\u6570\u3002\r\n"
-        Config:
-          SourceSign: Obj_Bullet_SceneC_Ring
-          Items:
-          - TargetEntitySign: Obj_Bullet_SceneC_Ring
-            ParamSign: MaxRadius
-            ValueType: 2
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: 5
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1
-          - TargetEntitySign: Obj_Bullet_SceneC_Ring
-            ParamSign: ExpandSpeed
-            ValueType: 2
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: 3
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1
-          - TargetEntitySign: Obj_Bullet_SceneC_Ring
-            ParamSign: Damage
-            ValueType: 2
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: 30
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1
-          - TargetEntitySign: Obj_Bullet_SceneC_Ring
-            ParamSign: DamageRadius
-            ValueType: 2
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: 0
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1
-          - TargetEntitySign: Obj_Bullet_SceneC_Ring
-            ParamSign: HitCooldown
-            ValueType: 2
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: -1
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1
-          - TargetEntitySign: Obj_Bullet_SceneC_Ring
-            ParamSign: MaxHits
-            ValueType: 1
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: 0
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1
-          - TargetEntitySign: Obj_Bullet_SceneC_Ring
-            ParamSign: Dead
-            ValueType: 0
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: 0
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1
     - rid: 8263989268591411210
       type: {class: BehaviourNode_BodyExpand, ns: LazyPan, asm: Assembly-CSharp}
       data:

@@ -40,6 +40,13 @@ namespace LazyPan {
         [Header("死亡瞬间要改的参数列表")]
         [Tooltip("死亡瞬间(置 Dead 标记时)执行一次，一条=改一个实体的一个 Data，如敌人死后给玩家 Score 加分，或把自己 MovementStop 置真。为空=不改任何参数，老配置不受影响")]
         public List<ParamModifyItem> OnDeathParams;
+
+        [Header("初始血量 0=无血条")]
+        [Tooltip("有血条(人/怪/塔)填正数，无血条(子弹/特效)填0。替代原来ParamValue里配Health/MaxHealth")]
+        public float Health;
+
+        [Header("最大血量 0=无血条")]
+        public float MaxHealth;
     }
 
     public enum DeathAction {

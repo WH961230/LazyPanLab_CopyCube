@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Datas:
   - SourceSign: Obj_Bullet_SceneC_Bullet
+    Speed: 10

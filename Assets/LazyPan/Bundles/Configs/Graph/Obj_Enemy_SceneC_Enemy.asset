@@ -16,7 +16,6 @@ MonoBehaviour:
   nodes:
   - rid: 8263989132141527881
   - rid: 8263989132141527884
-  - rid: 8263989132141527885
   - rid: 8263989132141527886
   - rid: 8263989181806280860
   edges: []
@@ -42,12 +41,15 @@ MonoBehaviour:
           serializedVersion: 2
           x: 1022
           y: 80
-          width: 260
+          width: 323
           height: 204
         expanded: 1
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
+        LastSyncedSign: Obj_Enemy_SceneC_Enemy
+        "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Event_Death\u3011\u9700\u914D
+          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n\u65E0 RequiredPayload\uFF0C\u672C\u884C\u4E3A\u65E0\u5916\u90E8\u53C2\u6570\u3002\r\n"
         Config:
           SourceSign: Obj_Enemy_SceneC_Enemy
           DeathDelay: 0
@@ -72,63 +74,20 @@ MonoBehaviour:
           serializedVersion: 2
           x: 116.99996
           y: 80.00001
-          width: 219
+          width: 240
           height: 249
         expanded: 1
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
+        LastSyncedSign: Obj_Enemy_SceneC_Enemy
+        "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Auto_TrackingEntityByNavMeshAgent\u3011\u9700\u914D
+          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n\u65E0 RequiredPayload\uFF0C\u672C\u884C\u4E3A\u65E0\u5916\u90E8\u53C2\u6570\u3002\r\n"
         Config:
           SourceSign: Obj_Enemy_SceneC_Enemy
           TrackingSpeed: 2
           TrackingStop: 0
           TargetType: Player
-    - rid: 8263989132141527885
-      type: {class: BehaviourNode_ParamValue, ns: LazyPan, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: 
-        GUID: ea85dd18-9d1c-4544-8885-619ee557531c
-        computeOrder: 2
-        position:
-          serializedVersion: 2
-          x: 336
-          y: 80
-          width: 328
-          height: 657
-        expanded: 1
-        debug: 0
-        nodeLock: 0
-        NodeInitialized: 1
-        Config:
-          SourceSign: Obj_Enemy_SceneC_Enemy
-          Items:
-          - TargetEntitySign: Obj_Enemy_SceneC_Enemy
-            ParamSign: Health
-            ValueType: 2
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: 100
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1
-          - TargetEntitySign: Obj_Enemy_SceneC_Enemy
-            ParamSign: MaxHealth
-            ValueType: 2
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: 100
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1
-          - TargetEntitySign: Obj_Enemy_SceneC_Enemy
-            ParamSign: Dead
-            ValueType: 0
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: 0
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1
     - rid: 8263989132141527886
       type: {class: BehaviourNode_EntityUIBinder, ns: LazyPan, asm: Assembly-CSharp}
       data:
@@ -139,12 +98,15 @@ MonoBehaviour:
           serializedVersion: 2
           x: 664
           y: 80
-          width: 358
+          width: 323
           height: 657
         expanded: 1
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
+        LastSyncedSign: Obj_Enemy_SceneC_Enemy
+        "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Event_EntityUIBinder\u3011\u9700\u914D
+          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n\u65E0 RequiredPayload\uFF0C\u672C\u884C\u4E3A\u65E0\u5916\u90E8\u53C2\u6570\u3002\r\n"
         Config:
           SourceSign: Obj_Enemy_SceneC_Enemy
           Items:
@@ -169,12 +131,15 @@ MonoBehaviour:
           serializedVersion: 2
           x: 1337
           y: 80.00001
-          width: 397
+          width: 240
           height: 704
         expanded: 0
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
+        LastSyncedSign: Obj_Enemy_SceneC_Enemy
+        "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Auto_EntityTriggerController\u3011\u9700\u914D
+          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n\u65E0 RequiredPayload\uFF0C\u672C\u884C\u4E3A\u65E0\u5916\u90E8\u53C2\u6570\u3002\r\n"
         Config:
           SourceSign: Obj_Enemy_SceneC_Enemy
           CompTriggerSign: Trigger

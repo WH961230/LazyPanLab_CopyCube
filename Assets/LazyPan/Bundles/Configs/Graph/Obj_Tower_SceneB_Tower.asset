@@ -15,7 +15,6 @@ MonoBehaviour:
   serializedNodes: []
   nodes:
   - rid: 8263989132141527887
-  - rid: 8263989132141527888
   - rid: 8263989132141527889
   - rid: 8263989181806280780
   edges: []
@@ -26,7 +25,7 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -544, y: 119, z: 0}
+  position: {x: -333, y: 151, z: 0}
   scale: {x: 1, y: 1, z: 1}
   references:
     version: 2
@@ -48,6 +47,8 @@ MonoBehaviour:
         nodeLock: 0
         NodeInitialized: 1
         LastSyncedSign: Obj_Tower_SceneB_Tower
+        "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Auto_EntityTriggerController\u3011\u9700\u914D
+          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n\u65E0 RequiredPayload\uFF0C\u672C\u884C\u4E3A\u65E0\u5916\u90E8\u53C2\u6570\u3002\r\n"
         Config:
           SourceSign: Obj_Tower_SceneB_Tower
           CompTriggerSign: Trigger
@@ -79,44 +80,6 @@ MonoBehaviour:
               Vector3Value: {x: 0, y: 0, z: 0}
               Min: 0
               Max: 100
-    - rid: 8263989132141527888
-      type: {class: BehaviourNode_ParamValue, ns: LazyPan, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: 
-        GUID: e170fc75-fd74-418f-92f2-0666aab9c66c
-        computeOrder: 1
-        position:
-          serializedVersion: 2
-          x: 929.19135
-          y: -6.000016
-          width: 323
-          height: 657
-        expanded: 1
-        debug: 0
-        nodeLock: 0
-        NodeInitialized: 1
-        LastSyncedSign: Obj_Tower_SceneB_Tower
-        Config:
-          SourceSign: Obj_Tower_SceneB_Tower
-          Items:
-          - TargetEntitySign: Obj_Tower_SceneB_Tower
-            ParamSign: Energy
-            ValueType: 2
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: 0
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1
-          - TargetEntitySign: Obj_Tower_SceneB_Tower
-            ParamSign: MaxEnergy
-            ValueType: 2
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: 100
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1
     - rid: 8263989132141527889
       type: {class: BehaviourNode_EntityUIBinder, ns: LazyPan, asm: Assembly-CSharp}
       data:
@@ -127,13 +90,15 @@ MonoBehaviour:
           serializedVersion: 2
           x: 507.13052
           y: -19.913034
-          width: 240
+          width: 323
           height: 657
         expanded: 1
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
         LastSyncedSign: Obj_Tower_SceneB_Tower
+        "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Event_EntityUIBinder\u3011\u9700\u914D
+          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n\u65E0 RequiredPayload\uFF0C\u672C\u884C\u4E3A\u65E0\u5916\u90E8\u53C2\u6570\u3002\r\n"
         Config:
           SourceSign: Obj_Tower_SceneB_Tower
           Items:
@@ -158,13 +123,15 @@ MonoBehaviour:
           serializedVersion: 2
           x: 1315.7864
           y: -33.685394
-          width: 288
+          width: 240
           height: 911
         expanded: 0
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
         LastSyncedSign: Obj_Tower_SceneB_Tower
+        "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Event_TeleportFlow\u3011\u9700\u914D
+          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n\u65E0 RequiredPayload\uFF0C\u672C\u884C\u4E3A\u65E0\u5916\u90E8\u53C2\u6570\u3002\r\n"
         Config:
           SourceSign: Obj_Tower_SceneB_Tower
           TargetSceneSign: SceneC

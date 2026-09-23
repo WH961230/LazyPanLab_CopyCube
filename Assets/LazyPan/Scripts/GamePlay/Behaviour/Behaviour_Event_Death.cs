@@ -9,6 +9,22 @@ namespace LazyPan {
     /// 配置来源 Setting/DeathSetting 运行时状态写入实体 Data(Dead)
     /// </summary>
     public class Behaviour_Event_Death : Behaviour {
+        /// <summary>死亡节点只读便签：图节点上直接显示，给用户看的参数说明</summary>
+        public static readonly string MemoDoc =
+            "【死亡】管一个实体的死活，有血条按血量自动死，无血条靠外部置 Dead。\n" +
+            "本行为数据自带，不用去 ParamValue 配任何东西。\n" +
+            "— 配置参数（DeathSetting 里按 SourceSign 配）—\n" +
+            "- Health：初始血量，有血条(人/怪/塔)填正数，无血条(子弹/特效)填0\n" +
+            "- MaxHealth：最大血量，0=无血条模式；>0=有血条，Health<=0 自动死，Health 回正自动活\n" +
+            "- DeathDelay：死后延迟几秒再执行 DeathAction，0=立即执行\n" +
+            "- DeathAction：None=只置 Dead 标记，DestroyEntity=销毁实体，DisableEntity=失活预制体\n" +
+            "- OnDeathParams：死的一瞬间改一批参数，一条=改一个实体的一个数（如敌人死后给玩家加分），为空=啥也不改\n" +
+            "— 运行时数据（DeathData，自己管）—\n" +
+            "- Health：当前血量，别人扣血改这个字段就行，有血条时<=0 自动死、回正自动活\n" +
+            "- Dead：死亡标记，无血条时外部置 true=喊死，置 false=复活\n" +
+            "— 数据交流（都读写 DeathData，不直接调别的行为）—\n" +
+            "- 扣血：改 Health，有血条看 HasHealthBar（MaxHealth>0）\n" +
+            "- 喊死/复活：改 Dead，有血条复活前先把 Health 回正";
         private const string settingPath = "Setting/DeathSetting";
         public const string HEALTH_LABEL = "Health";
         public const string MAXHEALTH_LABEL = "MaxHealth";
@@ -22,11 +38,6 @@ namespace LazyPan {
         private float deathDelayRemainTime;
         private bool hasHealthBar;
         private bool prevDead;
-
-        //data
-        private FloatData _healthFloatData;
-        private FloatData _maxHealthFloatData;
-        private BoolData _deadBoolData;
 
         public Behaviour_Event_Death(Entity entity, string behaviourSign) : base(entity, behaviourSign) {
             _deathData = AttachBehaviourData<DeathData>();
@@ -47,10 +58,10 @@ namespace LazyPan {
             _config.DeathAction = settingData.DeathAction;
             CopyOnDeathParams(settingData);
 
-            if (!BindRuntimeData()) {
-                LogUtil.LogErrorFormat("行为:{0} 实体:{1} 缺少 Dead 参数 请在 ParamValueSetting 为该实体配置 Bool 参数 Dead!", BehaviourSign, entity.ObjConfig.Sign);
-                return;
-            }
+            _deathData.Health = settingData.Health;
+            _deathData.MaxHealth = settingData.MaxHealth;
+            _deathData.Dead = false;
+            BindRuntimeData();
 
             Game.instance.OnUpdateEvent.AddListener(OnUpdate);
         }
@@ -98,10 +109,15 @@ namespace LazyPan {
         /// <summary>
         /// 死亡瞬间执行一次 按配置改一批参数 单项失败不影响其余项
         /// Set=直接赋值 Add=在原值上累加(只对 Int/Float/Vector3 有意义)
+        /// Health/Dead 优先走对方 DeathData 强类型(字典缓存无GetComponent) 其他标签走旧通用兜底
         /// </summary>
         private void ApplyOnDeathParams() {
             foreach (DeathData.ParamModifyConfig config in _config.OnDeathParams) {
                 if (!BehaviourSigns.ResolveEntity(entity, BehaviourSign, nameof(ParamModifyItem.TargetEntitySign), config.TargetEntitySign, out Entity target)) {
+                    continue;
+                }
+
+                if (TryApplyTyped(target, config)) {
                     continue;
                 }
 
@@ -143,42 +159,60 @@ namespace LazyPan {
             }
         }
         /// <summary>
-        /// 绑定实体 Data 标签 Dead 必填 Health/MaxHealth 可选(无血条实体不配)
-        /// 先用只读方式看有没有血条 有才绑定 没有就进无血条模式 不会自动建 Health 出来坑人
+        /// 强类型快路 Health/Dead 直接写对方 DeathData 不经过通用Data
         /// </summary>
-        private bool BindRuntimeData() {
-            hasHealthBar = Cond.Instance.GetData<FloatData>(entity, HEALTH_LABEL, out _healthFloatData)
-                && Cond.Instance.GetData<FloatData>(entity, MAXHEALTH_LABEL, out _maxHealthFloatData);
-            if (!Cond.Instance.TryGetData(entity, DEAD_LABEL, out _deadBoolData)) {
+        private bool TryApplyTyped(Entity target, DeathData.ParamModifyConfig config) {
+            if (!target.GetBehaviourData<DeathData>(out DeathData death)) {
                 return false;
             }
 
-            prevDead = _deadBoolData.Bool;
-            return true;
+            if (config.ParamSign == HEALTH_LABEL && config.ValueType == ParamValueType.Float) {
+                death.Health = config.Modify == ParamModifyType.Add ? death.Health + config.FloatValue : config.FloatValue;
+                return true;
+            }
+
+            if (config.ParamSign == DEAD_LABEL && config.ValueType == ParamValueType.Bool) {
+                death.Dead = config.BoolValue;
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 绑定运行时数据 血量自带不再依赖ParamValue配Dead/Health
+        /// </summary>
+        private void BindRuntimeData() {
+            hasHealthBar = _deathData.MaxHealth > 0f;
+            if (hasHealthBar && _deathData.Health <= 0f) {
+                _deathData.Health = _deathData.MaxHealth;
+            }
+
+            prevDead = _deathData.Dead;
         }
 
         private void OnUpdate() {
             if (hasHealthBar) {
-                if (!_deadBoolData.Bool && _healthFloatData.Float <= 0f) {
+                if (!_deathData.Dead && _deathData.Health <= 0f) {
                     SetDead();
                 }
 
                 //复活由外部直接把 Health 改回正数后自动恢复存活状态
-                if (_deadBoolData.Bool && _healthFloatData.Float > 0f) {
-                    _deadBoolData.Bool = false;
+                if (_deathData.Dead && _deathData.Health > 0f) {
+                    _deathData.Dead = false;
                     prevDead = false;
                     deathDelayRemainTime = 0f;
                 }
-            } else if (_deadBoolData.Bool && !prevDead) {
+            } else if (_deathData.Dead && !prevDead) {
                 //无血条模式 外部把 Dead 置 true 就是喊死 在这里统一走死亡结算
                 prevDead = true;
                 Die();
-            } else if (!_deadBoolData.Bool) {
+            } else if (!_deathData.Dead) {
                 prevDead = false;
             }
 
             //死亡标记有效时进入延迟销毁计时
-            if (_deadBoolData.Bool && _config.DeathAction == DeathAction.DestroyEntity && _config.DeathDelay > 0f) {
+            if (_deathData.Dead && _config.DeathAction == DeathAction.DestroyEntity && _config.DeathDelay > 0f) {
                 deathDelayRemainTime -= Time.deltaTime;
                 if (deathDelayRemainTime <= 0f) {
                     Obj.Instance.UnLoadEntity(entity);
@@ -187,18 +221,18 @@ namespace LazyPan {
         }
 
         /// <summary>
-        /// 复活 有血条靠 Health 回正自动活 无血条直接把 Dead 置 false 就活
+        /// 复活本实体（只改自己的 DeathData；别的实体要复活它，直接改它的 Dead/Health 字段，别调这个）。
         /// </summary>
         public void Revive() {
-            if (!_deadBoolData.Bool) {
+            if (!_deathData.Dead) {
                 return;
             }
 
-            if (hasHealthBar && _healthFloatData.Float <= 0f) {
+            if (hasHealthBar && _deathData.Health <= 0f) {
                 return;
             }
 
-            _deadBoolData.Bool = false;
+            _deathData.Dead = false;
             prevDead = false;
             deathDelayRemainTime = 0f;
         }
@@ -207,11 +241,11 @@ namespace LazyPan {
         /// Health 小于等于 0 时统一进入死亡状态。
         /// </summary>
         private void SetDead() {
-            if (_deadBoolData.Bool) {
+            if (_deathData.Dead) {
                 return;
             }
 
-            _deadBoolData.Bool = true;
+            _deathData.Dead = true;
             Die();
         }
 

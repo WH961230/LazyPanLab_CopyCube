@@ -14,8 +14,30 @@ namespace LazyPan {
 
         public GameObject Prefab;//物体
         public Comp Comp;//组件
-        public Data Data;//数据
+        public Data Data;//数据(旧通用数据 保留兼容 新代码请走 GetBehaviourData<T>)
         public ObjConfig ObjConfig;//配置
+
+        private readonly Dictionary<System.Type, Data> _dataMap = new Dictionary<System.Type, Data>();
+
+        public bool GetBehaviourData<T>(out T data) where T : Data {
+            if (_dataMap.TryGetValue(typeof(T), out Data found) && found != null) {
+                data = (T)found;
+                return true;
+            }
+            data = null;
+            return false;
+        }
+
+        public void SetBehaviourDataCache(Data data) {
+            if (data == null) {
+                return;
+            }
+            _dataMap[data.GetType()] = data;
+        }
+
+        public void RemoveBehaviourDataCache<T>() where T : Data {
+            _dataMap.Remove(typeof(T));
+        }
 
         public void Init(string sign) {
             //设置ID

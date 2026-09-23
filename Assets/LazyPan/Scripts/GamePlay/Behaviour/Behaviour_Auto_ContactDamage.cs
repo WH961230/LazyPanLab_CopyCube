@@ -92,13 +92,17 @@ namespace LazyPan {
                 }
 
                 hurtTime[candidate.ID] = Time.time;
-                if (Cond.Instance.TryGetData(candidate, DataLabels.Health, out FloatData health)) {
+                if (candidate.GetBehaviourData<DeathData>(out DeathData targetDeath)) {
+                    targetDeath.Damage(amount);
+                } else if (Cond.Instance.TryGetData(candidate, DataLabels.Health, out FloatData health)) {
                     health.Float -= amount;
                 }
 
                 hitCount++;
                 if (max > 0 && hitCount >= max) {
-                    if (Cond.Instance.TryGetData(entity, DataLabels.Dead, out BoolData dead)) {
+                    if (entity.GetBehaviourData<DeathData>(out DeathData selfDeath)) {
+                        selfDeath.Dead = true;
+                    } else if (Cond.Instance.TryGetData(entity, DataLabels.Dead, out BoolData dead)) {
                         dead.Bool = true;
                     }
 
