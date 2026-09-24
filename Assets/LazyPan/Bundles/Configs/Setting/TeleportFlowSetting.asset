@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 725274dcad12b2b4c80dc2d15fc8f132, type: 3}
   m_Name: TeleportFlowSetting
   m_EditorClassIdentifier: 
+  MemoDoc: "【传送流程】管条件一到跳场景。\n— 配置参数（TeleportFlowSetting 里按 SourceSign 配）—\n- <color=#FFD54F>TargetSceneSign</color>：跳去哪个场景\n- <color=#FFD54F>Once</color>：true=只跳一次\n- <color=#FFD54F>Condition</color>：前置条件，空=谁喊跳谁跳\n— 条件怎么填 —\n- <color=#FFD54F>LeftEntitySign</color>+<color=#FFD54F>LeftParamSign</color>：看谁的哪个数，Self=自己\n- <color=#FFD54F>Compare</color>：比大小的方式\n- <color=#FFD54F>RightIsEntityParam</color>：true=右边也是数，false=右边是常量\n- 右边是常量时，对着类型填下面的值"
   Datas:
   - SourceSign: Obj_Tower_SceneB_Tower
     TargetSceneSign: SceneC

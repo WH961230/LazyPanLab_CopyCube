@@ -11,34 +11,53 @@ namespace LazyPan {
     public class Behaviour_Event_Death : Behaviour {
         /// <summary>死亡节点只读便签：图节点上直接显示，给用户看的参数说明</summary>
         public static readonly string MemoDoc =
-            "【死亡】管一个实体的死活，有血条按血量自动死，无血条靠外部置 Dead。\n" +
-            "本行为数据自带，不用去 ParamValue 配任何东西。\n" +
+            "【死亡】管一个实体的死活，有血条按血量自动死，无血条靠外部喊死。\n" +
             "— 配置参数（DeathSetting 里按 SourceSign 配）—\n" +
-            "- Health：初始血量，有血条(人/怪/塔)填正数，无血条(子弹/特效)填0\n" +
-            "- MaxHealth：最大血量，0=无血条模式；>0=有血条，Health<=0 自动死，Health 回正自动活\n" +
-            "- DeathDelay：死后延迟几秒再执行 DeathAction，0=立即执行\n" +
-            "- DeathAction：None=只置 Dead 标记，DestroyEntity=销毁实体，DisableEntity=失活预制体\n" +
-            "- OnDeathParams：死的一瞬间改一批参数，一条=改一个实体的一个数（如敌人死后给玩家加分），为空=啥也不改\n" +
-            "— 运行时数据（DeathData，自己管）—\n" +
-            "- Health：当前血量，别人扣血改这个字段就行，有血条时<=0 自动死、回正自动活\n" +
-            "- Dead：死亡标记，无血条时外部置 true=喊死，置 false=复活\n" +
-            "— 数据交流（都读写 DeathData，不直接调别的行为）—\n" +
-            "- 扣血：改 Health，有血条看 HasHealthBar（MaxHealth>0）\n" +
-            "- 喊死/复活：改 Dead，有血条复活前先把 Health 回正";
+            "- <color=#FFD54F>Health</color>：初始血量，有血条（人/怪/塔）填正数，无血条（子弹/特效）填 0\n" +
+            "- <color=#FFD54F>MaxHealth</color>：最大血量，0=无血条模式，只靠外部喊死；>0=有血条，血量<=0 自动死，血量回正自动活\n" +
+            "- <color=#FFD54F>DeathDelay</color>：死后延迟几秒再执行 DeathAction，0=立即执行\n" +
+            "- <color=#FFD54F>DeathAction</color>：None=只标记不处理，DestroyEntity=销毁实体，DisableEntity=失活预制体\n" +
+            "- <color=#FFD54F>OnDeathParams</color>：死的一瞬间顺手改一批参数，一条改一个实体的一个数（比如敌人死后给玩家加 40 分），为空=啥也不改\n" +
+            "— 外部怎么互动 —\n" +
+            "- <color=#FFD54F>扣血</color>：有血条时把 Health 往下改，<=0 自动死；无血条时扣血没用\n" +
+            "- <color=#FFD54F>喊死/复活</color>：把 Dead 置 true=喊死，置 false=复活；有血条复活前先把 Health 回正";
         private const string settingPath = "Setting/DeathSetting";
         public const string HEALTH_LABEL = "Health";
-        public const string MAXHEALTH_LABEL = "MaxHealth";
         public const string DEAD_LABEL = "Dead";
+
+        /// <summary>
+        /// 上岗检查：只读配置不改东西，红=本节点缺的，黄=提醒，不拦保存。
+        /// </summary>
+        public static void CheckContract(object config, System.Collections.Generic.List<string> red, System.Collections.Generic.List<string> yellow) {
+            if (!(config is DeathSettingData c)) {
+                red.Add("节点 Config 读不到，先重新生成节点");
+                return;
+            }
+
+            if (c.MaxHealth <= 0f) {
+                yellow.Add("无血条模式：只靠外部置 Dead 喊死，扣血没用");
+            } else if (c.Health <= 0f) {
+                yellow.Add("初始血量<=0，开局会自动回满到 MaxHealth");
+            }
+
+            if (c.DeathDelay > 0f && c.DeathAction == DeathAction.None) {
+                yellow.Add("DeathDelay 配了但动作为 None，延迟没用");
+            }
+
+            if (c.OnDeathParams != null) {
+                for (int i = 0; i < c.OnDeathParams.Count; i++) {
+                    var item = c.OnDeathParams[i];
+                    if (item == null || string.IsNullOrEmpty(item.TargetEntitySign) || string.IsNullOrEmpty(item.ParamSign)) {
+                        red.Add($"死亡改参第{i}条目标或标签为空");
+                    }
+                }
+            }
+        }
 
         //config
         private DeathData _deathData;
         private DeathData.DeathConfig _config;
         private HealthAttr _health;
-
-        //runtime
-        private float deathDelayRemainTime;
-        private bool hasHealthBar;
-        private bool prevDead;
 
         public Behaviour_Event_Death(Entity entity, string behaviourSign) : base(entity, behaviourSign) {
             _deathData = AttachBehaviourData<DeathData>();
@@ -66,6 +85,8 @@ namespace LazyPan {
             //实体级注册：死亡行为是 Health 唯一生产者，其余行为只消费
             _health = new HealthAttr() { Current = _deathData.Health, Max = _deathData.MaxHealth };
             EntityAttrRegistry.RegisterHealth(entity, _health);
+            EntityAttrRegistry.SetNumber(entity, HEALTH_LABEL, _health.Current);
+            EntityAttrRegistry.SetNumber(entity, "MaxHealth", _health.Max);
 
             Game.instance.OnUpdateEvent.AddListener(OnUpdate);
         }
@@ -129,24 +150,28 @@ namespace LazyPan {
                     case ParamValueType.Bool:
                         if (Cond.Instance.TryGetData(target, config.ParamSign, out BoolData boolData)) {
                             boolData.Bool = config.BoolValue;
+                            EntityAttrRegistry.SetBool(target, config.ParamSign, config.BoolValue);
                         }
 
                         break;
                     case ParamValueType.Int:
                         if (Cond.Instance.TryGetData(target, config.ParamSign, out IntData intData)) {
                             intData.Int = config.Modify == ParamModifyType.Add ? intData.Int + config.IntValue : config.IntValue;
+                            EntityAttrRegistry.SetNumber(target, config.ParamSign, intData.Int);
                         }
 
                         break;
                     case ParamValueType.Float:
                         if (Cond.Instance.TryGetData(target, config.ParamSign, out FloatData floatData)) {
                             floatData.Float = config.Modify == ParamModifyType.Add ? floatData.Float + config.FloatValue : config.FloatValue;
+                            EntityAttrRegistry.SetNumber(target, config.ParamSign, floatData.Float);
                         }
 
                         break;
                     case ParamValueType.String:
                         if (Cond.Instance.TryGetData(target, config.ParamSign, out StringData stringData)) {
                             stringData.String = config.StringValue;
+                            EntityAttrRegistry.SetText(target, config.ParamSign, config.StringValue);
                         }
 
                         break;
@@ -187,12 +212,12 @@ namespace LazyPan {
         /// 绑定运行时数据 血量自带不再依赖ParamValue配Dead/Health
         /// </summary>
         private void BindRuntimeData() {
-            hasHealthBar = _deathData.MaxHealth > 0f;
-            if (hasHealthBar && _deathData.Health <= 0f) {
+            if (_deathData.HasHealthBar && _deathData.Health <= 0f) {
                 _deathData.Health = _deathData.MaxHealth;
             }
 
-            prevDead = _deathData.Dead;
+            _deathData.PrevDead = _deathData.Dead;
+            _deathData.DeathDelayRemain = 0f;
         }
 
         private void OnUpdate() {
@@ -200,8 +225,10 @@ namespace LazyPan {
             if (_health != null) {
                 _deathData.Health = _health.Current;
                 _deathData.MaxHealth = _health.Max;
-                hasHealthBar = _health.HasBar;
+                EntityAttrRegistry.SetNumber(entity, HEALTH_LABEL, _health.Current);
+                EntityAttrRegistry.SetNumber(entity, "MaxHealth", _health.Max);
             }
+            bool hasHealthBar = _health != null ? _health.HasBar : _deathData.HasHealthBar;
             if (hasHealthBar) {
                 if (!_deathData.Dead && _deathData.Health <= 0f) {
                     SetDead();
@@ -210,21 +237,21 @@ namespace LazyPan {
                 //复活由外部直接把 Health 改回正数后自动恢复存活状态
                 if (_deathData.Dead && _deathData.Health > 0f) {
                     _deathData.Dead = false;
-                    prevDead = false;
-                    deathDelayRemainTime = 0f;
+                    _deathData.PrevDead = false;
+                    _deathData.DeathDelayRemain = 0f;
                 }
-            } else if (_deathData.Dead && !prevDead) {
+            } else if (_deathData.Dead && !_deathData.PrevDead) {
                 //无血条模式 外部把 Dead 置 true 就是喊死 在这里统一走死亡结算
-                prevDead = true;
+                _deathData.PrevDead = true;
                 Die();
             } else if (!_deathData.Dead) {
-                prevDead = false;
+                _deathData.PrevDead = false;
             }
 
             //死亡标记有效时进入延迟销毁计时
             if (_deathData.Dead && _config.DeathAction == DeathAction.DestroyEntity && _config.DeathDelay > 0f) {
-                deathDelayRemainTime -= Time.deltaTime;
-                if (deathDelayRemainTime <= 0f) {
+                _deathData.DeathDelayRemain -= Time.deltaTime;
+                if (_deathData.DeathDelayRemain <= 0f) {
                     Obj.Instance.UnLoadEntity(entity);
                 }
             }
@@ -238,13 +265,13 @@ namespace LazyPan {
                 return;
             }
 
-            if (hasHealthBar && _deathData.Health <= 0f) {
+            if ((_health != null ? _health.HasBar : _deathData.HasHealthBar) && _deathData.Health <= 0f) {
                 return;
             }
 
             _deathData.Dead = false;
-            prevDead = false;
-            deathDelayRemainTime = 0f;
+            _deathData.PrevDead = false;
+            _deathData.DeathDelayRemain = 0f;
         }
 
         /// <summary>
@@ -267,7 +294,7 @@ namespace LazyPan {
             switch (_config.DeathAction) {
                 case DeathAction.DestroyEntity:
                     if (_config.DeathDelay > 0f) {
-                        deathDelayRemainTime = _config.DeathDelay;
+                        _deathData.DeathDelayRemain = _config.DeathDelay;
                     } else {
                         Obj.Instance.UnLoadEntity(entity);
                     }

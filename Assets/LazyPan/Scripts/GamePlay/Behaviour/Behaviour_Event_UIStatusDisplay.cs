@@ -13,7 +13,72 @@ namespace LazyPan {
     /// 配置来源 Setting/UIStatusDisplaySetting 一个实体一条 里面可配多个屏幕 UI 块
     /// </summary>
     public class Behaviour_Event_UIStatusDisplay : Behaviour {
+        /// <summary>屏幕UI节点只读便签：图节点上直接显示，给用户看的参数说明</summary>
+        public static readonly string MemoDoc =
+            "【屏幕UI】管屏幕上挂几块 HUD，数值跟着实体走。\n" +
+            "— 配置参数（UIStatusDisplaySetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>Displays</color>：UI 块列表，一块一行\n" +
+            "— 每块怎么填 —\n" +
+            "- <color=#FFD54F>UIName</color>：挂到哪个屏幕UI，空=当前流程主界面\n" +
+            "- <color=#FFD54F>UIPrefabSign</color>：用哪个 HUD，空=直接绑主界面\n" +
+            "- <color=#FFD54F>MountSign</color>：挂在哪个点上，Root=主界面根\n" +
+            "- <color=#FFD54F>InstanceSign</color>：实例名，空=用预制体名\n" +
+            "- <color=#FFD54F>DataBinds</color>：数值绑定，一条绑一个数\n" +
+            "— 数值绑定每条怎么填 —\n" +
+            "- <color=#FFD54F>ComponentSign</color>+<color=#FFD54F>ComponentType</color>：UI上哪个零件\n" +
+            "- <color=#FFD54F>Mode</color>：比例=当前/最大，直给=当前值\n" +
+            "- <color=#FFD54F>SourceEntitySign</color>：取谁的数，Self=自己\n" +
+            "- <color=#FFD54F>DataSign</color>+<color=#FFD54F>MaxDataSign</color>：哪个数，如 Health\n" +
+            "- <color=#FFD54F>Format</color>：显示格式，空=整数";
         private const string settingPath = "Setting/UIStatusDisplaySetting";
+
+        /// <summary>
+        /// 上岗检查：只读配置不改东西，红=本节点缺的，黄=提醒，不拦保存。
+        /// </summary>
+        public static void CheckContract(object config, System.Collections.Generic.List<string> red, System.Collections.Generic.List<string> yellow) {
+            if (!(config is UIStatusDisplaySettingData c)) {
+                red.Add("节点 Config 读不到，先重新生成节点");
+                return;
+            }
+
+            if (c.Displays == null || c.Displays.Count == 0) {
+                red.Add("一块 UI 没挂，挂了白挂");
+                return;
+            }
+
+            for (int i = 0; i < c.Displays.Count; i++) {
+                var d = c.Displays[i];
+                if (d == null) {
+                    red.Add($"第{i + 1}块是空行，删掉");
+                    continue;
+                }
+
+                if (d.DataBinds == null || d.DataBinds.Count == 0) {
+                    yellow.Add($"第{i + 1}块没绑数，纯摆设");
+                    continue;
+                }
+
+                for (int j = 0; j < d.DataBinds.Count; j++) {
+                    var b = d.DataBinds[j];
+                    if (b == null) {
+                        red.Add($"第{i + 1}块第{j + 1}条绑定是空行，删掉");
+                        continue;
+                    }
+
+                    if (string.IsNullOrEmpty(b.ComponentSign)) {
+                        red.Add($"第{i + 1}块第{j + 1}条绑定没填哪个零件");
+                    }
+
+                    if (string.IsNullOrEmpty(b.DataSign)) {
+                        red.Add($"第{i + 1}块第{j + 1}条绑定没填读哪个数");
+                    }
+
+                    if (string.IsNullOrEmpty(b.SourceEntitySign)) {
+                        yellow.Add($"第{i + 1}块第{j + 1}条绑定没填取谁的数");
+                    }
+                }
+            }
+        }
 
         //config
         private UIStatusDisplayData _displayData;
@@ -522,6 +587,11 @@ namespace LazyPan {
                 return true;
             }
 
+            if (EntityAttrRegistry.TryGetNumber(source, sign, out float regValue)) {
+                value = regValue;
+                return true;
+            }
+
             LogBindErrorOnce(binding, $"实体:{source?.ObjConfig?.Sign} 未找到数值数据:{sign}");
             return false;
         }
@@ -545,6 +615,21 @@ namespace LazyPan {
 
             if (Cond.Instance.GetData<BoolData>(source, binding.DataSign, out BoolData boolData)) {
                 content = boolData.Bool.ToString();
+                return true;
+            }
+
+            if (EntityAttrRegistry.TryGetNumber(source, binding.DataSign, out float regNum)) {
+                content = regNum.ToString(string.IsNullOrEmpty(binding.Format) ? "F0" : binding.Format);
+                return true;
+            }
+
+            if (EntityAttrRegistry.TryGetText(source, binding.DataSign, out string regText)) {
+                content = regText;
+                return true;
+            }
+
+            if (EntityAttrRegistry.TryGetBool(source, binding.DataSign, out bool regBool)) {
+                content = regBool.ToString();
                 return true;
             }
 

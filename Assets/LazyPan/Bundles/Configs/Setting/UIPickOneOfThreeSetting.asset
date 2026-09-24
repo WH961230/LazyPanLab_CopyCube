@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c81d4f2a6b3e4c5d8f7091a2b3c4d5e6, type: 3}
   m_Name: UIPickOneOfThreeSetting
   m_EditorClassIdentifier: 
+  MemoDoc: "【三选一】管开奖面板，摆三张卡给人点一张，点后效果逐条生效。\n— 配置参数（UIPickOneOfThreeSetting 里按 SourceSign 配）—\n- <color=#FFD54F>PanelPrefabSign</color>：面板用哪个\n- <color=#FFD54F>MountSign</color>：挂在哪个点上，Root=主界面根\n- <color=#FFD54F>WatchSign</color>：触发旗标签，空=不监听\n- <color=#FFD54F>EnableTestAutoOpen</color>+<color=#FFD54F>AutoOpenDelay</color>：测试自动开奖，几秒后自动开\n- <color=#FFD54F>Pool</color>：奖池，一张卡一行\n— 每张卡怎么填 —\n- <color=#FFD54F>Title</color>/<color=#FFD54F>Description</color>/<color=#FFD54F>IconName</color>：标题描述图标，图标可空\n- <color=#FFD54F>Effects</color>：点卡后逐条生效，TargetEntitySign=给谁（Self=自己），ParamSign=改哪个数，对着类型填值"
   Datas:
   - SourceSign: Obj_UI_SceneC_PickOneOfThree
     PanelPrefabSign: UI/UI_PickOneOfThree

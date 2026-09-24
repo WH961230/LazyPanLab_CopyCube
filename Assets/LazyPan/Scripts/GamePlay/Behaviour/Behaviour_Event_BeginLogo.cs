@@ -9,7 +9,38 @@ namespace LazyPan {
     /// 跳转由同实体的传送流程行为执行 两行为仅经方法调用解耦
     /// </summary>
     public class Behaviour_Event_BeginLogo : Behaviour {
+        /// <summary>开头Logo节点只读便签：图节点上直接显示，给用户看的参数说明</summary>
+        public static readonly string MemoDoc =
+            "【开头Logo】管开场播几秒 Logo，播完自动跳下一步。\n" +
+            "— 配置参数（BeginLogoSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>UIParentPrefabSign</color>：Logo 挂在哪个界面上，如 UI/UI_SceneA\n" +
+            "- <color=#FFD54F>UIChildPrefabSign</color>：挂哪个 Logo，如 UI/UI_Logo\n" +
+            "- <color=#FFD54F>LogoContinueTime</color>：播几秒，建议 3~8，0=一闪而过";
         private const string settingPath = "Setting/BeginLogoSetting";
+
+        /// <summary>
+        /// 上岗检查：只读配置不改东西，红=本节点缺的，黄=提醒，不拦保存。
+        /// </summary>
+        public static void CheckContract(object config, System.Collections.Generic.List<string> red, System.Collections.Generic.List<string> yellow) {
+            if (!(config is BeginLogoSettingData c)) {
+                red.Add("节点 Config 读不到，先重新生成节点");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(c.UIParentPrefabSign)) {
+                red.Add("没填挂在哪个界面上，Logo 不显示");
+            }
+
+            if (string.IsNullOrEmpty(c.UIChildPrefabSign)) {
+                red.Add("没填挂哪个 Logo，Logo 不显示");
+            }
+
+            if (c.LogoContinueTime < 0f) {
+                yellow.Add("播放时间是负数，会当 0 用");
+            } else if (c.LogoContinueTime == 0f) {
+                yellow.Add("播放时间=0，一闪而过");
+            }
+        }
         public const string REMAIN_LABEL = "LogoRemainTime";
 
         private BeginLogoData _beginLogoEntityData;

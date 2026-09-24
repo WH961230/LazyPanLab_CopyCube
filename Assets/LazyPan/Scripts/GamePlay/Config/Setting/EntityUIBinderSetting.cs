@@ -6,6 +6,24 @@ namespace LazyPan {
     /// <summary>实体挂载界面 — 把 UI 预制体挂到实体节点并按 Data 自动刷新数值。</summary>
     [CreateAssetMenu(fileName = "EntityUIBinderSetting", menuName = "LazyPan/EntityUIBinderSetting")]
     public class EntityUIBinderSetting : Setting {
+        [Header("节点便签说明 自由修改")]
+        [Tooltip("实体UI绑定节点上的行为说明书，改这里就行，不用改代码。清空则回退到代码里的默认文案")]
+        [TextArea(5, 15)]
+        public string MemoDoc =
+            "【实体UI绑定】管一个实体头上挂UI，血条能量头像都归它挂。\n" +
+            "— 配置参数（EntityUIBinderSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>Items</color>：要挂几个UI，一条挂一个\n" +
+            "— 每条UI怎么填 —\n" +
+            "- <color=#FFD54F>UIPrefabSign</color>：挂哪个UI\n" +
+            "- <color=#FFD54F>AttachLabel</color>：挂在哪个点上，Root=实体根\n" +
+            "- <color=#FFD54F>Offset</color>：挂点上再偏一点\n" +
+            "- <color=#FFD54F>Billboard</color>：true=一直朝着相机\n" +
+            "- <color=#FFD54F>DataBinds</color>：数值绑定，一条绑一个数\n" +
+            "— 数值绑定每条怎么填 —\n" +
+            "- <color=#FFD54F>ComponentSign</color>+<color=#FFD54F>ComponentType</color>：UI上哪个零件\n" +
+            "- <color=#FFD54F>Mode</color>：比例=当前/最大，直给=当前值\n" +
+            "- <color=#FFD54F>DataSign</color>+<color=#FFD54F>MaxDataSign</color>：读实体的哪个数，如 Health\n" +
+            "- <color=#FFD54F>Format</color>：显示格式，空=整数";
         public List<EntityUIBindSettingData> Datas = new List<EntityUIBindSettingData>();
 
         public bool TryGet(string sourceSign, out EntityUIBindSettingData data) {

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ac15e890812cd94c9ada982e7cebc09, type: 3}
   m_Name: ContactDamageSetting
   m_EditorClassIdentifier: 
+  MemoDoc: "【接触伤害】管一个东西碰到敌人扣血，碰到谁由触发器定，不用你配。\n— 配置参数（ContactDamageSetting 里按 SourceSign 配）—\n- <color=#FFD54F>Damage</color>：碰一下扣多少血，0=睡觉不伤人\n- <color=#FFD54F>DamageRadius</color>：多近算碰到，0=跟别人每帧写的那个走\n- <color=#FFD54F>HitCooldown</color>：同一个敌人隔几秒才能再伤，-1=只伤一次\n- <color=#FFD54F>MaxHits</color>：伤几个人后自己死，0=不限"
   Datas:
   - SourceSign: Obj_Bullet_SceneC_Ring
     Damage: 10

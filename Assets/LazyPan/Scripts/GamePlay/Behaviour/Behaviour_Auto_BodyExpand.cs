@@ -10,6 +10,33 @@ namespace LazyPan {
     /// </summary>
     public class Behaviour_Auto_BodyExpand : Behaviour {
         /// <summary>
+        /// 上岗检查：只读配置不改东西，红=本节点缺的，黄=提醒，不拦保存。
+        /// </summary>
+        public static void CheckContract(object config, System.Collections.Generic.List<string> red, System.Collections.Generic.List<string> yellow) {
+            if (!(config is BodyExpandSettingData c)) {
+                red.Add("节点 Config 读不到，先重新生成节点");
+                return;
+            }
+
+            if (c.MaxRadius < 0f) {
+                red.Add("半径是负数，长不大就睡了");
+            } else if (c.MaxRadius == 0f) {
+                yellow.Add("半径=0，沿用节点上配的数，确认节点上配了");
+            }
+
+            if (c.ExpandSpeed <= 0f) {
+                yellow.Add("速度<=0，沿用节点上配的数，确认节点上配了");
+            }
+        }
+        /// <summary>扩散节点只读便签：图节点上直接显示，给用户看的参数说明</summary>
+        public static readonly string MemoDoc =
+            "【体型扩散】管一个东西从小变大，长到头自动停下并走死亡。\n" +
+            "— 配置参数（BodyExpandSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>MaxRadius</color>：长到这个半径就停，0=沿用节点上配的数\n" +
+            "- <color=#FFD54F>ExpandSpeed</color>：每秒长大多少，建议 1~5，0=沿用节点上配的数\n" +
+            "— 外部怎么互动 —\n" +
+            "- <color=#FFD54F>停下</color>：长满自动停并喊死，不用你管";
+        /// <summary>
         /// 对外契约（仅兼容老配置：Setting 为 0 时才读这些 Data）
         /// </summary>
         public static readonly PayloadContractDef[] RequiredPayload = {

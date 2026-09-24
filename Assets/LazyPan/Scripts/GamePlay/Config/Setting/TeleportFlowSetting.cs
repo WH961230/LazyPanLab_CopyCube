@@ -9,6 +9,20 @@ namespace LazyPan {
     /// </summary>
     [CreateAssetMenu(fileName = "TeleportFlowSetting", menuName = "LazyPan/TeleportFlowSetting")]
     public class TeleportFlowSetting : Setting {
+        [Header("节点便签说明 自由修改")]
+        [Tooltip("传送流程节点上的行为说明书，改这里就行，不用改代码。清空则回退到代码里的默认文案")]
+        [TextArea(5, 15)]
+        public string MemoDoc =
+            "【传送流程】管条件一到跳场景。\n" +
+            "— 配置参数（TeleportFlowSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>TargetSceneSign</color>：跳去哪个场景\n" +
+            "- <color=#FFD54F>Once</color>：true=只跳一次\n" +
+            "- <color=#FFD54F>Condition</color>：前置条件，空=谁喊跳谁跳\n" +
+            "— 条件怎么填 —\n" +
+            "- <color=#FFD54F>LeftEntitySign</color>+<color=#FFD54F>LeftParamSign</color>：看谁的哪个数，Self=自己\n" +
+            "- <color=#FFD54F>Compare</color>：比大小的方式\n" +
+            "- <color=#FFD54F>RightIsEntityParam</color>：true=右边也是数，false=右边是常量\n" +
+            "- 右边是常量时，对着类型填下面的值";
         public List<TeleportFlowSettingData> Datas = new List<TeleportFlowSettingData>();
 
         public bool TryGet(string sourceSign, out TeleportFlowSettingData data) {

@@ -8,6 +8,16 @@ namespace LazyPan {
     /// </summary>
     [CreateAssetMenu(fileName = "ContactDamageSetting", menuName = "LazyPan/ContactDamageSetting")]
     public class ContactDamageSetting : Setting {
+        [Header("节点便签说明 自由修改")]
+        [Tooltip("接触伤害节点上的行为说明书，改这里就行，不用改代码。清空则回退到代码里的默认文案")]
+        [TextArea(5, 15)]
+        public string MemoDoc =
+            "【接触伤害】管一个东西碰到敌人扣血，碰到谁由触发器定，不用你配。\n" +
+            "— 配置参数（ContactDamageSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>Damage</color>：碰一下扣多少血，0=睡觉不伤人\n" +
+            "- <color=#FFD54F>DamageRadius</color>：多近算碰到，0=跟别人每帧写的那个走\n" +
+            "- <color=#FFD54F>HitCooldown</color>：同一个敌人隔几秒才能再伤，-1=只伤一次\n" +
+            "- <color=#FFD54F>MaxHits</color>：伤几个人后自己死，0=不限";
         public List<ContactDamageSettingData> Datas = new List<ContactDamageSettingData>();
 
         public bool TryGet(string sourceSign, out ContactDamageSettingData data) {

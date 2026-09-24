@@ -8,6 +8,33 @@ namespace LazyPan {
     /// </summary>
     public class Behaviour_Auto_FollowHolder : Behaviour {
         /// <summary>
+        /// 上岗检查：只读配置不改东西，红=本节点缺的，黄=提醒，不拦保存。
+        /// </summary>
+        public static void CheckContract(object config, System.Collections.Generic.List<string> red, System.Collections.Generic.List<string> yellow) {
+            if (!(config is FollowHolderSettingData c)) {
+                red.Add("节点 Config 读不到，先重新生成节点");
+                return;
+            }
+
+            if (c.OrbitRadius <= 0f) {
+                yellow.Add("半径<=0，会按 0.5 算");
+            }
+
+            if (c.OrbitSpeed == 0f) {
+                yellow.Add("速度=0，挂着不动");
+            }
+
+            yellow.Add("跨实体提醒：主人由触发器交过来，没主人就原地睡觉");
+        }
+        /// <summary>跟随主人节点只读便签：图节点上直接显示，给用户看的参数说明</summary>
+        public static readonly string MemoDoc =
+            "【跟随主人】管一个东西围着主人转，主人没了就原地睡觉。\n" +
+            "跟谁不用你配，触发器会交过来。\n" +
+            "— 配置参数（FollowHolderSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>OrbitRadius</color>：转圈半径，建议 1~4\n" +
+            "- <color=#FFD54F>OrbitSpeed</color>：每秒转多少度，建议 90~360\n" +
+            "- <color=#FFD54F>OrbitAngle</color>：出生时站在几点钟方向，0~360";
+        /// <summary>
         /// 对外契约 HolderID 由触发器交接不用配
         /// </summary>
         public static readonly PayloadContractDef[] RequiredPayload = {

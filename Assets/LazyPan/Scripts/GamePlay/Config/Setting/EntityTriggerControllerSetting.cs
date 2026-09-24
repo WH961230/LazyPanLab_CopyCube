@@ -6,6 +6,25 @@ namespace LazyPan {
     /// <summary>实体触发控制器 — 源实体触发器命中目标实体时 按进入/停留/离开/范围外 四个相位给自己或其他实体增减参数 不读业务。典型: 玩家进塔范围 Energy 每秒涨 离开每秒降。</summary>
     [CreateAssetMenu(fileName = "EntityTriggerControllerSetting", menuName = "LazyPan/EntityTriggerControllerSetting")]
     public class EntityTriggerControllerSetting : Setting {
+        [Header("节点便签说明 自由修改")]
+        [Tooltip("触发器节点上的行为说明书，改这里就行，不用改代码。清空则回退到代码里的默认文案")]
+        [TextArea(5, 15)]
+        public string MemoDoc =
+            "【触发器】管一块地盘，谁进来出去干什么全在这里定。\n" +
+            "— 配置参数（EntityTriggerControllerSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>CompTriggerSign</color>：用地盘上哪个触发器，Root=实体根\n" +
+            "- <color=#FFD54F>Rules</color>：触发规则，一条规则管一类人\n" +
+            "— 每条规则怎么填 —\n" +
+            "- <color=#FFD54F>TriggerEntitySign</color>：谁算数，Any=谁都算\n" +
+            "- <color=#FFD54F>EnterActions</color>：进来瞬间触发一次\n" +
+            "- <color=#FFD54F>StayActions</color>：待着不动每帧都触发\n" +
+            "- <color=#FFD54F>ExitActions</color>：离开瞬间触发一次\n" +
+            "- <color=#FFD54F>OutsideActions</color>：在范围外每帧触发\n" +
+            "— 每个动作怎么填 —\n" +
+            "- <color=#FFD54F>TargetEntitySign</color>：改谁，Self=自己，Triggerer=触发的人\n" +
+            "- <color=#FFD54F>ParamSign</color>：改哪个数\n" +
+            "- <color=#FFD54F>Modify</color>：Set=直接给，Add=累加\n" +
+            "- <color=#FFD54F>Min</color>/<color=#FFD54F>Max</color>：改完夹在范围内，只对整数小数有效";
         public List<EntityTriggerControllerSettingData> Datas = new List<EntityTriggerControllerSettingData>();
 
         public bool TryGet(string sourceSign, out EntityTriggerControllerSettingData data) {

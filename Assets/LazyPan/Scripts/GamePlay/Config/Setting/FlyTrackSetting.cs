@@ -8,6 +8,14 @@ namespace LazyPan {
     /// </summary>
     [CreateAssetMenu(fileName = "FlyTrackSetting", menuName = "LazyPan/FlyTrackSetting")]
     public class FlyTrackSetting : Setting {
+        [Header("节点便签说明 自由修改")]
+        [Tooltip("飞行追踪节点上的行为说明书，改这里就行，不用改代码。清空则回退到代码里的默认文案")]
+        [TextArea(5, 15)]
+        public string MemoDoc =
+            "【飞行追踪】管一个东西往前飞，有目标就追着飞，没目标就直着飞。\n" +
+            "追谁不用你配，触发器会交过来。\n" +
+            "— 配置参数（FlyTrackSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>Speed</color>：飞多快，建议 5~15，0=睡觉不动";
         public List<FlyTrackSettingData> Datas = new List<FlyTrackSettingData>();
 
         public bool TryGet(string sourceSign, out FlyTrackSettingData data) {

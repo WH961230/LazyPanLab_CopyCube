@@ -13,7 +13,75 @@ namespace LazyPan {
     /// 对外入口 Open() 由升级满级等外部调用 关面板后自动恢复时间
     /// </summary>
     public class Behaviour_Event_UIPickOneOfThree : Behaviour {
+        /// <summary>三选一节点只读便签：图节点上直接显示，给用户看的参数说明</summary>
+        public static readonly string MemoDoc =
+            "【三选一】管开奖面板，摆三张卡给人点一张，点后效果逐条生效。\n" +
+            "— 配置参数（UIPickOneOfThreeSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>PanelPrefabSign</color>：面板用哪个\n" +
+            "- <color=#FFD54F>MountSign</color>：挂在哪个点上，Root=主界面根\n" +
+            "- <color=#FFD54F>WatchSign</color>：触发旗标签，空=不监听\n" +
+            "- <color=#FFD54F>EnableTestAutoOpen</color>+<color=#FFD54F>AutoOpenDelay</color>：测试自动开奖，几秒后自动开\n" +
+            "- <color=#FFD54F>Pool</color>：奖池，一张卡一行\n" +
+            "— 每张卡怎么填 —\n" +
+            "- <color=#FFD54F>Title</color>/<color=#FFD54F>Description</color>/<color=#FFD54F>IconName</color>：标题描述图标，图标可空\n" +
+            "- <color=#FFD54F>Effects</color>：点卡后逐条生效，TargetEntitySign=给谁（Self=自己），ParamSign=改哪个数，对着类型填值";
         private const string settingPath = "Setting/UIPickOneOfThreeSetting";
+
+        /// <summary>
+        /// 上岗检查：只读配置不改东西，红=本节点缺的，黄=提醒，不拦保存。
+        /// </summary>
+        public static void CheckContract(object config, System.Collections.Generic.List<string> red, System.Collections.Generic.List<string> yellow) {
+            if (!(config is UIPickOneOfThreeSettingData c)) {
+                red.Add("节点 Config 读不到，先重新生成节点");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(c.PanelPrefabSign)) {
+                red.Add("没填面板用哪个");
+            }
+
+            if (string.IsNullOrEmpty(c.MountSign)) {
+                yellow.Add("没填挂哪个点，确认默认挂哪");
+            }
+
+            if (c.Pool == null || c.Pool.Count == 0) {
+                red.Add("奖池是空的，没卡可开");
+                return;
+            }
+
+            for (int i = 0; i < c.Pool.Count; i++) {
+                var card = c.Pool[i];
+                if (card == null) {
+                    red.Add($"第{i + 1}张卡是空行，删掉");
+                    continue;
+                }
+
+                if (string.IsNullOrEmpty(card.Title)) {
+                    yellow.Add($"第{i + 1}张卡没写标题");
+                }
+
+                if (card.Effects == null || card.Effects.Count == 0) {
+                    yellow.Add($"第{i + 1}张卡没配效果，点了白点");
+                    continue;
+                }
+
+                for (int j = 0; j < card.Effects.Count; j++) {
+                    var e = card.Effects[j];
+                    if (e == null) {
+                        red.Add($"第{i + 1}张卡第{j + 1}条效果是空行，删掉");
+                        continue;
+                    }
+
+                    if (string.IsNullOrEmpty(e.TargetEntitySign)) {
+                        red.Add($"第{i + 1}张卡第{j + 1}条效果没填给谁");
+                    }
+
+                    if (string.IsNullOrEmpty(e.ParamSign)) {
+                        red.Add($"第{i + 1}张卡第{j + 1}条效果没填改哪个数");
+                    }
+                }
+            }
+        }
         private const int pickCount = 3;
 
         //面板 Comp 标签约定 Card0/Card1/Card2=按钮 Card0_Title=标题 以此类推

@@ -8,6 +8,12 @@ namespace LazyPan {
     public class InputWASDMoveData : Data {
         [Header("控制器WASD移动参数")] public InputWASDMoveConfig Config = new InputWASDMoveConfig();
 
+        [Header("运行时：输入向量，回调里实时更新，外部不用管")]
+        public Vector2 InputVec;
+
+        [Header("运行时：下坠速度，内部累计，落地自动回压")]
+        public float YSpeed;
+
         public override bool Get<T>(string sign, out T t) {
             if (typeof(T) == typeof(InputWASDMoveConfig)) {
                 t = (T) Convert.ChangeType(Config, typeof(T));

@@ -14,6 +14,9 @@ namespace LazyPan {
         [Header("最大血量 0=无血条(子弹/特效靠外部置Dead)")] public float MaxHealth;
         [Header("死亡标记")] public bool Dead;
 
+        [Header("运行时：上帧死亡标记，边沿检测用")] public bool PrevDead;
+        [Header("运行时：延迟销毁剩余秒数")] public float DeathDelayRemain;
+
         public bool HasHealthBar => MaxHealth > 0f;
 
         public void Damage(float amount) {

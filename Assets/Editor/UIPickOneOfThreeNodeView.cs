@@ -25,6 +25,7 @@ public class UIPickOneOfThreeNodeView : BaseNodeView {
 
     public override void Enable() {
         base.Enable();
+        NodeMemoHelper.Attach(this);
         contractLabel = new UnityEngine.UIElements.Label();
         contractLabel.style.whiteSpace = WhiteSpace.Normal;
         var checkButton = new UnityEngine.UIElements.Button(RefreshContract) { text = "检查面板预制体契约" };

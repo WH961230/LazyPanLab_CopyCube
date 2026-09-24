@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d358e493926c1e4587b34b18b2f1765, type: 3}
   m_Name: EquipmentMountSetting
   m_EditorClassIdentifier: 
+  MemoDoc: "【装备挂载】管一个实体穿装备脱装备，穿什么挂哪都归它。\n— 配置参数（EquipmentMountSetting 里按 SourceSign 配）—\n- <color=#FFD54F>InitialMount</color>：true=开局就穿上\n- <color=#FFD54F>Mounts</color>：槽位列表，一条一个槽\n— 每个槽怎么填 —\n- <color=#FFD54F>SlotSign</color>：槽叫什么名\n- <color=#FFD54F>EquipmentPrefabSign</color>：穿什么，Virtual=看不见的虚拟装备\n- <color=#FFD54F>MountPointLabel</color>：挂在哪个点上，Root=实体根\n- <color=#FFD54F>OffsetPosition</color>/<color=#FFD54F>OffsetRotation</color>/<color=#FFD54F>OffsetScale</color>：位置旋转缩放微调"
   Datas: []

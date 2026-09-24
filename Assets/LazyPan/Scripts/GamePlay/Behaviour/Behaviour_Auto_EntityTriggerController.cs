@@ -9,7 +9,86 @@ namespace LazyPan {
     /// 配置来源 Setting/EntityTriggerControllerSetting 运行时状态写自身 Data(IsInTrigger/InsideCount)
     /// </summary>
     public class Behaviour_Auto_EntityTriggerController : Behaviour {
+        /// <summary>触发器节点只读便签：图节点上直接显示，给用户看的参数说明</summary>
+        public static readonly string MemoDoc =
+            "【触发器】管一块地盘，谁进来出去干什么全在这里定。\n" +
+            "— 配置参数（EntityTriggerControllerSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>CompTriggerSign</color>：用地盘上哪个触发器，Root=实体根\n" +
+            "- <color=#FFD54F>Rules</color>：触发规则，一条规则管一类人\n" +
+            "— 每条规则怎么填 —\n" +
+            "- <color=#FFD54F>TriggerEntitySign</color>：谁算数，Any=谁都算\n" +
+            "- <color=#FFD54F>EnterActions</color>：进来瞬间触发一次\n" +
+            "- <color=#FFD54F>StayActions</color>：待着不动每帧都触发\n" +
+            "- <color=#FFD54F>ExitActions</color>：离开瞬间触发一次\n" +
+            "- <color=#FFD54F>OutsideActions</color>：在范围外每帧触发\n" +
+            "— 每个动作怎么填 —\n" +
+            "- <color=#FFD54F>TargetEntitySign</color>：改谁，Self=自己，Triggerer=触发的人\n" +
+            "- <color=#FFD54F>ParamSign</color>：改哪个数\n" +
+            "- <color=#FFD54F>Modify</color>：Set=直接给，Add=累加\n" +
+            "- <color=#FFD54F>Min</color>/<color=#FFD54F>Max</color>：改完夹在范围内，只对整数小数有效";
         private const string settingPath = "Setting/EntityTriggerControllerSetting";
+
+        /// <summary>
+        /// 上岗检查：只读配置不改东西，红=本节点缺的，黄=提醒，不拦保存。
+        /// </summary>
+        public static void CheckContract(object config, System.Collections.Generic.List<string> red, System.Collections.Generic.List<string> yellow) {
+            if (!(config is EntityTriggerControllerSettingData c)) {
+                red.Add("节点 Config 读不到，先重新生成节点");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(c.CompTriggerSign)) {
+                red.Add("没填用地盘上哪个触发器");
+            }
+
+            if (c.Rules == null || c.Rules.Count == 0) {
+                red.Add("一条规则没有，谁来都没反应");
+                return;
+            }
+
+            for (int i = 0; i < c.Rules.Count; i++) {
+                var r = c.Rules[i];
+                if (r == null) {
+                    red.Add($"第{i + 1}条规则是空行，删掉");
+                    continue;
+                }
+
+                if (string.IsNullOrEmpty(r.TriggerEntitySign)) {
+                    red.Add($"第{i + 1}条规则没填谁算数（谁都算填 Any）");
+                }
+
+                CheckActions($"第{i + 1}条规则进来", r.EnterActions, red);
+                CheckActions($"第{i + 1}条规则停留", r.StayActions, red);
+                CheckActions($"第{i + 1}条规则离开", r.ExitActions, red);
+                CheckActions($"第{i + 1}条规则范围外", r.OutsideActions, red);
+            }
+        }
+
+        static void CheckActions(string where, System.Collections.Generic.List<TriggerAction> actions, System.Collections.Generic.List<string> red) {
+            if (actions == null) {
+                return;
+            }
+
+            for (int k = 0; k < actions.Count; k++) {
+                var a = actions[k];
+                if (a == null) {
+                    red.Add($"{where}第{k + 1}个动作是空行，删掉");
+                    continue;
+                }
+
+                if (string.IsNullOrEmpty(a.TargetEntitySign)) {
+                    red.Add($"{where}第{k + 1}个动作没填改谁");
+                }
+
+                if (string.IsNullOrEmpty(a.ParamSign)) {
+                    red.Add($"{where}第{k + 1}个动作没填改哪个数");
+                }
+
+                if (a.Min > a.Max) {
+                    red.Add($"{where}第{k + 1}个动作下限比上限大");
+                }
+            }
+        }
 
         //config
         private EntityTriggerControllerData _triggerData;

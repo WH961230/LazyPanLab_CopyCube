@@ -6,11 +6,78 @@ using UnityEngine.UI;
 namespace LazyPan {
     /// <summary>
     /// 行为 - 实体UI绑定
-    /// 按配置给实体挂载UI预制体 血条 能量 头像等 数值通过实体Data标签驱动 不引入业务
+    /// 按配置给实体挂载UI预制体 血条 能量 头像等 数值走实体属性注册表驱动 不引入业务
     /// 配置来源 Setting/EntityUIBinderSetting 每个实体可绑定多个UI 每个UI可绑定多条数值
     /// </summary>
     public class Behaviour_Event_EntityUIBinder : Behaviour {
+        /// <summary>实体UI绑定节点只读便签：图节点上直接显示，给用户看的参数说明</summary>
+        public static readonly string MemoDoc =
+            "【实体UI绑定】管一个实体头上挂UI，血条能量头像都归它挂。\n" +
+            "— 配置参数（EntityUIBinderSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>Items</color>：要挂几个UI，一条挂一个\n" +
+            "— 每条UI怎么填 —\n" +
+            "- <color=#FFD54F>UIPrefabSign</color>：挂哪个UI\n" +
+            "- <color=#FFD54F>AttachLabel</color>：挂在哪个点上，Root=实体根\n" +
+            "- <color=#FFD54F>Offset</color>：挂点上再偏一点\n" +
+            "- <color=#FFD54F>Billboard</color>：true=一直朝着相机\n" +
+            "- <color=#FFD54F>DataBinds</color>：数值绑定，一条绑一个数\n" +
+            "— 数值绑定每条怎么填 —\n" +
+            "- <color=#FFD54F>ComponentSign</color>+<color=#FFD54F>ComponentType</color>：UI上哪个零件\n" +
+            "- <color=#FFD54F>Mode</color>：比例=当前/最大，直给=当前值\n" +
+            "- <color=#FFD54F>DataSign</color>+<color=#FFD54F>MaxDataSign</color>：读注册表里的哪个数，如 Health\n" +
+            "- <color=#FFD54F>Format</color>：显示格式，空=整数";
         private const string settingPath = "Setting/EntityUIBinderSetting";
+
+        /// <summary>
+        /// 上岗检查：只读配置不改东西，红=本节点缺的，黄=提醒，不拦保存。
+        /// </summary>
+        public static void CheckContract(object config, System.Collections.Generic.List<string> red, System.Collections.Generic.List<string> yellow) {
+            if (!(config is EntityUIBindSettingData c)) {
+                red.Add("节点 Config 读不到，先重新生成节点");
+                return;
+            }
+
+            if (c.Items == null || c.Items.Count == 0) {
+                red.Add("一个 UI 没挂，挂了白挂");
+                return;
+            }
+
+            for (int i = 0; i < c.Items.Count; i++) {
+                var item = c.Items[i];
+                if (item == null) {
+                    red.Add($"第{i + 1}个 UI 是空行，删掉");
+                    continue;
+                }
+
+                if (string.IsNullOrEmpty(item.UIPrefabSign)) {
+                    red.Add($"第{i + 1}个 UI 没填挂哪个");
+                }
+
+                if (string.IsNullOrEmpty(item.AttachLabel)) {
+                    yellow.Add($"第{i + 1}个 UI 没填挂点，确认默认挂哪");
+                }
+
+                if (item.DataBinds == null) {
+                    continue;
+                }
+
+                for (int j = 0; j < item.DataBinds.Count; j++) {
+                    var b = item.DataBinds[j];
+                    if (b == null) {
+                        red.Add($"第{i + 1}个 UI 第{j + 1}条绑定是空行，删掉");
+                        continue;
+                    }
+
+                    if (string.IsNullOrEmpty(b.ComponentSign)) {
+                        red.Add($"第{i + 1}个 UI 第{j + 1}条绑定没填哪个零件");
+                    }
+
+                    if (string.IsNullOrEmpty(b.DataSign)) {
+                        red.Add($"第{i + 1}个 UI 第{j + 1}条绑定没填读哪个数");
+                    }
+                }
+            }
+        }
 
         //config
         private EntityUIBinderData _uiBinderData;
@@ -264,7 +331,7 @@ namespace LazyPan {
         }
 
         /// <summary>
-        /// 数值刷新 走实体Data读取 与血量等行为零耦合
+        /// 数值刷新 走实体属性注册表读取 与血量等行为零耦合
         /// </summary>
         private void UpdateDataBindings() {
             foreach (BoundUI bound in bounds) {
@@ -295,7 +362,8 @@ namespace LazyPan {
         }
 
         /// <summary>
-        /// 读取数值 比例模式读主键与最大值键 直接模式只读主键
+        /// 读取数值 只走实体属性注册表 老 Data 通道已下线
+        /// 比例模式读主键与最大值键 直接模式只读主键
         /// </summary>
         private bool TryReadValue(DataBinding binding, out float value) {
             value = 0f;
@@ -327,18 +395,30 @@ namespace LazyPan {
                 return false;
             }
 
-            if (Cond.Instance.GetData<FloatData>(entity, sign, out FloatData floatData)) {
-                value = floatData.Float;
+            if (TryReadHealthNumber(sign, out value)) {
                 return true;
             }
 
-            if (Cond.Instance.GetData<IntData>(entity, sign, out IntData intData)) {
-                value = intData.Int;
+            if (EntityAttrRegistry.TryGetNumber(entity, sign, out value)) {
                 return true;
             }
 
-            LogBindErrorOnce(binding, $"实体:{entity.ObjConfig.Sign} 未找到数值数据:{sign}");
+            LogBindErrorOnce(binding, $"实体:{entity.ObjConfig.Sign} 注册表未找到数值数据:{sign}");
             return false;
+        }
+
+        private bool TryReadHealthNumber(string sign, out float value) {
+            value = 0f;
+            if (sign != Behaviour_Event_Death.HEALTH_LABEL && sign != "MaxHealth") {
+                return false;
+            }
+
+            if (!EntityAttrRegistry.TryGetHealth(entity, out HealthAttr health)) {
+                return false;
+            }
+
+            value = sign == "MaxHealth" ? health.Max : health.Current;
+            return true;
         }
 
         private bool TryReadText(DataBinding binding, out string content) {
@@ -348,27 +428,27 @@ namespace LazyPan {
                 return false;
             }
 
-            if (Cond.Instance.GetData<FloatData>(entity, binding.DataSign, out FloatData floatData)) {
-                content = floatData.Float.ToString(string.IsNullOrEmpty(binding.Format) ? "F0" : binding.Format);
+            if (EntityAttrRegistry.TryGetText(entity, binding.DataSign, out string text)) {
+                content = text;
                 return true;
             }
 
-            if (Cond.Instance.GetData<IntData>(entity, binding.DataSign, out IntData intData)) {
-                content = intData.Int.ToString();
+            if (EntityAttrRegistry.TryGetNumber(entity, binding.DataSign, out float number)) {
+                content = number.ToString(string.IsNullOrEmpty(binding.Format) ? "F0" : binding.Format);
                 return true;
             }
 
-            if (Cond.Instance.GetData<StringData>(entity, binding.DataSign, out StringData stringData)) {
-                content = stringData.String;
+            if (EntityAttrRegistry.TryGetBool(entity, binding.DataSign, out bool flag)) {
+                content = flag.ToString();
                 return true;
             }
 
-            if (Cond.Instance.GetData<BoolData>(entity, binding.DataSign, out BoolData boolData)) {
-                content = boolData.Bool.ToString();
+            if (TryReadHealthNumber(binding.DataSign, out float healthValue)) {
+                content = healthValue.ToString(string.IsNullOrEmpty(binding.Format) ? "F0" : binding.Format);
                 return true;
             }
 
-            LogBindErrorOnce(binding, $"实体:{entity.ObjConfig.Sign} 未找到数据:{binding.DataSign}");
+            LogBindErrorOnce(binding, $"实体:{entity.ObjConfig.Sign} 注册表未找到数据:{binding.DataSign}");
             return false;
         }
 

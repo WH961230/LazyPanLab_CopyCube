@@ -6,6 +6,21 @@ namespace LazyPan {
     /// <summary>阶段进度 — 通用阶段与上限关系，不管业务词。只认阶段钥匙(Int)与进度值(Float)及一张阶段对照上限表。</summary>
     [CreateAssetMenu(fileName = "StageProgressSetting", menuName = "LazyPan/StageProgressSetting")]
     public class StageProgressSetting : Setting {
+        [Header("节点便签说明 自由修改")]
+        [Tooltip("阶段进度节点上的行为说明书，改这里就行，不用改代码。清空则回退到代码里的默认文案")]
+        [TextArea(5, 15)]
+        public string MemoDoc =
+            "【阶段进度】管升级那套数，进度装满自动升一段，多的进度带到下一段。\n" +
+            "— 配置参数（StageProgressSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>StageParamSign</color>：段数存哪个标签，Int 类型\n" +
+            "- <color=#FFD54F>ProgressParamSign</color>：进度存哪个标签，Float 类型\n" +
+            "- <color=#FFD54F>InitialStage</color>：开局第几段\n" +
+            "- <color=#FFD54F>MaxStage</color>：满级第几段，封顶\n" +
+            "- <color=#FFD54F>FallbackCap</color>：表里没写的段统一按这个算\n" +
+            "- <color=#FFD54F>Caps</color>：每段上限表，一条一段\n" +
+            "- <color=#FFD54F>MaxStageParamSign</color>+<color=#FFD54F>MaxProgressParamSign</color>：选填，空=不同步\n" +
+            "— 外部怎么互动 —\n" +
+            "- <color=#FFD54F>加进度</color>：只管往进度里加数，升段它自己算";
         public List<StageProgressSettingData> Datas = new List<StageProgressSettingData>();
 
         public bool TryGet(string sourceSign, out StageProgressSettingData data) {

@@ -11,6 +11,22 @@ namespace LazyPan {
     /// </summary>
     [CreateAssetMenu(fileName = "WeaponSetting", menuName = "LazyPan/WeaponSetting")]
     public class WeaponSetting : Setting {
+        [Header("节点便签说明 自由修改")]
+        [Tooltip("武器开火节点上的行为说明书，改这里就行，不用改代码。清空则回退到代码里的默认文案")]
+        [TextArea(5, 15)]
+        public string MemoDoc =
+            "【武器开火】管一把枪怎么打，军火库里一枪一行。\n" +
+            "— 配置参数（WeaponSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>DefaultWeaponID</color>：开局拿哪把\n" +
+            "- <color=#FFD54F>Weapons</color>：军火库，一枪一行\n" +
+            "— 每把枪怎么填 —\n" +
+            "- <color=#FFD54F>WeaponID</color>/<color=#FFD54F>WeaponName</color>：枪的编号和名字，编号全局唯一\n" +
+            "- <color=#FFD54F>Kind</color>：直射=点射，环绕=围着转，范围=生产范围体\n" +
+            "- <color=#FFD54F>TargetType</color>：打谁，索敌类型必填\n" +
+            "- <color=#FFD54F>Range</color>/<color=#FFD54F>Interval</color>：射程和开火间隔秒数\n" +
+            "- <color=#FFD54F>SpawnSign</color>：打出什么，直射范围填，环绕不填\n" +
+            "- <color=#FFD54F>SpawnCount</color>/<color=#FFD54F>SpreadAngle</color>：一次打几个，散布总角度，0=无散布\n" +
+            "- <color=#FFD54F>Payload</color>：传话包，写进打出东西的 Data 里，ParamSign=哪个数，对着类型填值";
         public List<WeaponSettingData> Datas = new List<WeaponSettingData>();
 
         public bool TryGet(string sourceSign, out WeaponSettingData data) {

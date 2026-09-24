@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6adb7bad120893468e19e3ea2465789, type: 3}
   m_Name: BeginLogoSetting
   m_EditorClassIdentifier: 
+  MemoDoc: "【开头Logo】管开场播几秒 Logo，播完自动跳下一步。\n— 配置参数（BeginLogoSetting 里按 SourceSign 配）—\n- <color=#FFD54F>UIParentPrefabSign</color>：Logo 挂在哪个界面上，如 UI/UI_SceneA\n- <color=#FFD54F>UIChildPrefabSign</color>：挂哪个 Logo，如 UI/UI_Logo\n- <color=#FFD54F>LogoContinueTime</color>：播几秒，建议 3~8，0=一闪而过"
   Datas:
   - SourceSign: Obj_Logo_SceneA_BeginLogo
     UIParentPrefabSign: UI/UI_SceneA

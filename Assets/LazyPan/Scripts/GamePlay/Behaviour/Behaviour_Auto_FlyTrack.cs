@@ -8,6 +8,25 @@ namespace LazyPan {
     /// </summary>
     public class Behaviour_Auto_FlyTrack : Behaviour {
         /// <summary>
+        /// 上岗检查：只读配置不改东西，红=本节点缺的，黄=提醒，不拦保存。
+        /// </summary>
+        public static void CheckContract(object config, System.Collections.Generic.List<string> red, System.Collections.Generic.List<string> yellow) {
+            if (!(config is FlyTrackSettingData c)) {
+                red.Add("节点 Config 读不到，先重新生成节点");
+                return;
+            }
+
+            if (c.Speed <= 0f) {
+                red.Add("速度<=0，不飞");
+            }
+        }
+        /// <summary>飞行追踪节点只读便签：图节点上直接显示，给用户看的参数说明</summary>
+        public static readonly string MemoDoc =
+            "【飞行追踪】管一个东西往前飞，有目标就追着飞，没目标就直着飞。\n" +
+            "追谁不用你配，触发器会交过来。\n" +
+            "— 配置参数（FlyTrackSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>Speed</color>：飞多快，建议 5~15，0=睡觉不动";
+        /// <summary>
         /// 对外契约 TargetID/TargetType 由触发器交接不用配
         /// </summary>
         public static readonly PayloadContractDef[] RequiredPayload = {

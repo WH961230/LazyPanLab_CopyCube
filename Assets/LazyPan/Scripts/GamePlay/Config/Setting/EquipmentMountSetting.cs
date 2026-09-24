@@ -6,6 +6,19 @@ namespace LazyPan {
     /// <summary>装备挂载 — 管理实体与装备的挂载/拆卸 物理装备挂预制体 虚拟装备纯数据。挂载后递增 {槽位}TriggerTick 触发信号 触发什么不可知。</summary>
     [CreateAssetMenu(fileName = "EquipmentMountSetting", menuName = "LazyPan/EquipmentMountSetting")]
     public class EquipmentMountSetting : Setting {
+        [Header("节点便签说明 自由修改")]
+        [Tooltip("装备挂载节点上的行为说明书，改这里就行，不用改代码。清空则回退到代码里的默认文案")]
+        [TextArea(5, 15)]
+        public string MemoDoc =
+            "【装备挂载】管一个实体穿装备脱装备，穿什么挂哪都归它。\n" +
+            "— 配置参数（EquipmentMountSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>InitialMount</color>：true=开局就穿上\n" +
+            "- <color=#FFD54F>Mounts</color>：槽位列表，一条一个槽\n" +
+            "— 每个槽怎么填 —\n" +
+            "- <color=#FFD54F>SlotSign</color>：槽叫什么名\n" +
+            "- <color=#FFD54F>EquipmentPrefabSign</color>：穿什么，Virtual=看不见的虚拟装备\n" +
+            "- <color=#FFD54F>MountPointLabel</color>：挂在哪个点上，Root=实体根\n" +
+            "- <color=#FFD54F>OffsetPosition</color>/<color=#FFD54F>OffsetRotation</color>/<color=#FFD54F>OffsetScale</color>：位置旋转缩放微调";
         public List<EquipmentMountSettingData> Datas = new List<EquipmentMountSettingData>();
 
         public bool TryGet(string sourceSign, out EquipmentMountSettingData data) {

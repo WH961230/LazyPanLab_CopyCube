@@ -6,6 +6,20 @@ namespace LazyPan {
     /// <summary>延时生成 — 只管产怪，不认识波次。写 LivingCount。</summary>
     [CreateAssetMenu(fileName = "DelayGenerateSetting", menuName = "LazyPan/DelayGenerateSetting")]
     public class DelayGenerateEntitySetting : Setting {
+        [Header("节点便签说明 自由修改")]
+        [Tooltip("延时生成节点上的行为说明书，改这里就行，不用改代码。清空则回退到代码里的默认文案")]
+        [TextArea(5, 15)]
+        public string MemoDoc =
+            "【延时生成】管一个产怪点按节奏产怪，产谁产几个全在这里定。\n" +
+            "— 配置参数（DelayGenerateEntitySetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>GenerateType</color>：没触发时 Once=只产一次，Loop=循环产\n" +
+            "- <color=#FFD54F>IntervalTime</color>：没触发时隔几秒产一个\n" +
+            "- <color=#FFD54F>GenerateEntitySign</color>：没触发时产谁\n" +
+            "- <color=#FFD54F>Profiles</color>：触发档案，按顺序谁先满足用谁；空着就只按默认节奏产\n" +
+            "— 档案里每条怎么填 —\n" +
+            "- <color=#FFD54F>WatchSign</color>+<color=#FFD54F>WatchEntitySign</color>：盯着谁的哪个数看，如波次实体的 WaveIndex\n" +
+            "- <color=#FFD54F>Compare</color>+<color=#FFD54F>WatchValue</color>：数到几开产，如 >=1\n" +
+            "- <color=#FFD54F>Count</color>：这条产几只，0=一直产到被下一条顶掉";
         public List<DelayGenerateEntitySettingData> Datas = new List<DelayGenerateEntitySettingData>();
 
         public bool TryGet(string sourceSign, out DelayGenerateEntitySettingData data) {

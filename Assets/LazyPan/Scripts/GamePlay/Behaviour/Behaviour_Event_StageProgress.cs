@@ -11,7 +11,68 @@ namespace LazyPan {
     /// 配置来源 Setting/StageProgressSetting 满级掐顶 不做掉级 不做升级瞬间行为
     /// </summary>
     public class Behaviour_Event_StageProgress : Behaviour {
+        /// <summary>阶段进度节点只读便签：图节点上直接显示，给用户看的参数说明</summary>
+        public static readonly string MemoDoc =
+            "【阶段进度】管升级那套数，进度装满自动升一段，多的进度带到下一段。\n" +
+            "— 配置参数（StageProgressSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>StageParamSign</color>：段数存哪个标签，Int 类型\n" +
+            "- <color=#FFD54F>ProgressParamSign</color>：进度存哪个标签，Float 类型\n" +
+            "- <color=#FFD54F>InitialStage</color>：开局第几段\n" +
+            "- <color=#FFD54F>MaxStage</color>：满级第几段，封顶\n" +
+            "- <color=#FFD54F>FallbackCap</color>：表里没写的段统一按这个算\n" +
+            "- <color=#FFD54F>Caps</color>：每段上限表，一条一段\n" +
+            "- <color=#FFD54F>MaxStageParamSign</color>+<color=#FFD54F>MaxProgressParamSign</color>：选填，空=不同步\n" +
+            "— 外部怎么互动 —\n" +
+            "- <color=#FFD54F>加进度</color>：只管往进度里加数，升段它自己算";
         private const string settingPath = "Setting/StageProgressSetting";
+
+        /// <summary>
+        /// 上岗检查：只读配置不改东西，红=本节点缺的，黄=提醒，不拦保存。
+        /// </summary>
+        public static void CheckContract(object config, System.Collections.Generic.List<string> red, System.Collections.Generic.List<string> yellow) {
+            if (!(config is StageProgressSettingData c)) {
+                red.Add("节点 Config 读不到，先重新生成节点");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(c.StageParamSign)) {
+                red.Add("没填段数存哪个标签");
+            }
+
+            if (string.IsNullOrEmpty(c.ProgressParamSign)) {
+                red.Add("没填进度存哪个标签");
+            }
+
+            if (c.MaxStage < c.InitialStage) {
+                red.Add("满级比开局低，升不动");
+            }
+
+            if (c.Caps == null || c.Caps.Count == 0) {
+                yellow.Add("一段上限没配，全走兜底算");
+            }
+
+            if (c.FallbackCap <= 0f) {
+                yellow.Add("兜底上限<=0，表里没写的段装不满");
+            }
+
+            if (c.StageUpEvents != null) {
+                for (int i = 0; i < c.StageUpEvents.Count; i++) {
+                    var e = c.StageUpEvents[i];
+                    if (e == null) {
+                        red.Add($"第{i + 1}个升级事件是空行，删掉");
+                        continue;
+                    }
+
+                    if (string.IsNullOrEmpty(e.TargetEntitySign)) {
+                        red.Add($"第{i + 1}个升级事件没填给谁");
+                    }
+
+                    if (string.IsNullOrEmpty(e.ParamSign)) {
+                        red.Add($"第{i + 1}个升级事件没填改哪个数");
+                    }
+                }
+            }
+        }
 
         //config
         private StageProgressData _stageData;
@@ -129,9 +190,8 @@ namespace LazyPan {
         }
 
         /// <summary>
-        /// 绑定阶段钥匙与进度数值 不存在自动创建 钥匙低于开局扶到开局 进度为负按 0 算
-        /// 上限标签选填 配了才绑定 没配不同步 老存档兼容
-        /// 阶段与进度标签与初始值归 ParamValue 配置初始化 本行为只做升阶维护
+        /// 绑定阶段钥匙与进度数值 拿不到就自己注册 不依赖任何外部初始赋值
+        /// 钥匙低于开局扶到开局 进度为负按 0 算 每次写入同步全局注册表 保证两边读到同一个数
         /// </summary>
         private bool BindRuntimeData() {
             if (!Cond.Instance.TryGetData(entity, _config.StageParamSign, out _stageIntData)) {
@@ -160,6 +220,15 @@ namespace LazyPan {
                 _progressFloatData.Float = 0f;
             }
 
+            EntityAttrRegistry.SetNumber(entity, _config.StageParamSign, _stageIntData.Int);
+            EntityAttrRegistry.SetNumber(entity, _config.ProgressParamSign, _progressFloatData.Float);
+            if (_maxStageIntData != null) {
+                EntityAttrRegistry.SetNumber(entity, _config.MaxStageParamSign, _maxStageIntData.Int);
+            }
+            if (_maxProgressFloatData != null) {
+                EntityAttrRegistry.SetNumber(entity, _config.MaxProgressParamSign, _maxProgressFloatData.Float);
+            }
+
             return true;
         }
 
@@ -178,6 +247,7 @@ namespace LazyPan {
             }
 
             _progressFloatData.Float += amount;
+            EntityAttrRegistry.SetNumber(entity, _config.ProgressParamSign, _progressFloatData.Float);
             Normalize();
             SyncMaxProgress();
             SyncMaxStage();
@@ -192,6 +262,7 @@ namespace LazyPan {
             }
 
             _stageIntData.Int += amount;
+            EntityAttrRegistry.SetNumber(entity, _config.StageParamSign, _stageIntData.Int);
             Normalize();
             SyncMaxProgress();
             SyncMaxStage();
@@ -207,6 +278,7 @@ namespace LazyPan {
             }
 
             _maxProgressFloatData.Float = GetCap(_stageIntData.Int);
+            EntityAttrRegistry.SetNumber(entity, _config.MaxProgressParamSign, _maxProgressFloatData.Float);
         }
 
         /// <summary>
@@ -219,6 +291,7 @@ namespace LazyPan {
             }
 
             _maxStageIntData.Int = _config.MaxStage;
+            EntityAttrRegistry.SetNumber(entity, _config.MaxStageParamSign, _maxStageIntData.Int);
         }
 
         /// <summary>
@@ -281,8 +354,10 @@ namespace LazyPan {
                 }
             }
 
-            //升了几级触发几次事件(只改数 不调行为 目标不存在单项跳过)
+            //升了几级触发几次事件(只改数 不调行为 目标不存在就地注册再改 单项失败不影响其余项)
             int gained = _stageIntData.Int - stageBefore;
+            EntityAttrRegistry.SetNumber(entity, _config.StageParamSign, _stageIntData.Int);
+            EntityAttrRegistry.SetNumber(entity, _config.ProgressParamSign, _progressFloatData.Float);
             for (int i = 0; i < gained; i++) {
                 ApplyStageUpEvents();
             }
@@ -301,24 +376,28 @@ namespace LazyPan {
                     case ParamValueType.Bool:
                         if (Cond.Instance.TryGetData(target, config.ParamSign, out BoolData boolData)) {
                             boolData.Bool = config.BoolValue;
+                            EntityAttrRegistry.SetBool(target, config.ParamSign, config.BoolValue);
                         }
 
                         break;
                     case ParamValueType.Int:
                         if (Cond.Instance.TryGetData(target, config.ParamSign, out IntData intData)) {
                             intData.Int = config.Modify == ParamModifyType.Add ? intData.Int + config.IntValue : config.IntValue;
+                            EntityAttrRegistry.SetNumber(target, config.ParamSign, intData.Int);
                         }
 
                         break;
                     case ParamValueType.Float:
                         if (Cond.Instance.TryGetData(target, config.ParamSign, out FloatData floatData)) {
                             floatData.Float = config.Modify == ParamModifyType.Add ? floatData.Float + config.FloatValue : config.FloatValue;
+                            EntityAttrRegistry.SetNumber(target, config.ParamSign, floatData.Float);
                         }
 
                         break;
                     case ParamValueType.String:
                         if (Cond.Instance.TryGetData(target, config.ParamSign, out StringData stringData)) {
                             stringData.String = config.StringValue;
+                            EntityAttrRegistry.SetText(target, config.ParamSign, config.StringValue);
                         }
 
                         break;

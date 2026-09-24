@@ -8,6 +8,13 @@ namespace LazyPan {
     /// </summary>
     [CreateAssetMenu(fileName = "LifeTimeoutSetting", menuName = "LazyPan/LifeTimeoutSetting")]
     public class LifeTimeoutSetting : Setting {
+        [Header("节点便签说明 自由修改")]
+        [Tooltip("寿命节点上的行为说明书，改这里就行，不用改代码。清空则回退到代码里的默认文案")]
+        [TextArea(5, 15)]
+        public string MemoDoc =
+            "【寿命】管一个东西活几秒，时间到自动喊死。\n" +
+            "— 配置参数（LifeTimeoutSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>LifeTime</color>：活几秒，建议 1~10，0=一直活";
         public List<LifeTimeoutSettingData> Datas = new List<LifeTimeoutSettingData>();
 
         public bool TryGet(string sourceSign, out LifeTimeoutSettingData data) {

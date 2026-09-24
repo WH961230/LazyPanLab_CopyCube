@@ -146,17 +146,6 @@ namespace LazyPan {
     }
 
     /// <summary>
-    /// 实体参数值行为节点 对应 ParamValueSettingData 一条
-    /// </summary>
-    [Serializable]
-    [NodeMenuItem("LazyPan/行为/实体参数值")]
-    public class BehaviourNode_ParamValue : BehaviourGraphNode {
-        public ParamValueSettingData Config;
-        public override string name => "实体参数值";
-        public override string BehaviourSign => nameof(Behaviour_Event_ParamValue);
-    }
-
-    /// <summary>
     /// 传送流程行为节点 对应 TeleportFlowSettingData 一条
     /// </summary>
     [Serializable]

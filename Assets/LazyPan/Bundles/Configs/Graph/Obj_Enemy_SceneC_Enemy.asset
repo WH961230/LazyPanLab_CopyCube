@@ -26,8 +26,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -122, y: -36, z: 0}
-  scale: {x: 1.3225, y: 1.3225, z: 1}
+  position: {x: 264, y: 250, z: 0}
+  scale: {x: 0.65751624, y: 0.65751624, z: 1}
   references:
     version: 2
     RefIds:
@@ -39,10 +39,10 @@ MonoBehaviour:
         computeOrder: 0
         position:
           serializedVersion: 2
-          x: 1022
-          y: 80
-          width: 323
-          height: 204
+          x: 1173.6243
+          y: 88.00001
+          width: 270
+          height: 930
         expanded: 1
         debug: 0
         nodeLock: 0
@@ -64,6 +64,8 @@ MonoBehaviour:
             FloatValue: 40
             StringValue: 
             Vector3Value: {x: 0, y: 0, z: 0}
+          Health: 100
+          MaxHealth: 100
     - rid: 8263989132141527884
       type: {class: BehaviourNode_TrackingEntity, ns: LazyPan, asm: Assembly-CSharp}
       data:
@@ -72,10 +74,10 @@ MonoBehaviour:
         computeOrder: 1
         position:
           serializedVersion: 2
-          x: 116.99996
-          y: 80.00001
+          x: -101.75348
+          y: 88.00001
           width: 240
-          height: 249
+          height: 381
         expanded: 1
         debug: 0
         nodeLock: 0
@@ -88,18 +90,19 @@ MonoBehaviour:
           TrackingSpeed: 2
           TrackingStop: 0
           TargetType: Player
+          NavMeshTerrainSign: Obj_Terrain_SceneC_Terrain
     - rid: 8263989132141527886
       type: {class: BehaviourNode_EntityUIBinder, ns: LazyPan, asm: Assembly-CSharp}
       data:
         nodeCustomName: 
         GUID: eb11516c-2050-41fb-b2f3-41a7d98741bb
-        computeOrder: 3
+        computeOrder: 2
         position:
           serializedVersion: 2
-          x: 664
-          y: 80
-          width: 323
-          height: 657
+          x: 472.05103
+          y: 88.00001
+          width: 240
+          height: 747
         expanded: 1
         debug: 0
         nodeLock: 0
@@ -126,14 +129,14 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 8aaaa24c-470a-41ad-88cb-078950099043
-        computeOrder: 4
+        computeOrder: 3
         position:
           serializedVersion: 2
-          x: 1337
-          y: 80.00001
+          x: 1744
+          y: 88
           width: 240
-          height: 704
-        expanded: 0
+          height: 288
+        expanded: 1
         debug: 0
         nodeLock: 0
         NodeInitialized: 1

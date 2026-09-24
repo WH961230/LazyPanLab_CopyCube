@@ -11,19 +11,41 @@ namespace LazyPan {
     public class Behaviour_Auto_TrackingEntityByNavMeshAgent : Behaviour {
         /// <summary>追踪节点只读便签：图节点上直接显示，给用户看的参数说明</summary>
         public static readonly string MemoDoc =
-            "【追踪实体】管一个实体的自动追人，NavMeshAgent 找路追目标，不调别的移动行为。\n" +
-            "本行为数据自带，不用去 ParamValue 配任何东西；停走命令看实体级 MoveAttr，谁置停都停。\n" +
+            "【追踪实体】管一个怪自动找路追人，目标没了就原地等。\n" +
+            "停走命令看实体级 MoveAttr，谁置停都停。\n" +
             "— 配置参数（TrackingEntitySetting 里按 SourceSign 配）—\n" +
-            "- TargetType：追谁，按实体类型名填，找不到就原地等\n" +
-            "- TrackingSpeed：追击速度，建议 2~6，填到 NavMeshAgent.speed\n" +
-            "- TrackingStop：true=本行为自己先停住，false=跟着实体级开关走\n" +
-            "— 运行时数据（TrackingEntityData，自己管）—\n" +
-            "- 目标实体：第一次找到后缓存，目标销毁自动清空重找\n" +
-            "- NavMeshAgent：第一次拿到后缓存，拿不到就不跑\n" +
-            "— 数据交流（读写实体级 MoveAttr，不直接调别的行为）—\n" +
-            "- 停走：自己 TrackingStop 或 MoveAttr.Stopped 任一 true 就停\n" +
-            "- 寻路：目标 Body 位置丢给 SetDestination，目标没 Body 就重找";
+            "- <color=#FFD54F>TargetType</color>：追谁，按实体类型名填，找不到就原地等\n" +
+            "- <color=#FFD54F>NavMeshTerrainSign</color>：寻路用的地形实体，如 Obj_Terrain_SceneC_Terrain，不填不查 NavMesh\n" +
+            "- <color=#FFD54F>TrackingSpeed</color>：追多快，建议 2~6\n" +
+            "- <color=#FFD54F>TrackingStop</color>：true=这个追踪自己先停住，false=跟着大家一起走";
         private const string settingPath = "Setting/TrackingEntitySetting";
+
+        /// <summary>
+        /// 上岗检查：只读配置不改东西，红=本节点缺的，黄=提醒，不拦保存。
+        /// </summary>
+        public static void CheckContract(object config, System.Collections.Generic.List<string> red, System.Collections.Generic.List<string> yellow) {
+            if (!(config is TrackingEntitySettingData c)) {
+                red.Add("节点 Config 读不到，先重新生成节点");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(c.TargetType)) {
+                red.Add("没填追谁，原地等");
+            }
+
+            if (c.TrackingSpeed <= 0f) {
+                yellow.Add("速度<=0，追不动");
+            }
+
+            if (c.TrackingStop) {
+                yellow.Add("停止打勾了，自己先停住");
+            }
+
+            // 地形填没填只看空不空，预制体上有没有导航组件由编辑器加查去翻，不用开场景
+            if (string.IsNullOrEmpty(c.NavMeshTerrainSign)) {
+                red.Add("没选寻路地形，先填地形实体");
+            }
+        }
         private NavMeshAgent _navMeshAgent;
         private Entity _targetEntity;
         private TrackingEntityData _trackingData;

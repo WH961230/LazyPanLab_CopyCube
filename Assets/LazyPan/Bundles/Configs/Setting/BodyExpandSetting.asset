@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d50438e722fe041827909bfe1a6ae7, type: 3}
   m_Name: BodyExpandSetting
   m_EditorClassIdentifier: 
+  MemoDoc: "【体型扩散】管一个东西从小变大，长到头自动停下并走死亡。\n— 配置参数（BodyExpandSetting 里按 SourceSign 配）—\n- <color=#FFD54F>MaxRadius</color>：长到这个半径就停，0=沿用节点上配的数\n- <color=#FFD54F>ExpandSpeed</color>：每秒长大多少，建议 1~5，0=沿用节点上配的数\n— 外部怎么互动 —\n- <color=#FFD54F>停下</color>：长满自动停并喊死，不用你管"
   Datas:
   - SourceSign: Obj_Bullet_SceneC_Ring
     MaxRadius: 5

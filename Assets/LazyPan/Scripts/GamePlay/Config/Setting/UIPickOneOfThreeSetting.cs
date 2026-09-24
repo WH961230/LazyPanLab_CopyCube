@@ -11,6 +11,20 @@ namespace LazyPan {
     /// </summary>
     [CreateAssetMenu(fileName = "UIPickOneOfThreeSetting", menuName = "LazyPan/UIPickOneOfThreeSetting")]
     public class UIPickOneOfThreeSetting : Setting {
+        [Header("节点便签说明 自由修改")]
+        [Tooltip("三选一节点上的行为说明书，改这里就行，不用改代码。清空则回退到代码里的默认文案")]
+        [TextArea(5, 15)]
+        public string MemoDoc =
+            "【三选一】管开奖面板，摆三张卡给人点一张，点后效果逐条生效。\n" +
+            "— 配置参数（UIPickOneOfThreeSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>PanelPrefabSign</color>：面板用哪个\n" +
+            "- <color=#FFD54F>MountSign</color>：挂在哪个点上，Root=主界面根\n" +
+            "- <color=#FFD54F>WatchSign</color>：触发旗标签，空=不监听\n" +
+            "- <color=#FFD54F>EnableTestAutoOpen</color>+<color=#FFD54F>AutoOpenDelay</color>：测试自动开奖，几秒后自动开\n" +
+            "- <color=#FFD54F>Pool</color>：奖池，一张卡一行\n" +
+            "— 每张卡怎么填 —\n" +
+            "- <color=#FFD54F>Title</color>/<color=#FFD54F>Description</color>/<color=#FFD54F>IconName</color>：标题描述图标，图标可空\n" +
+            "- <color=#FFD54F>Effects</color>：点卡后逐条生效，TargetEntitySign=给谁（Self=自己），ParamSign=改哪个数，对着类型填值";
         public List<UIPickOneOfThreeSettingData> Datas = new List<UIPickOneOfThreeSettingData>();
 
         public bool TryGet(string sourceSign, out UIPickOneOfThreeSettingData data) {

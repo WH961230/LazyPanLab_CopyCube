@@ -10,7 +10,70 @@ namespace LazyPan {
     /// 配置来源 Setting/WeaponSetting 一个持有者一条 里面是军火库
     /// </summary>
     public class Behaviour_Event_WeaponFire : Behaviour {
+        /// <summary>武器开火节点只读便签：图节点上直接显示，给用户看的参数说明</summary>
+        public static readonly string MemoDoc =
+            "【武器开火】管一把枪怎么打，军火库里一枪一行。\n" +
+            "— 配置参数（WeaponSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>DefaultWeaponID</color>：开局拿哪把\n" +
+            "- <color=#FFD54F>Weapons</color>：军火库，一枪一行\n" +
+            "— 每把枪怎么填 —\n" +
+            "- <color=#FFD54F>WeaponID</color>/<color=#FFD54F>WeaponName</color>：枪的编号和名字，编号全局唯一\n" +
+            "- <color=#FFD54F>Kind</color>：直射=点射，环绕=围着转，范围=生产范围体\n" +
+            "- <color=#FFD54F>TargetType</color>：打谁，索敌类型必填\n" +
+            "- <color=#FFD54F>Range</color>/<color=#FFD54F>Interval</color>：射程和开火间隔秒数\n" +
+            "- <color=#FFD54F>SpawnSign</color>：打出什么，直射范围填，环绕不填\n" +
+            "- <color=#FFD54F>SpawnCount</color>/<color=#FFD54F>SpreadAngle</color>：一次打几个，散布总角度，0=无散布\n" +
+            "- <color=#FFD54F>Payload</color>：传话包，写进打出东西的 Data 里，ParamSign=哪个数，对着类型填值";
         private const string settingPath = "Setting/WeaponSetting";
+
+        /// <summary>
+        /// 上岗检查：只读配置不改东西，红=本节点缺的，黄=提醒，不拦保存。
+        /// </summary>
+        public static void CheckContract(object config, System.Collections.Generic.List<string> red, System.Collections.Generic.List<string> yellow) {
+            if (!(config is WeaponSettingData c)) {
+                red.Add("节点 Config 读不到，先重新生成节点");
+                return;
+            }
+
+            if (c.Weapons == null || c.Weapons.Count == 0) {
+                red.Add("军火库是空的，没枪可拿");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(c.DefaultWeaponID)) {
+                yellow.Add("没配默认枪，开局拿不到枪");
+            } else if (!c.Weapons.Exists(w => w != null && w.WeaponID == c.DefaultWeaponID)) {
+                red.Add($"默认枪 {c.DefaultWeaponID} 不在军火库里");
+            }
+
+            var seen = new HashSet<string>();
+            foreach (var w in c.Weapons) {
+                if (w == null || string.IsNullOrEmpty(w.WeaponID)) {
+                    red.Add("有把枪没填编号");
+                    continue;
+                }
+
+                if (!seen.Add(w.WeaponID)) {
+                    red.Add($"枪 {w.WeaponID} 编号重复");
+                }
+
+                if (string.IsNullOrEmpty(w.TargetType)) {
+                    red.Add($"枪 {w.WeaponID} 没填打谁，不会开火");
+                }
+
+                if (w.Interval <= 0f) {
+                    yellow.Add($"枪 {w.WeaponID} 间隔<=0，会每帧打");
+                }
+
+                if (w.Kind != WeaponKind.Orbit && string.IsNullOrEmpty(w.SpawnSign)) {
+                    yellow.Add($"枪 {w.WeaponID} 没配生成物，打出去没东西（环绕类不用配）");
+                }
+
+                if (w.SpawnCount <= 0) {
+                    yellow.Add($"枪 {w.WeaponID} 一次生成<=0，打出去没东西");
+                }
+            }
+        }
         private const string currentWeaponSign = DataLabels.CurrentWeapon;
 
         //config

@@ -8,6 +8,16 @@ namespace LazyPan {
     /// </summary>
     [CreateAssetMenu(fileName = "FollowHolderSetting", menuName = "LazyPan/FollowHolderSetting")]
     public class FollowHolderSetting : Setting {
+        [Header("节点便签说明 自由修改")]
+        [Tooltip("跟随主人节点上的行为说明书，改这里就行，不用改代码。清空则回退到代码里的默认文案")]
+        [TextArea(5, 15)]
+        public string MemoDoc =
+            "【跟随主人】管一个东西围着主人转，主人没了就原地睡觉。\n" +
+            "跟谁不用你配，触发器会交过来。\n" +
+            "— 配置参数（FollowHolderSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>OrbitRadius</color>：转圈半径，建议 1~4\n" +
+            "- <color=#FFD54F>OrbitSpeed</color>：每秒转多少度，建议 90~360\n" +
+            "- <color=#FFD54F>OrbitAngle</color>：出生时站在几点钟方向，0~360";
         public List<FollowHolderSettingData> Datas = new List<FollowHolderSettingData>();
 
         public bool TryGet(string sourceSign, out FollowHolderSettingData data) {

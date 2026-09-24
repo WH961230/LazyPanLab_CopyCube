@@ -7,7 +7,54 @@ namespace LazyPan {
     /// 仅读写自身 Data: WaveIndex/WaveState/WaveRestRemain  等待条件通过通用 WatchWatchSign 读任意 IntData
     /// </summary>
     public class Behaviour_Event_WaveManager : Behaviour {
+        /// <summary>波次节点只读便签：图节点上直接显示，给用户看的参数说明</summary>
+        public static readonly string MemoDoc =
+            "【波次】管怪一波一波上，第几波写到 WaveIndex 供产怪点盯着看。\n" +
+            "— 配置参数（WaveManagerSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>StartWaveIndex</color>：从第几波开始，默认 1\n" +
+            "- <color=#FFD54F>InitialDelay</color>：首波前等几秒，0=立即开始\n" +
+            "- <color=#FFD54F>Loop</color>：true=全打完再从头来\n" +
+            "- <color=#FFD54F>Waves</color>：波次列表，按顺序打\n" +
+            "— 每波怎么填 —\n" +
+            "- <color=#FFD54F>RestDuration</color>：本波打完歇几秒，0=立刻下一波\n" +
+            "- <color=#FFD54F>AdvanceMode</color>：进下一波的条件\n" +
+            "- <color=#FFD54F>WaitWatchSign</color>+<color=#FFD54F>WaitWatchEntitySign</color>：盯着谁的哪个数，如产怪点的 LivingCount\n" +
+            "- <color=#FFD54F>WaitTargetValue</color>+<color=#FFD54F>Compare</color>：数到多少算打完，如 =0";
         private const string settingPath = "Setting/WaveManagerSetting";
+
+        /// <summary>
+        /// 上岗检查：只读配置不改东西，红=本节点缺的，黄=提醒，不拦保存。
+        /// </summary>
+        public static void CheckContract(object config, System.Collections.Generic.List<string> red, System.Collections.Generic.List<string> yellow) {
+            if (!(config is WaveManagerSettingData c)) {
+                red.Add("节点 Config 读不到，先重新生成节点");
+                return;
+            }
+
+            if (c.Waves == null || c.Waves.Count == 0) {
+                red.Add("一波都没配，不会出怪");
+                return;
+            }
+
+            if (c.StartWaveIndex < 1) {
+                red.Add("起始波<1，波数从 1 起");
+            }
+
+            for (int i = 0; i < c.Waves.Count; i++) {
+                var w = c.Waves[i];
+                if (w.AdvanceMode == WaveAdvanceMode.WaitValue && string.IsNullOrEmpty(w.WaitWatchSign)) {
+                    red.Add($"第{i + 1}波要等数值但没填 WatchSign");
+                }
+
+                if (string.IsNullOrEmpty(w.WaitWatchEntitySign)) {
+                    yellow.Add($"第{i + 1}波数据源实体没填，跨实体提醒：确认波次和产怪是不是同一家");
+                }
+
+                if (w.RestDuration < 0f) {
+                    yellow.Add($"第{i + 1}波等待是负数，会当 0 用");
+                }
+            }
+        }
         public const string WAVEINDEX_LABEL = "WaveIndex";
         public const string WAVESTATE_LABEL = "WaveState";
         public const string WAVERESTREMAIN_LABEL = "WaveRestRemain";

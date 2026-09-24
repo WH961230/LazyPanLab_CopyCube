@@ -6,182 +6,89 @@ using GraphProcessor;
 using LazyPan;
 
 /// <summary>
-/// 开火节点编辑器扩展: 把每把枪的生成物行为列出来 传话包写错词一眼能对上
-/// 触发器不管表现 但配的人要知道生成物认哪些词 这里只做显示 不拦保存
+/// 开火节点视图：说明书 + 上岗检查走共享装配，生成物契约并进上岗检查。
+/// 一键补齐不要了，传话包玩家自己配，缺词检查只报出来不动手。
 /// </summary>
 [NodeCustomEditor(typeof(BehaviourNode_WeaponFire))]
 public class WeaponFireNodeView : BaseNodeView {
-    UnityEngine.UIElements.Label contractLabel;
-
     public override void Enable() {
         base.Enable();
-        contractLabel = new UnityEngine.UIElements.Label();
-        contractLabel.style.whiteSpace = WhiteSpace.Normal;
-        var checkButton = new UnityEngine.UIElements.Button(RefreshContract) { text = "检查生成物契约" };
-        var fillButton = new UnityEngine.UIElements.Button(FillPayload) { text = "一键补齐传话包" };
-        controlsContainer.Add(contractLabel);
-        controlsContainer.Add(checkButton);
-        controlsContainer.Add(fillButton);
-        RefreshContract();
+        NodeMemoHelper.Attach(this, null, WeaponContractCheck);
     }
 
     /// <summary>
-    /// 一键补齐 词从生成物行为的认词单里来 缺的自动加行带默认值 配的人只改数不打字
-    /// 补完标脏走自动保存 图与 Setting 一起落盘
+    /// 生成物契约：顺着枪→生成物→它挂的行为→认词单，跟传话包逐个对。
+    /// 缺词=本节点没给，判红；生成物不在、模块缺失是跨实体的事，只提醒。
     /// </summary>
-    void FillPayload() {
-        var node = nodeTarget as BehaviourNode_WeaponFire;
-        if (node == null || node.Config == null || node.Config.Weapons == null) {
+    internal static void WeaponContractCheck(object config, List<string> red, List<string> yellow) {
+        if (!(config is WeaponSettingData c) || c.Weapons == null) {
             return;
         }
 
-        int added = 0;
-        foreach (WeaponItem weapon in node.Config.Weapons) {
-            if (weapon == null || string.IsNullOrEmpty(weapon.SpawnSign)) {
-                continue;
-            }
+        var setting = AssetDatabase.LoadAssetAtPath<ParamValueSetting>(
+            "Assets/LazyPan/Bundles/Configs/Setting/ParamValueSetting.asset");
 
-            string spawnBehaviours = SafeGetSpawnBehaviours(weapon.SpawnSign);
-            if (spawnBehaviours == null) {
-                continue;
-            }
-
-            if (weapon.Payload == null) {
-                weapon.Payload = new List<WeaponPayloadItem>();
-            }
-
-            var has = new HashSet<string>();
-            foreach (WeaponPayloadItem item in weapon.Payload) {
-                if (item != null && !string.IsNullOrEmpty(item.ParamSign)) {
-                    has.Add(item.ParamSign);
-                }
-            }
-
-            foreach (PayloadContractDef def in FindPayloadContracts(spawnBehaviours)) {
-                if (def == null || string.IsNullOrEmpty(def.Sign) || has.Contains(def.Sign)) {
-                    continue;
-                }
-
-                weapon.Payload.Add(new WeaponPayloadItem() {
-                    ParamSign = def.Sign,
-                    ValueType = def.ValueType,
-                    BoolValue = def.BoolDefault,
-                    IntValue = def.IntDefault,
-                    FloatValue = def.FloatDefault,
-                    StringValue = def.StringDefault,
-                    Vector3Value = def.Vector3Default,
-                });
-                added++;
-            }
-        }
-
-        if (added > 0 && owner != null && owner.graph != null) {
-            EditorUtility.SetDirty(owner.graph);
-        }
-
-        RefreshContract();
-    }
-
-    /// <summary>
-    /// 每把枪: 生成物在不在清单里 挂了哪些行为 传话包写了哪些词 三行对上就齐了
-    /// </summary>
-    void RefreshContract() {
-        var node = nodeTarget as BehaviourNode_WeaponFire;
-        if (node == null || node.Config == null) {
-            contractLabel.text = "节点数据异常";
-            return;
-        }
-
-        var lines = new List<string>();
-        if (node.Config.Weapons == null || node.Config.Weapons.Count == 0) {
-            contractLabel.text = "军火库是空的 先加一行武器";
-            return;
-        }
-
-        foreach (WeaponItem weapon in node.Config.Weapons) {
+        foreach (WeaponItem weapon in c.Weapons) {
             if (weapon == null || string.IsNullOrEmpty(weapon.WeaponID)) {
-                lines.Add("✗ 有一行 WeaponID 是空的 开火时会被跳过!");
                 continue;
             }
 
             if (weapon.Kind == WeaponKind.Orbit) {
-                lines.Add($"✓ {weapon.WeaponID}(环绕) 不生成 只转圈");
                 continue;
             }
 
             if (string.IsNullOrEmpty(weapon.SpawnSign)) {
-                lines.Add($"✗ {weapon.WeaponID} 生成实体是空的 不会生东西!");
                 continue;
             }
 
-            string spawnBehaviours = SafeGetSpawnBehaviours(weapon.SpawnSign);
-
-            if (spawnBehaviours == null) {
-                lines.Add($"✗ {weapon.WeaponID} 生成物 {weapon.SpawnSign} 不在 ObjConfig 清单里!");
+            string behaviours = SafeGetSpawnBehaviours(weapon.SpawnSign);
+            if (behaviours == null) {
+                yellow.Add($"跨实体提醒：枪 {weapon.WeaponID} 的生成物 {weapon.SpawnSign} 不在 ObjConfig 清单里");
                 continue;
             }
 
-            List<string> payloadSigns = new List<string>();
+            var payload = new HashSet<string>();
             if (weapon.Payload != null) {
                 foreach (WeaponPayloadItem item in weapon.Payload) {
                     if (item != null && !string.IsNullOrEmpty(item.ParamSign)) {
-                        payloadSigns.Add(item.ParamSign);
+                        payload.Add(item.ParamSign);
                     }
                 }
             }
 
-            List<string> missing = FindMissingPayload(weapon.SpawnSign, spawnBehaviours, payloadSigns);
-            if (missing.Count == 0) {
-                lines.Add($"✓ {weapon.WeaponID}→{weapon.SpawnSign}[{spawnBehaviours}]传话:{string.Join("/", payloadSigns)}");
-            foreach (string module in FindMissingModules(spawnBehaviours)) {
-                lines.Add($"✗ {weapon.WeaponID} 生成物缺模块依赖:{module}(工具箱下载记得带上!)");
+            var defaults = FindSpawnDefaultSigns(setting, weapon.SpawnSign);
+            var missing = new List<string>();
+            foreach (PayloadContractDef def in FindPayloadContracts(behaviours)) {
+                if (!payload.Contains(def.Sign) && !defaults.Contains(def.Sign) && !missing.Contains(def.Sign)) {
+                    missing.Add(def.Sign);
+                }
             }
-            } else {
-                lines.Add($"✗ {weapon.WeaponID}→{weapon.SpawnSign} 传话包缺:{string.Join("/", missing)}(生成物认但没给!)");
+
+            if (missing.Count > 0) {
+                red.Add($"枪 {weapon.WeaponID} 传话包缺：{string.Join("、", missing)}（生成物认但没给，自己加行）");
+            }
+
+            foreach (string module in FindMissingModules(behaviours)) {
+                yellow.Add($"跨实体提醒：枪 {weapon.WeaponID} 生成物缺模块依赖 {module}");
             }
         }
-
-        contractLabel.text = string.Join("\n", lines);
     }
 
     /// <summary>
-    /// 按生成物挂的行为反查它们认哪些词 传话包没给、生成物默认值里也没有的才标出来
-    /// 生成物 ParamValue 自带默认值=认了 传话包只写覆盖 空传话包全绿才是对的
+    /// 生成物 ParamValue 自带的默认值标签，传话包不用重复写。
     /// </summary>
-    static List<string> FindMissingPayload(string spawnSign, string behaviourNames, List<string> payloadSigns) {
-        var missing = new List<string>();
-        var payload = new HashSet<string>(payloadSigns);
-        var defaults = FindSpawnDefaultSigns(spawnSign);
-        foreach (PayloadContractDef def in FindPayloadContracts(behaviourNames)) {
-            if (!payload.Contains(def.Sign) && !defaults.Contains(def.Sign) && !missing.Contains(def.Sign)) {
-                missing.Add(def.Sign);
-            }
-        }
-
-        return missing;
-    }
-
-    /// <summary>
-    /// 生成物 ParamValue 自带的默认值标签 传话包不用重复写
-    /// </summary>
-    static HashSet<string> FindSpawnDefaultSigns(string spawnSign) {
+    static HashSet<string> FindSpawnDefaultSigns(ParamValueSetting setting, string spawnSign) {
         var defaults = new HashSet<string>();
-        if (string.IsNullOrEmpty(spawnSign)) {
-            return defaults;
-        }
-
-        var setting = AssetDatabase.LoadAssetAtPath<LazyPan.ParamValueSetting>(
-            "Assets/LazyPan/Bundles/Configs/Setting/ParamValueSetting.asset");
         if (setting == null || setting.Datas == null) {
             return defaults;
         }
 
-        foreach (LazyPan.ParamValueSettingData entry in setting.Datas) {
+        foreach (ParamValueSettingData entry in setting.Datas) {
             if (entry == null || entry.SourceSign != spawnSign || entry.Items == null) {
                 continue;
             }
 
-            foreach (LazyPan.ParamValueItem item in entry.Items) {
+            foreach (ParamValueItem item in entry.Items) {
                 if (item != null && !string.IsNullOrEmpty(item.ParamSign)) {
                     defaults.Add(item.ParamSign);
                 }
@@ -192,7 +99,7 @@ public class WeaponFireNodeView : BaseNodeView {
     }
 
     /// <summary>
-    /// 生成物行为的认词单三件套 读不到(老行为没贴)返回空 不拦
+    /// 生成物行为的认词单，读不到（老行为没贴）返回空，不拦。
     /// </summary>
     static List<PayloadContractDef> FindPayloadContracts(string behaviourNames) {
         var contracts = new List<PayloadContractDef>();
@@ -211,10 +118,13 @@ public class WeaponFireNodeView : BaseNodeView {
                 continue;
             }
 
-            System.Type type = System.Type.GetType("LazyPan." + sign + ", Assembly-CSharp");
-            var field = type?.GetField("RequiredPayload",
+            if (!BehaviourPayloadDoc.TryGetBehaviourType(sign, out System.Type type) || type == null) {
+                continue;
+            }
+
+            var field = type.GetField("RequiredPayload",
                 System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
-            PayloadContractDef[] required = field?.GetValue(null) as PayloadContractDef[];
+            var required = field?.GetValue(null) as PayloadContractDef[];
             if (required == null) {
                 continue;
             }
@@ -241,33 +151,8 @@ public class WeaponFireNodeView : BaseNodeView {
         return contracts;
     }
 
-    /// 编辑器读清单 运行时 ObjConfig.Get 依赖当前流程(Flo) 编辑器里 Flo 是空的直接炸
-    /// 这里照实体下拉的老路子 直接读 Csv 拿生成物挂的行为 不走运行时接口
-    /// </summary>
-    static string SafeGetSpawnBehaviours(string sign) {
-        try {
-            string path = System.IO.Path.Combine(UnityEngine.Application.streamingAssetsPath, "Csv", "ObjConfig.csv");
-            if (!System.IO.File.Exists(path)) {
-                return null;
-            }
-
-            string[] lines = System.IO.File.ReadAllLines(path, System.Text.Encoding.UTF8);
-            for (int i = 3; i < lines.Length; i++) {
-                string[] cols = lines[i].Split(',');
-                if (cols.Length < 6 || cols[0].Trim() != sign) {
-                    continue;
-                }
-
-                return cols[5].Trim();
-            }
-        } catch {
-        }
-
-        return null;
-    }
-
     /// <summary>
-    /// 生成物行为声明的模块依赖 清单里没挂的标出来 工具箱视角: 装一半跑起来必炸
+    /// 生成物行为声明的模块依赖，清单里没挂的标出来。
     /// </summary>
     static List<string> FindMissingModules(string behaviourNames) {
         var missing = new List<string>();
@@ -294,10 +179,13 @@ public class WeaponFireNodeView : BaseNodeView {
                 continue;
             }
 
-            System.Type type = System.Type.GetType("LazyPan." + sign + ", Assembly-CSharp");
-            var field = type?.GetField("RequiredModules",
+            if (!BehaviourPayloadDoc.TryGetBehaviourType(sign, out System.Type type) || type == null) {
+                continue;
+            }
+
+            var field = type.GetField("RequiredModules",
                 System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
-            string[] required = field?.GetValue(null) as string[];
+            var required = field?.GetValue(null) as string[];
             if (required == null) {
                 continue;
             }
@@ -313,14 +201,39 @@ public class WeaponFireNodeView : BaseNodeView {
     }
 
     /// <summary>
-    /// 中文行为名反查 Sign 走 BehaviourConfig.csv 与运行时注册同一张表
+    /// 中文行为名反查 Sign，走 BehaviourConfig.csv 与运行时注册同一张表。
     /// </summary>
     static string FindBehaviourSign(string behaviourName) {
-        foreach (string key in LazyPan.BehaviourConfig.GetKeys()) {
-            var config = LazyPan.BehaviourConfig.Get(key);
+        foreach (string key in BehaviourConfig.GetKeys()) {
+            var config = BehaviourConfig.Get(key);
             if (config != null && config.Name == behaviourName) {
                 return config.Sign;
             }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// 编辑器读清单，运行时接口依赖当前流程，编辑器里直接读 Csv。
+    /// </summary>
+    static string SafeGetSpawnBehaviours(string sign) {
+        try {
+            string path = System.IO.Path.Combine(Application.streamingAssetsPath, "Csv", "ObjConfig.csv");
+            if (!System.IO.File.Exists(path)) {
+                return null;
+            }
+
+            string[] lines = System.IO.File.ReadAllLines(path, System.Text.Encoding.UTF8);
+            for (int i = 3; i < lines.Length; i++) {
+                string[] cols = lines[i].Split(',');
+                if (cols.Length < 6 || cols[0].Trim() != sign) {
+                    continue;
+                }
+
+                return cols[5].Trim();
+            }
+        } catch {
         }
 
         return null;

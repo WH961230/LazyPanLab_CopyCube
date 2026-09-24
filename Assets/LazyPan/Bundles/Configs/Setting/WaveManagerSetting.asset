@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1b2c3d4e5f60718293a4b5c6d7e8fb0, type: 3}
   m_Name: WaveManagerSetting
   m_EditorClassIdentifier: 
+  MemoDoc: "【波次】管怪一波一波上，第几波写到 WaveIndex 供产怪点盯着看。\n— 配置参数（WaveManagerSetting 里按 SourceSign 配）—\n- <color=#FFD54F>StartWaveIndex</color>：从第几波开始，默认 1\n- <color=#FFD54F>InitialDelay</color>：首波前等几秒，0=立即开始\n- <color=#FFD54F>Loop</color>：true=全打完再从头来\n- <color=#FFD54F>Waves</color>：波次列表，按顺序打\n— 每波怎么填 —\n- <color=#FFD54F>RestDuration</color>：本波打完歇几秒，0=立刻下一波\n- <color=#FFD54F>AdvanceMode</color>：进下一波的条件\n- <color=#FFD54F>WaitWatchSign</color>+<color=#FFD54F>WaitWatchEntitySign</color>：盯着谁的哪个数，如产怪点的 LivingCount\n- <color=#FFD54F>WaitTargetValue</color>+<color=#FFD54F>Compare</color>：数到多少算打完，如 =0"
   Datas:
   - SourceSign: Obj_Wave_SceneC_WaveManager
     StartWaveIndex: 1

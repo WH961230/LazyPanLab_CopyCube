@@ -12,6 +12,25 @@ namespace LazyPan {
     /// </summary>
     [CreateAssetMenu(fileName = "UIStatusDisplaySetting", menuName = "LazyPan/UIStatusDisplaySetting")]
     public class UIStatusDisplaySetting : Setting {
+        [Header("节点便签说明 自由修改")]
+        [Tooltip("屏幕UI节点上的行为说明书，改这里就行，不用改代码。清空则回退到代码里的默认文案")]
+        [TextArea(5, 15)]
+        public string MemoDoc =
+            "【屏幕UI】管屏幕上挂几块 HUD，数值跟着实体走。\n" +
+            "— 配置参数（UIStatusDisplaySetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>Displays</color>：UI 块列表，一块一行\n" +
+            "— 每块怎么填 —\n" +
+            "- <color=#FFD54F>UIName</color>：挂到哪个屏幕UI，空=当前流程主界面\n" +
+            "- <color=#FFD54F>UIPrefabSign</color>：用哪个 HUD，空=直接绑主界面\n" +
+            "- <color=#FFD54F>MountSign</color>：挂在哪个点上，Root=主界面根\n" +
+            "- <color=#FFD54F>InstanceSign</color>：实例名，空=用预制体名\n" +
+            "- <color=#FFD54F>DataBinds</color>：数值绑定，一条绑一个数\n" +
+            "— 数值绑定每条怎么填 —\n" +
+            "- <color=#FFD54F>ComponentSign</color>+<color=#FFD54F>ComponentType</color>：UI上哪个零件\n" +
+            "- <color=#FFD54F>Mode</color>：比例=当前/最大，直给=当前值\n" +
+            "- <color=#FFD54F>SourceEntitySign</color>：取谁的数，Self=自己\n" +
+            "- <color=#FFD54F>DataSign</color>+<color=#FFD54F>MaxDataSign</color>：哪个数，如 Health\n" +
+            "- <color=#FFD54F>Format</color>：显示格式，空=整数";
         public List<UIStatusDisplaySettingData> Datas = new List<UIStatusDisplaySettingData>();
 
         public bool TryGet(string sourceSign, out UIStatusDisplaySettingData data) {

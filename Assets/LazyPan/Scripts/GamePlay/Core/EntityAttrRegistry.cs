@@ -8,6 +8,9 @@ namespace LazyPan {
     public static class EntityAttrRegistry {
         private static readonly Dictionary<int, HealthAttr> healthMap = new Dictionary<int, HealthAttr>();
         private static readonly Dictionary<int, MoveAttr> moveMap = new Dictionary<int, MoveAttr>();
+        private static readonly Dictionary<int, Dictionary<string, float>> numberMap = new Dictionary<int, Dictionary<string, float>>();
+        private static readonly Dictionary<int, Dictionary<string, string>> textMap = new Dictionary<int, Dictionary<string, string>>();
+        private static readonly Dictionary<int, Dictionary<string, bool>> boolMap = new Dictionary<int, Dictionary<string, bool>>();
 
         public static bool RegisterHealth(Entity entity, HealthAttr attr) {
             if (entity == null || attr == null) return false;
@@ -34,10 +37,58 @@ namespace LazyPan {
             return attr;
         }
 
+        public static void SetNumber(Entity entity, string sign, float value) {
+            if (entity == null || string.IsNullOrEmpty(sign)) return;
+            if (!numberMap.TryGetValue(entity.ID, out var map)) {
+                map = new Dictionary<string, float>();
+                numberMap[entity.ID] = map;
+            }
+            map[sign] = value;
+        }
+
+        public static bool TryGetNumber(Entity entity, string sign, out float value) {
+            value = 0f;
+            if (entity == null || string.IsNullOrEmpty(sign)) return false;
+            return numberMap.TryGetValue(entity.ID, out var map) && map.TryGetValue(sign, out value);
+        }
+
+        public static void SetText(Entity entity, string sign, string value) {
+            if (entity == null || string.IsNullOrEmpty(sign)) return;
+            if (!textMap.TryGetValue(entity.ID, out var map)) {
+                map = new Dictionary<string, string>();
+                textMap[entity.ID] = map;
+            }
+            map[sign] = value;
+        }
+
+        public static bool TryGetText(Entity entity, string sign, out string value) {
+            value = null;
+            if (entity == null || string.IsNullOrEmpty(sign)) return false;
+            return textMap.TryGetValue(entity.ID, out var map) && map.TryGetValue(sign, out value);
+        }
+
+        public static void SetBool(Entity entity, string sign, bool value) {
+            if (entity == null || string.IsNullOrEmpty(sign)) return;
+            if (!boolMap.TryGetValue(entity.ID, out var map)) {
+                map = new Dictionary<string, bool>();
+                boolMap[entity.ID] = map;
+            }
+            map[sign] = value;
+        }
+
+        public static bool TryGetBool(Entity entity, string sign, out bool value) {
+            value = false;
+            if (entity == null || string.IsNullOrEmpty(sign)) return false;
+            return boolMap.TryGetValue(entity.ID, out var map) && map.TryGetValue(sign, out value);
+        }
+
         public static void Unregister(Entity entity) {
             if (entity == null) return;
             healthMap.Remove(entity.ID);
             moveMap.Remove(entity.ID);
+            numberMap.Remove(entity.ID);
+            textMap.Remove(entity.ID);
+            boolMap.Remove(entity.ID);
         }
     }
 

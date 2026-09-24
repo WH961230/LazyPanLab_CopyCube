@@ -8,7 +8,7 @@ Obj_Tower_SceneB_Tower,场景B,Tower,塔B,LocationInf_SceneB_Tower1,实体触发
 Obj_Terrain_SceneB_Terrain,场景B,Terrain,地形B,LocationInf_SceneB_Terrain1,
 Obj_Camera_SceneB_Camera,场景B,Camera,相机B,,
 Obj_UI_SceneB_MainUI,场景B,UI,主界面B,,
-Obj_Player_SceneC_Player,场景C,Player,玩家C,LocationInf_SceneC_Player1,控制器前后左右移动|实体挂载界面|实体触发控制器|阶段进度|死亡
+Obj_Player_SceneC_Player,场景C,Player,玩家C,LocationInf_SceneC_Player1,控制器前后左右移动|实体挂载界面|实体触发控制器|阶段进度|死亡|开火
 Obj_Tower_SceneC_Tower,场景C,Tower,塔C,LocationInf_SceneC_Tower1,开火
 Obj_Enemy_SceneC_Enemy,场景C,Enemy,敌人C,LocationInf_SceneC_Enemy1,追踪实体|死亡|实体挂载界面|实体触发控制器
 Obj_Terrain_SceneC_Terrain,场景C,Terrain,地形C,LocationInf_SceneC_Terrain1,

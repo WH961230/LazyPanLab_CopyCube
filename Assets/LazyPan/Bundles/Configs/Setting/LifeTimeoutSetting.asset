@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b0d612bb61c9de419a99e069988bebd, type: 3}
   m_Name: LifeTimeoutSetting
   m_EditorClassIdentifier: 
+  MemoDoc: "【寿命】管一个东西活几秒，时间到自动喊死。\n— 配置参数（LifeTimeoutSetting 里按 SourceSign 配）—\n- <color=#FFD54F>LifeTime</color>：活几秒，建议 1~10，0=一直活"
   Datas:
   - SourceSign: Obj_Bullet_SceneC_Bullet
     LifeTime: 3

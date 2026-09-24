@@ -9,7 +9,56 @@ namespace LazyPan {
     /// 配置来源 Setting/TeleportFlowSetting 快照同步到自身 TeleportFlowData 便于查看与调试
     /// </summary>
     public class Behaviour_Event_TeleportFlow : Behaviour {
+        /// <summary>传送流程节点只读便签：图节点上直接显示，给用户看的参数说明</summary>
+        public static readonly string MemoDoc =
+            "【传送流程】管条件一到跳场景。\n" +
+            "— 配置参数（TeleportFlowSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>TargetSceneSign</color>：跳去哪个场景\n" +
+            "- <color=#FFD54F>Once</color>：true=只跳一次\n" +
+            "- <color=#FFD54F>Condition</color>：前置条件，空=谁喊跳谁跳\n" +
+            "— 条件怎么填 —\n" +
+            "- <color=#FFD54F>LeftEntitySign</color>+<color=#FFD54F>LeftParamSign</color>：看谁的哪个数，Self=自己\n" +
+            "- <color=#FFD54F>Compare</color>：比大小的方式\n" +
+            "- <color=#FFD54F>RightIsEntityParam</color>：true=右边也是数，false=右边是常量\n" +
+            "- 右边是常量时，对着类型填下面的值";
         private const string settingPath = "Setting/TeleportFlowSetting";
+
+        /// <summary>
+        /// 上岗检查：只读配置不改东西，红=本节点缺的，黄=提醒，不拦保存。
+        /// </summary>
+        public static void CheckContract(object config, System.Collections.Generic.List<string> red, System.Collections.Generic.List<string> yellow) {
+            if (!(config is TeleportFlowSettingData c)) {
+                red.Add("节点 Config 读不到，先重新生成节点");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(c.TargetSceneSign)) {
+                red.Add("没填跳去哪个场景");
+            }
+
+            if (c.Condition == null) {
+                yellow.Add("没配前置条件，谁喊跳谁跳");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(c.Condition.LeftEntitySign)) {
+                red.Add("条件没填看谁");
+            }
+
+            if (string.IsNullOrEmpty(c.Condition.LeftParamSign)) {
+                red.Add("条件没填看哪个数");
+            }
+
+            if (c.Condition.RightIsEntityParam) {
+                if (string.IsNullOrEmpty(c.Condition.RightEntitySign)) {
+                    red.Add("条件右边是数但没填看谁");
+                }
+
+                if (string.IsNullOrEmpty(c.Condition.RightParamSign)) {
+                    red.Add("条件右边是数但没填看哪个数");
+                }
+            }
+        }
 
         //config
         private TeleportFlowData _teleportData;

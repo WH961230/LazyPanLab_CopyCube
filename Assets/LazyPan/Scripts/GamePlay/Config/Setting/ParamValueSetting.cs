@@ -6,6 +6,18 @@ namespace LazyPan {
     /// <summary>实体参数赋值 — 给自己或配置的目标实体写 Data 属性，不读业务不做判定。一个实体一条配置，内挂多条参数项。</summary>
     [CreateAssetMenu(fileName = "ParamValueSetting", menuName = "LazyPan/ParamValueSetting")]
     public class ParamValueSetting : Setting {
+        [Header("节点便签说明 自由修改")]
+        [Tooltip("参数赋值节点上的行为说明书，改这里就行，不用改代码。清空则回退到代码里的默认文案")]
+        [TextArea(5, 15)]
+        public string MemoDoc =
+            "【实体参数赋值】管开局给数，一次能给一批。\n" +
+            "— 配置参数（ParamValueSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>Items</color>：参数项列表，一条改一个数\n" +
+            "— 每条怎么填 —\n" +
+            "- <color=#FFD54F>TargetEntitySign</color>：给谁，Self=自己\n" +
+            "- <color=#FFD54F>ParamSign</color>：改哪个数\n" +
+            "- <color=#FFD54F>ValueType</color>：数的类型，对着类型填下面对应的值\n" +
+            "- <color=#FFD54F>ApplyOnInit</color>：true=装配时立刻给";
         public List<ParamValueSettingData> Datas = new List<ParamValueSettingData>();
 
         public bool TryGet(string sourceSign, out ParamValueSettingData data) {

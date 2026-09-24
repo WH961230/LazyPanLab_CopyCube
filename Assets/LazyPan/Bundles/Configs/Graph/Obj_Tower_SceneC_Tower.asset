@@ -23,8 +23,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -139, y: 39, z: 0}
-  scale: {x: 1.15, y: 1.15, z: 1}
+  position: {x: -2, y: -3, z: 0}
+  scale: {x: 1.520875, y: 1.520875, z: 1}
   references:
     version: 2
     RefIds:
@@ -36,20 +36,31 @@ MonoBehaviour:
         computeOrder: 0
         position:
           serializedVersion: 2
-          x: 298
-          y: 80
-          width: 640
-          height: 799
-        expanded: 0
+          x: 331.58087
+          y: 48.132153
+          width: 240
+          height: 795
+        expanded: 1
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
-        LastSyncedSign: Obj_Tower_SceneC_Tower
-        "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Event_WeaponFire\u3011\u9700\u914D
-          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n\u65E0 RequiredPayload\uFF0C\u672C\u884C\u4E3A\u65E0\u5916\u90E8\u53C2\u6570\u3002\r\n"
+        LastSyncedSign: None
+        "\u53C2\u6570\u4FBF\u7B7E": "\u3010\u5F00\u706B\u3011\r\n\u3010\u6B66\u5668\u5F00\u706B\u3011\u7BA1\u4E00\u628A\u67AA\u600E\u4E48\u6253\uFF0C\u519B\u706B\u5E93\u91CC\u4E00\u67AA\u4E00\u884C\u3002\n\u2014
+          \u914D\u7F6E\u53C2\u6570\uFF08WeaponSetting \u91CC\u6309 SourceSign \u914D\uFF09\u2014\n-
+          <color=#FFD54F>DefaultWeaponID</color>\uFF1A\u5F00\u5C40\u62FF\u54EA\u628A\n-
+          <color=#FFD54F>Weapons</color>\uFF1A\u519B\u706B\u5E93\uFF0C\u4E00\u67AA\u4E00\u884C\n\u2014
+          \u6BCF\u628A\u67AA\u600E\u4E48\u586B \u2014\n- <color=#FFD54F>WeaponID</color>/<color=#FFD54F>WeaponName</color>\uFF1A\u67AA\u7684\u7F16\u53F7\u548C\u540D\u5B57\uFF0C\u7F16\u53F7\u5168\u5C40\u552F\u4E00\n-
+          <color=#FFD54F>Kind</color>\uFF1A\u76F4\u5C04=\u70B9\u5C04\uFF0C\u73AF\u7ED5=\u56F4\u7740\u8F6C\uFF0C\u8303\u56F4=\u751F\u4EA7\u8303\u56F4\u4F53\n-
+          <color=#FFD54F>TargetType</color>\uFF1A\u6253\u8C01\uFF0C\u7D22\u654C\u7C7B\u578B\u5FC5\u586B\n-
+          <color=#FFD54F>Range</color>/<color=#FFD54F>Interval</color>\uFF1A\u5C04\u7A0B\u548C\u5F00\u706B\u95F4\u9694\u79D2\u6570\n-
+          <color=#FFD54F>SpawnSign</color>\uFF1A\u6253\u51FA\u4EC0\u4E48\uFF0C\u76F4\u5C04\u8303\u56F4\u586B\uFF0C\u73AF\u7ED5\u4E0D\u586B\n-
+          <color=#FFD54F>SpawnCount</color>/<color=#FFD54F>SpreadAngle</color>\uFF1A\u4E00\u6B21\u6253\u51E0\u4E2A\uFF0C\u6563\u5E03\u603B\u89D2\u5EA6\uFF0C0=\u65E0\u6563\u5E03\n-
+          <color=#FFD54F>Payload</color>\uFF1A\u4F20\u8BDD\u5305\uFF0C\u5199\u8FDB\u6253\u51FA\u4E1C\u897F\u7684
+          Data \u91CC\uFF0CParamSign=\u54EA\u4E2A\u6570\uFF0C\u5BF9\u7740\u7C7B\u578B\u586B\u503C\r\n\r\n\u2014
+          \u5916\u90E8\u53C2\u6570 \u2014\r\n\u65E0\uFF0C\u672C\u884C\u4E3A\u5F00\u7BB1\u5373\u7528\uFF0C\u65E0\u9700\u914D\u7F6E\u3002"
         Config:
-          SourceSign: Obj_Tower_SceneC_Tower
-          DefaultWeaponID: "\u73AF\u7ED5\u7403"
+          SourceSign: None
+          DefaultWeaponID: "\u51B2\u950B\u67AA"
           Weapons:
           - WeaponID: "\u51B2\u950B\u67AA"
             WeaponName: "\u51B2\u950B\u67AA"
@@ -134,6 +145,27 @@ MonoBehaviour:
               FloatValue: 30
               StringValue: 
               Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: DamageRadius
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 0.5
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: HitCooldown
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: -1
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: MaxHits
+              ValueType: 1
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 0
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
           - WeaponID: "\u73AF\u7ED5\u7403"
             WeaponName: "\u73AF\u7ED5\u7403"
             Kind: 1
@@ -170,5 +202,33 @@ MonoBehaviour:
               BoolValue: 0
               IntValue: 0
               FloatValue: 10
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: OrbitAngle
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 0
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: DamageRadius
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 0.5
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: HitCooldown
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: -1
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: MaxHits
+              ValueType: 1
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 0
               StringValue: 
               Vector3Value: {x: 0, y: 0, z: 0}

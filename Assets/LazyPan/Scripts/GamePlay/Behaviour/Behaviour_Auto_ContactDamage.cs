@@ -9,6 +9,41 @@ namespace LazyPan {
     /// </summary>
     public class Behaviour_Auto_ContactDamage : Behaviour {
         /// <summary>
+        /// 上岗检查：只读配置不改东西，红=本节点缺的，黄=提醒，不拦保存。
+        /// </summary>
+        public static void CheckContract(object config, System.Collections.Generic.List<string> red, System.Collections.Generic.List<string> yellow) {
+            if (!(config is ContactDamageSettingData c)) {
+                red.Add("节点 Config 读不到，先重新生成节点");
+                return;
+            }
+
+            if (c.Damage <= 0f) {
+                yellow.Add("伤害<=0，碰到也不扣血");
+            }
+
+            if (c.DamageRadius < 0f) {
+                yellow.Add("半径是负数，会按 0 用");
+            }
+
+            if (c.HitCooldown < -1f) {
+                yellow.Add("间隔<-1，会按只伤一次用");
+            }
+
+            if (c.MaxHits < 0) {
+                yellow.Add("次数是负数，会按不限用");
+            }
+
+            yellow.Add("跨实体提醒：挨打的一方必须挂死亡行为，不然扣血没地方写");
+        }
+        /// <summary>接触伤害节点只读便签：图节点上直接显示，给用户看的参数说明</summary>
+        public static readonly string MemoDoc =
+            "【接触伤害】管一个东西碰到敌人扣血，碰到谁由触发器定，不用你配。\n" +
+            "— 配置参数（ContactDamageSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>Damage</color>：碰一下扣多少血，0=睡觉不伤人\n" +
+            "- <color=#FFD54F>DamageRadius</color>：多近算碰到，0=跟别人每帧写的那个走\n" +
+            "- <color=#FFD54F>HitCooldown</color>：同一个敌人隔几秒才能再伤，-1=只伤一次\n" +
+            "- <color=#FFD54F>MaxHits</color>：伤几个人后自己死，0=不限";
+        /// <summary>
         /// 对外契约 TargetType 由触发器交接不用配
         /// </summary>
         public static readonly PayloadContractDef[] RequiredPayload = {

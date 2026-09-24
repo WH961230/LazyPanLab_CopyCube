@@ -6,6 +6,21 @@ namespace LazyPan {
     /// <summary>波数管理器 — 只报第几波、歇几秒、啥时候报下一波，不产怪不感知其他行为。写 WaveIndex/WaveState/WaveRestRemain。</summary>
     [CreateAssetMenu(fileName = "WaveManagerSetting", menuName = "LazyPan/WaveManagerSetting")]
     public class WaveManagerSetting : Setting {
+        [Header("节点便签说明 自由修改")]
+        [Tooltip("波次节点上的行为说明书，改这里就行，不用改代码。清空则回退到代码里的默认文案")]
+        [TextArea(5, 15)]
+        public string MemoDoc =
+            "【波次】管怪一波一波上，第几波写到 WaveIndex 供产怪点盯着看。\n" +
+            "— 配置参数（WaveManagerSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>StartWaveIndex</color>：从第几波开始，默认 1\n" +
+            "- <color=#FFD54F>InitialDelay</color>：首波前等几秒，0=立即开始\n" +
+            "- <color=#FFD54F>Loop</color>：true=全打完再从头来\n" +
+            "- <color=#FFD54F>Waves</color>：波次列表，按顺序打\n" +
+            "— 每波怎么填 —\n" +
+            "- <color=#FFD54F>RestDuration</color>：本波打完歇几秒，0=立刻下一波\n" +
+            "- <color=#FFD54F>AdvanceMode</color>：进下一波的条件\n" +
+            "- <color=#FFD54F>WaitWatchSign</color>+<color=#FFD54F>WaitWatchEntitySign</color>：盯着谁的哪个数，如产怪点的 LivingCount\n" +
+            "- <color=#FFD54F>WaitTargetValue</color>+<color=#FFD54F>Compare</color>：数到多少算打完，如 =0";
         public List<WaveManagerSettingData> Datas = new List<WaveManagerSettingData>();
 
         public bool TryGet(string sourceSign, out WaveManagerSettingData data) {

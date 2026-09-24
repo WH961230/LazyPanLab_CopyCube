@@ -12,6 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf22acd8ed4f4a51a87d142fb640b75f, type: 3}
   m_Name: EntityTriggerControllerSetting
   m_EditorClassIdentifier: 
+  MemoDoc: "\u3010\u89E6\u53D1\u5668\u3011\u7BA1\u4E00\u5757\u5730\u76D8\uFF0C\u8C01\u8FDB\u6765\u51FA\u53BB\u5E72\u4EC0\u4E48\u5168\u5728\u8FD9\u91CC\u5B9A\u3002\n\u2014
+    \u914D\u7F6E\u53C2\u6570\uFF08EntityTriggerControllerSetting \u91CC\u6309 SourceSign
+    \u914D\uFF09\u2014\n- <color=#FFD54F>CompTriggerSign</color>\uFF1A\u7528\u5730\u76D8\u4E0A\u54EA\u4E2A\u89E6\u53D1\u5668\uFF0CRoot=\u5B9E\u4F53\u6839\n-
+    <color=#FFD54F>Rules</color>\uFF1A\u89E6\u53D1\u89C4\u5219\uFF0C\u4E00\u6761\u89C4\u5219\u7BA1\u4E00\u7C7B\u4EBA\n\u2014
+    \u6BCF\u6761\u89C4\u5219\u600E\u4E48\u586B \u2014\n- <color=#FFD54F>TriggerEntitySign</color>\uFF1A\u8C01\u7B97\u6570\uFF0CAny=\u8C01\u90FD\u7B97\n-
+    <color=#FFD54F>EnterActions</color>\uFF1A\u8FDB\u6765\u77AC\u95F4\u89E6\u53D1\u4E00\u6B21\n-
+    <color=#FFD54F>StayActions</color>\uFF1A\u5F85\u7740\u4E0D\u52A8\u6BCF\u5E27\u90FD\u89E6\u53D1\n-
+    <color=#FFD54F>ExitActions</color>\uFF1A\u79BB\u5F00\u77AC\u95F4\u89E6\u53D1\u4E00\u6B21\n-
+    <color=#FFD54F>OutsideActions</color>\uFF1A\u5728\u8303\u56F4\u5916\u6BCF\u5E27\u89E6\u53D1\n\u2014
+    \u6BCF\u4E2A\u52A8\u4F5C\u600E\u4E48\u586B \u2014\n- <color=#FFD54F>TargetEntitySign</color>\uFF1A\u6539\u8C01\uFF0CSelf=\u81EA\u5DF1\uFF0CTriggerer=\u89E6\u53D1\u7684\u4EBA\n-
+    <color=#FFD54F>ParamSign</color>\uFF1A\u6539\u54EA\u4E2A\u6570\n- <color=#FFD54F>Modify</color>\uFF1ASet=\u76F4\u63A5\u7ED9\uFF0CAdd=\u7D2F\u52A0\n-
+    <color=#FFD54F>Min</color>/<color=#FFD54F>Max</color>\uFF1A\u6539\u5B8C\u5939\u5728\u8303\u56F4\u5185\uFF0C\u53EA\u5BF9\u6574\u6570\u5C0F\u6570\u6709\u6548"
   Datas:
   - SourceSign: Obj_Tower_SceneB_Tower
     CompTriggerSign: Trigger

@@ -11,7 +11,53 @@ namespace LazyPan {
     ///          不引用任何其他行为类型
     /// </summary>
     public class Behaviour_Event_EquipmentMountManager : Behaviour {
+        /// <summary>装备挂载节点只读便签：图节点上直接显示，给用户看的参数说明</summary>
+        public static readonly string MemoDoc =
+            "【装备挂载】管一个实体穿装备脱装备，穿什么挂哪都归它。\n" +
+            "— 配置参数（EquipmentMountSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>InitialMount</color>：true=开局就穿上\n" +
+            "- <color=#FFD54F>Mounts</color>：槽位列表，一条一个槽\n" +
+            "— 每个槽怎么填 —\n" +
+            "- <color=#FFD54F>SlotSign</color>：槽叫什么名\n" +
+            "- <color=#FFD54F>EquipmentPrefabSign</color>：穿什么，Virtual=看不见的虚拟装备\n" +
+            "- <color=#FFD54F>MountPointLabel</color>：挂在哪个点上，Root=实体根\n" +
+            "- <color=#FFD54F>OffsetPosition</color>/<color=#FFD54F>OffsetRotation</color>/<color=#FFD54F>OffsetScale</color>：位置旋转缩放微调";
         private const string settingPath = "Setting/EquipmentMountSetting";
+
+        /// <summary>
+        /// 上岗检查：只读配置不改东西，红=本节点缺的，黄=提醒，不拦保存。
+        /// </summary>
+        public static void CheckContract(object config, System.Collections.Generic.List<string> red, System.Collections.Generic.List<string> yellow) {
+            if (!(config is EquipmentMountSettingData c)) {
+                red.Add("节点 Config 读不到，先重新生成节点");
+                return;
+            }
+
+            if (c.Mounts == null || c.Mounts.Count == 0) {
+                red.Add("一个槽没配，没东西可穿");
+                return;
+            }
+
+            for (int i = 0; i < c.Mounts.Count; i++) {
+                var m = c.Mounts[i];
+                if (m == null) {
+                    red.Add($"第{i + 1}个槽是空行，删掉");
+                    continue;
+                }
+
+                if (string.IsNullOrEmpty(m.SlotSign)) {
+                    red.Add($"第{i + 1}个槽没起名");
+                }
+
+                if (string.IsNullOrEmpty(m.EquipmentPrefabSign)) {
+                    red.Add($"第{i + 1}个槽没填穿什么（虚拟装备填 Virtual）");
+                }
+
+                if (string.IsNullOrEmpty(m.MountPointLabel)) {
+                    yellow.Add($"第{i + 1}个槽没填挂点，确认默认挂哪");
+                }
+            }
+        }
         public const string MOUNTCOUNT_LABEL = "MountCount";
         public const string MOUNTEDSLOTS_LABEL = "MountedSlots";
         public const string SLOT_MOUNTED_SUFFIX = "Mounted";

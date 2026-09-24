@@ -8,6 +8,24 @@ namespace LazyPan {
     /// </summary>
     public class Behaviour_Auto_LifeTimeout : Behaviour {
         /// <summary>
+        /// 上岗检查：只读配置不改东西，红=本节点缺的，黄=提醒，不拦保存。
+        /// </summary>
+        public static void CheckContract(object config, System.Collections.Generic.List<string> red, System.Collections.Generic.List<string> yellow) {
+            if (!(config is LifeTimeoutSettingData c)) {
+                red.Add("节点 Config 读不到，先重新生成节点");
+                return;
+            }
+
+            if (c.LifeTime <= 0f) {
+                yellow.Add("时长<=0，一直活，不会喊死");
+            }
+        }
+        /// <summary>寿命节点只读便签：图节点上直接显示，给用户看的参数说明</summary>
+        public static readonly string MemoDoc =
+            "【寿命】管一个东西活几秒，时间到自动喊死。\n" +
+            "— 配置参数（LifeTimeoutSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>LifeTime</color>：活几秒，建议 1~10，0=一直活";
+        /// <summary>
         /// 对外契约
         /// </summary>
         public static readonly PayloadContractDef[] RequiredPayload = {

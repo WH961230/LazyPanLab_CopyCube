@@ -8,6 +8,16 @@ namespace LazyPan {
     /// </summary>
     [CreateAssetMenu(fileName = "BodyExpandSetting", menuName = "LazyPan/BodyExpandSetting")]
     public class BodyExpandSetting : Setting {
+        [Header("节点便签说明 自由修改")]
+        [Tooltip("体型扩散节点上的行为说明书，改这里就行，不用改代码。清空则回退到代码里的默认文案")]
+        [TextArea(5, 15)]
+        public string MemoDoc =
+            "【体型扩散】管一个东西从小变大，长到头自动停下并走死亡。\n" +
+            "— 配置参数（BodyExpandSetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>MaxRadius</color>：长到这个半径就停，0=沿用节点上配的数\n" +
+            "- <color=#FFD54F>ExpandSpeed</color>：每秒长大多少，建议 1~5，0=沿用节点上配的数\n" +
+            "— 外部怎么互动 —\n" +
+            "- <color=#FFD54F>停下</color>：长满自动停并喊死，不用你管";
         public List<BodyExpandSettingData> Datas = new List<BodyExpandSettingData>();
 
         public bool TryGet(string sourceSign, out BodyExpandSettingData data) {
