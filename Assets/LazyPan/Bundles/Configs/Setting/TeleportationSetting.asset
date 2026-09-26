@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b572aaf09bc6fc40b20036af8e0f536, type: 3}
+  m_Name: TeleportationSetting
+  m_EditorClassIdentifier: 
+  MemoDoc: "\u3010\u77AC\u95F4\u79FB\u52A8\u3011\u7BA1\u4E00\u4E2A\u5B9E\u4F53\u7684\u77AC\u79FB\uFF0C\u6309\u6309\u952E\u3001\u671D\u8EAB\u4F53\u671D\u5411\u3001\u6309\u66F2\u7EBF\u98DE\u4E00\u6BB5\uFF0C\u4E0D\u8C03\u522B\u7684\u79FB\u52A8\u884C\u4E3A\u3002\n\u505C\u8D70\u547D\u4EE4\u770B\u5B9E\u4F53\u7EA7
+    MoveAttr\uFF0C\u8C01\u7F6E\u505C\u90FD\u505C\u3002\n\u2014 \u914D\u7F6E\u53C2\u6570\uFF08TeleportationSetting
+    \u91CC\u6309 SourceSign \u914D\uFF09\u2014\n- <color=#FFD54F>TeleportInputSign</color>\uFF1A\u89E6\u53D1\u6309\u952E\uFF0C\u586B
+    InputRegister \u91CC\u7684\u90A3\u4E00\u4E2A\uFF0C\u5982 Global/Space\uFF0C\u9519\u4E86\u5C31\u6CA1\u53CD\u5E94\n-
+    <color=#FFD54F>Distance</color>\uFF1A\u77AC\u79FB\u8DDD\u79BB\uFF0C0=\u539F\u5730\u7F5A\u7AD9\uFF0C\u5EFA\u8BAE
+    4~8\n- <color=#FFD54F>Duration</color>\uFF1A\u77AC\u79FB\u8017\u65F6\uFF08\u79D2\uFF09\uFF0C\u8D70\u5B8C\u66F2\u7EBF\u5C31\u505C\uFF0C\u5EFA\u8BAE
+    0.2~0.4\n- <color=#FFD54F>SpeedCurve</color>\uFF1A\u901F\u5EA6\u66F2\u7EBF\uFF0Cx=\u8FDB\u5EA60~1\uFF0Cy=\u901F\u5EA6\u500D\u7387\uFF0C\u524D\u5FEB\u540E\u6162\u5C31\u62C9\u6210\u524D\u9AD8\u540E\u4F4E\n-
+    <color=#FFD54F>Cooldown</color>\uFF1A\u51B7\u5374\uFF08\u79D2\uFF09\uFF0C\u9632\u8FDE\u6309\uFF0C\u5EFA\u8BAE
+    0.5~1.5\n- <color=#FFD54F>TeleportPriority</color>\uFF1A\u77AC\u79FB\u4F18\u5148\u7EA7\uFF0C\u8DDF
+    MoveAttr.MovePriority \u6BD4\uFF0C\u5927\u5C31\u538B\u4F4F WASD\n\u2014 \u6570\u636E\u4EA4\u6D41\uFF08\u8BFB\u5199\u5B9E\u4F53\u7EA7
+    MoveAttr\uFF0C\u4E0D\u76F4\u63A5\u8C03\u522B\u7684\u884C\u4E3A\uFF09\u2014\n-
+    <color=#FFD54F>\u505C\u8D70</color>\uFF1AMoveAttr.Stopped=true \u5168\u4F53\u79FB\u52A8\u884C\u4E3A\u4E00\u8D77\u505C\uFF0Cfalse=\u6062\u590D\n-
+    <color=#FFD54F>\u5360\u9886</color>\uFF1A\u8D77\u98DE\u7F6E MoveAttr.Teleporting=true\uFF0CWASD
+    \u6C34\u5E73\u8BA9\u8DEF\u53EA\u7559\u91CD\u529B\uFF0C\u843D\u5730=false=\u6062\u590D\n-
+    <color=#FFD54F>\u4F4D\u7F6E</color>\uFF1A\u63A8 CharacterController\uFF0C\u65B9\u5411\u53D6\u8EAB\u4F53\u671D\u5411"
+  Datas:
+  - SourceSign: None
+    TeleportInputSign: Global/Space
+    Distance: 6
+    Duration: 0.1
+    SpeedCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    Cooldown: 0
+    TeleportPriority: 10
+  - SourceSign: Obj_Player_SceneC_Player
+    TeleportInputSign: Global/Space
+    Distance: 10
+    Duration: 0.2
+    SpeedCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.3324141
+        value: 1.5
+        inSlope: -0.030874413
+        outSlope: -0.030874413
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.1865526
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    Cooldown: 0.1
+    TeleportPriority: 10

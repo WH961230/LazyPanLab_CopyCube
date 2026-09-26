@@ -32,15 +32,21 @@ MonoBehaviour:
     OnDeathParams: []
     Health: 0
     MaxHealth: 0
-  - SourceSign: Obj_Bullet_SceneC_Bullet
-    DeathDelay: 1
+  - SourceSign: Obj_Player_SceneC_Player
+    DeathDelay: 0
+    DeathAction: 1
+    OnDeathParams: []
+    Health: 500
+    MaxHealth: 500
+  - SourceSign: Obj_Bullet_SceneC_OrbitFollow
+    DeathDelay: 0
     DeathAction: 1
     OnDeathParams: []
     Health: 0
     MaxHealth: 0
-  - SourceSign: Obj_Bullet_SceneC_OrbitFollow
+  - SourceSign: Obj_Bullet_SceneC_Bullet
     DeathDelay: 0
-    DeathAction: 0
+    DeathAction: 1
     OnDeathParams: []
     Health: 0
     MaxHealth: 0
@@ -57,11 +63,5 @@ MonoBehaviour:
       FloatValue: 40
       StringValue: 
       Vector3Value: {x: 0, y: 0, z: 0}
-    Health: 100
-    MaxHealth: 100
-  - SourceSign: Obj_Player_SceneC_Player
-    DeathDelay: 0
-    DeathAction: 1
-    OnDeathParams: []
-    Health: 500
-    MaxHealth: 500
+    Health: 150
+    MaxHealth: 150

@@ -107,9 +107,17 @@ namespace LazyPan {
                     _remainData.Float = 0f;
                 }
 
-                // 倒计时结束 调同实体传送行为的内部请求 不写 Data 由传送行为内部消费
-                if (entity != null && BehaviourRegister.GetBehaviour(entity, out Behaviour_Event_TeleportFlow teleport)) {
-                    teleport.RequestTeleport();
+                // 倒计时结束 只往自己身上写传送纸条，不直接调传送行为，由传送行为自己轮询消费
+                if (entity != null && entity.Data != null) {
+                    BoolData wantTeleport = null;
+                    if (!Cond.Instance.PeekData(entity, DataLabels.WantTeleport, out wantTeleport) || wantTeleport == null) {
+                        entity.Data.Add<BoolData>(DataLabels.WantTeleport, DataLabels.WantTeleport);
+                        Cond.Instance.PeekData(entity, DataLabels.WantTeleport, out wantTeleport);
+                    }
+
+                    if (wantTeleport != null) {
+                        wantTeleport.Bool = true;
+                    }
                 }
             }
         }

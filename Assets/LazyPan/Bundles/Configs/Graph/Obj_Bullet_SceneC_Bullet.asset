@@ -26,8 +26,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 138, y: -17, z: 0}
-  scale: {x: 1.3225, y: 1.3225, z: 1}
+  position: {x: -1191, y: 41, z: 0}
+  scale: {x: 1.520875, y: 1.520875, z: 1}
   references:
     version: 2
     RefIds:
@@ -39,11 +39,11 @@ MonoBehaviour:
         computeOrder: 0
         position:
           serializedVersion: 2
-          x: 792.36115
+          x: 1370.2574
           y: 80
-          width: 268
-          height: 850
-        expanded: 0
+          width: 270
+          height: 411
+        expanded: 1
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
@@ -52,22 +52,24 @@ MonoBehaviour:
           Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n\u65E0 RequiredPayload\uFF0C\u672C\u884C\u4E3A\u65E0\u5916\u90E8\u53C2\u6570\u3002\r\n"
         Config:
           SourceSign: Obj_Bullet_SceneC_Bullet
-          DeathDelay: 1
+          DeathDelay: 0
           DeathAction: 1
           OnDeathParams: []
+          Health: 0
+          MaxHealth: 0
     - rid: 8263989268591411323
       type: {class: BehaviourNode_FlyTrack, ns: LazyPan, asm: Assembly-CSharp}
       data:
         nodeCustomName: 
         GUID: 9a74d966-a5a1-4731-9992-1b6fb2f34c95
-        computeOrder: 2
+        computeOrder: 1
         position:
           serializedVersion: 2
           x: 60
           y: 80
           width: 240
           height: 100
-        expanded: 0
+        expanded: 1
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
@@ -83,14 +85,14 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: f30f0043-10b3-467c-91ce-e1934807327f
-        computeOrder: 3
+        computeOrder: 2
         position:
           serializedVersion: 2
-          x: 300
-          y: 80
+          x: 456.4002
+          y: 80.00001
           width: 240
-          height: 100
-        expanded: 0
+          height: 362
+        expanded: 1
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
@@ -102,23 +104,28 @@ MonoBehaviour:
           0\uFF09\r\n\u4F9D\u8D56\u6A21\u5757\uFF1A\u6B7B\u4EA1\r\n"
         Config:
           SourceSign: Obj_Bullet_SceneC_Bullet
-          Damage: 10
+          TargetType: Enemy
+          Damage: 35
           DamageRadius: 0
           HitCooldown: -1
-          MaxHits: 0
+          MaxHits: 1
+          KnockbackDistance: 0
+          KnockbackDuration: 0
+          DamageToType: 
+          Hits: []
     - rid: 8263989268591411325
       type: {class: BehaviourNode_LifeTimeout, ns: LazyPan, asm: Assembly-CSharp}
       data:
         nodeCustomName: 
         GUID: e8125ad6-1c29-43a8-bb43-2409f8896700
-        computeOrder: 4
+        computeOrder: 3
         position:
           serializedVersion: 2
-          x: 540
-          y: 80
+          x: 888.2001
+          y: 80.00001
           width: 240
-          height: 100
-        expanded: 0
+          height: 221
+        expanded: 1
         debug: 0
         nodeLock: 0
         NodeInitialized: 1

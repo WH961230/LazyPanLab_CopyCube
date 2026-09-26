@@ -87,6 +87,18 @@ namespace LazyPan {
         }
 
         /// <summary>
+        /// 只看不建：读不到返回失败，不自动添加。给每帧读取用，避免把 Setting 的默认值盖成 0。
+        /// </summary>
+        public bool PeekData<T>(Entity entity, string label, out T t) {
+            t = default;
+            if (entity == null || entity.Data == null) {
+                return false;
+            }
+
+            return entity.Data.Get(label, out t);
+        }
+
+        /// <summary>
         /// 尝试获取数据 若不存在则自动添加并返回默认值 实体或 Data 已销毁时直接返回失败
         /// </summary>
         public bool TryGetData<T>(Entity entity, string label, out T t) {

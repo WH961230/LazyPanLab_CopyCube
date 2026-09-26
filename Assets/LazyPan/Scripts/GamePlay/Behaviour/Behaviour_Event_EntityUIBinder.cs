@@ -409,7 +409,7 @@ namespace LazyPan {
 
         private bool TryReadHealthNumber(string sign, out float value) {
             value = 0f;
-            if (sign != Behaviour_Event_Death.HEALTH_LABEL && sign != "MaxHealth") {
+            if (sign != DataLabels.Health && sign != "MaxHealth") {
                 return false;
             }
 

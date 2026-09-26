@@ -16,10 +16,10 @@ MonoBehaviour:
   nodes:
   - rid: 8263989132141527882
   - rid: 8263989154599141377
-  - rid: 8263989181806280859
   - rid: 8263989226649419856
   - rid: 8263989290281993186
-  - rid: 8263989318493929472
+  - rid: 8499331007413747716
+  - rid: 8499331026626019329
   edges: []
   groups: []
   stackNodes: []
@@ -28,8 +28,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 89, y: 186, z: 0}
-  scale: {x: 1.15, y: 1.15, z: 1}
+  position: {x: -3373, y: 580, z: 0}
+  scale: {x: 1.3225, y: 1.3225, z: 1}
   references:
     version: 2
     RefIds:
@@ -41,10 +41,10 @@ MonoBehaviour:
         computeOrder: 0
         position:
           serializedVersion: 2
-          x: -556
-          y: -260
+          x: -513.0002
+          y: -257.86957
           width: 257
-          height: 574
+          height: 409
         expanded: 1
         debug: 0
         nodeLock: 0
@@ -67,8 +67,9 @@ MonoBehaviour:
           SourceSign: Obj_Player_SceneC_Player
           InputControlSign: Player/Motion
           MoveSpeed: 5
-          RotateSpeed: 10
+          RotateSpeed: 20
           Gravity: -2
+          MovePriority: 0
     - rid: 8263989154599141377
       type: {class: BehaviourNode_EntityUIBinder, ns: LazyPan, asm: Assembly-CSharp}
       data:
@@ -77,10 +78,10 @@ MonoBehaviour:
         computeOrder: 1
         position:
           serializedVersion: 2
-          x: 652.09143
-          y: -260.00012
-          width: 354
-          height: 145
+          x: 979
+          y: -257.86957
+          width: 240
+          height: 722
         expanded: 1
         debug: 0
         nodeLock: 0
@@ -119,57 +120,18 @@ MonoBehaviour:
               DataSign: Level
               MaxDataSign: MaxLevel
               Format: 
-    - rid: 8263989181806280859
-      type: {class: BehaviourNode_EntityTriggerController, ns: LazyPan, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: 
-        GUID: 4e2d4298-0002-4c90-ae5f-8cb54095a98f
-        computeOrder: 2
-        position:
-          serializedVersion: 2
-          x: 1018
-          y: -260
-          width: 240
-          height: 555
-        expanded: 1
-        debug: 0
-        nodeLock: 0
-        NodeInitialized: 1
-        LastSyncedSign: Obj_Player_SceneC_Player
-        "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Auto_EntityTriggerController\u3011\u9700\u914D
-          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n\u65E0 RequiredPayload\uFF0C\u672C\u884C\u4E3A\u65E0\u5916\u90E8\u53C2\u6570\u3002\r\n"
-        Config:
-          SourceSign: Obj_Player_SceneC_Player
-          CompTriggerSign: Trigger
-          Rules:
-          - TriggerEntitySign: Obj_Enemy_SceneC_Enemy
-            EnterActions: []
-            StayActions:
-            - TargetEntitySign: Triggerer
-              ParamSign: Health
-              ValueType: 2
-              Modify: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: -30
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-              Min: 0
-              Max: 100
-            ExitActions: []
-            OutsideActions: []
     - rid: 8263989226649419856
       type: {class: BehaviourNode_StageProgress, ns: LazyPan, asm: Assembly-CSharp}
       data:
         nodeCustomName: 
         GUID: 47d3e20a-6656-4475-beb3-c835b5c40b36
-        computeOrder: 3
+        computeOrder: 2
         position:
           serializedVersion: 2
-          x: 1425
-          y: -260
+          x: 1634.1598
+          y: -258
           width: 256
-          height: 826
+          height: 599
         expanded: 1
         debug: 0
         nodeLock: 0
@@ -222,13 +184,13 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 9ed119e3-f041-412a-a79b-3c3c24ea8555
-        computeOrder: 4
+        computeOrder: 3
         position:
           serializedVersion: 2
-          x: -28.521736
-          y: -260
+          x: 220.9999
+          y: -257.86957
           width: 270
-          height: 623
+          height: 411
         expanded: 1
         debug: 0
         nodeLock: 0
@@ -254,207 +216,137 @@ MonoBehaviour:
           OnDeathParams: []
           Health: 500
           MaxHealth: 500
-    - rid: 8263989318493929472
-      type: {class: BehaviourNode_WeaponFire, ns: LazyPan, asm: Assembly-CSharp}
+    - rid: 8499331007413747716
+      type: {class: BehaviourNode_Teleportation, ns: LazyPan, asm: Assembly-CSharp}
       data:
         nodeCustomName: 
-        GUID: 155a0eb3-7849-4fd2-bb7b-14b2c63558d7
-        computeOrder: 5
+        GUID: 17db7b27-47f8-4ef9-a234-570383372636
+        computeOrder: 4
         position:
           serializedVersion: 2
-          x: 351.58087
-          y: 68.13216
-          width: 240
-          height: 795
+          x: 2383.1597
+          y: -258
+          width: 349
+          height: 427
         expanded: 1
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
         LastSyncedSign: Obj_Player_SceneC_Player
-        "\u53C2\u6570\u4FBF\u7B7E": "\u3010\u5F00\u706B\u3011\r\n\u3010\u6B66\u5668\u5F00\u706B\u3011\u7BA1\u4E00\u628A\u67AA\u600E\u4E48\u6253\uFF0C\u519B\u706B\u5E93\u91CC\u4E00\u67AA\u4E00\u884C\u3002\n\u2014
-          \u914D\u7F6E\u53C2\u6570\uFF08WeaponSetting \u91CC\u6309 SourceSign \u914D\uFF09\u2014\n-
-          <color=#FFD54F>DefaultWeaponID</color>\uFF1A\u5F00\u5C40\u62FF\u54EA\u628A\n-
-          <color=#FFD54F>Weapons</color>\uFF1A\u519B\u706B\u5E93\uFF0C\u4E00\u67AA\u4E00\u884C\n\u2014
-          \u6BCF\u628A\u67AA\u600E\u4E48\u586B \u2014\n- <color=#FFD54F>WeaponID</color>/<color=#FFD54F>WeaponName</color>\uFF1A\u67AA\u7684\u7F16\u53F7\u548C\u540D\u5B57\uFF0C\u7F16\u53F7\u5168\u5C40\u552F\u4E00\n-
-          <color=#FFD54F>Kind</color>\uFF1A\u76F4\u5C04=\u70B9\u5C04\uFF0C\u73AF\u7ED5=\u56F4\u7740\u8F6C\uFF0C\u8303\u56F4=\u751F\u4EA7\u8303\u56F4\u4F53\n-
-          <color=#FFD54F>TargetType</color>\uFF1A\u6253\u8C01\uFF0C\u7D22\u654C\u7C7B\u578B\u5FC5\u586B\n-
-          <color=#FFD54F>Range</color>/<color=#FFD54F>Interval</color>\uFF1A\u5C04\u7A0B\u548C\u5F00\u706B\u95F4\u9694\u79D2\u6570\n-
-          <color=#FFD54F>SpawnSign</color>\uFF1A\u6253\u51FA\u4EC0\u4E48\uFF0C\u76F4\u5C04\u8303\u56F4\u586B\uFF0C\u73AF\u7ED5\u4E0D\u586B\n-
-          <color=#FFD54F>SpawnCount</color>/<color=#FFD54F>SpreadAngle</color>\uFF1A\u4E00\u6B21\u6253\u51E0\u4E2A\uFF0C\u6563\u5E03\u603B\u89D2\u5EA6\uFF0C0=\u65E0\u6563\u5E03\n-
-          <color=#FFD54F>Payload</color>\uFF1A\u4F20\u8BDD\u5305\uFF0C\u5199\u8FDB\u6253\u51FA\u4E1C\u897F\u7684
-          Data \u91CC\uFF0CParamSign=\u54EA\u4E2A\u6570\uFF0C\u5BF9\u7740\u7C7B\u578B\u586B\u503C\r\n\r\n\u2014
-          \u5916\u90E8\u53C2\u6570 \u2014\r\n\u65E0\uFF0C\u672C\u884C\u4E3A\u5F00\u7BB1\u5373\u7528\uFF0C\u65E0\u9700\u914D\u7F6E\u3002"
+        "\u53C2\u6570\u4FBF\u7B7E": "\u3010\u77AC\u95F4\u79FB\u52A8\u3011\r\n\u3010\u77AC\u95F4\u79FB\u52A8\u3011\u7BA1\u4E00\u4E2A\u5B9E\u4F53\u7684\u77AC\u79FB\uFF0C\u6309\u6309\u952E\u3001\u671D\u8EAB\u4F53\u671D\u5411\u3001\u6309\u66F2\u7EBF\u98DE\u4E00\u6BB5\uFF0C\u4E0D\u8C03\u522B\u7684\u79FB\u52A8\u884C\u4E3A\u3002\n\u505C\u8D70\u547D\u4EE4\u770B\u5B9E\u4F53\u7EA7
+          MoveAttr\uFF0C\u8C01\u7F6E\u505C\u90FD\u505C\u3002\n\u2014 \u914D\u7F6E\u53C2\u6570\uFF08TeleportationSetting
+          \u91CC\u6309 SourceSign \u914D\uFF09\u2014\n- <color=#FFD54F>TeleportInputSign</color>\uFF1A\u89E6\u53D1\u6309\u952E\uFF0C\u586B
+          InputRegister \u91CC\u7684\u90A3\u4E00\u4E2A\uFF0C\u5982 Global/Space\uFF0C\u9519\u4E86\u5C31\u6CA1\u53CD\u5E94\n-
+          <color=#FFD54F>Distance</color>\uFF1A\u77AC\u79FB\u8DDD\u79BB\uFF0C0=\u539F\u5730\u7F5A\u7AD9\uFF0C\u5EFA\u8BAE
+          4~8\n- <color=#FFD54F>Duration</color>\uFF1A\u77AC\u79FB\u8017\u65F6\uFF08\u79D2\uFF09\uFF0C\u8D70\u5B8C\u66F2\u7EBF\u5C31\u505C\uFF0C\u5EFA\u8BAE
+          0.2~0.4\n- <color=#FFD54F>SpeedCurve</color>\uFF1A\u901F\u5EA6\u66F2\u7EBF\uFF0Cx=\u8FDB\u5EA60~1\uFF0Cy=\u901F\u5EA6\u500D\u7387\uFF0C\u524D\u5FEB\u540E\u6162\u5C31\u62C9\u6210\u524D\u9AD8\u540E\u4F4E\n-
+          <color=#FFD54F>Cooldown</color>\uFF1A\u51B7\u5374\uFF08\u79D2\uFF09\uFF0C\u9632\u8FDE\u6309\uFF0C\u5EFA\u8BAE
+          0.5~1.5\n- <color=#FFD54F>TeleportPriority</color>\uFF1A\u77AC\u79FB\u4F18\u5148\u7EA7\uFF0C\u8DDF
+          MoveAttr.MovePriority \u6BD4\uFF0C\u5927\u5C31\u538B\u4F4F WASD\n\u2014
+          \u6570\u636E\u4EA4\u6D41\uFF08\u8BFB\u5199\u5B9E\u4F53\u7EA7 MoveAttr\uFF0C\u4E0D\u76F4\u63A5\u8C03\u522B\u7684\u884C\u4E3A\uFF09\u2014\n-
+          <color=#FFD54F>\u505C\u8D70</color>\uFF1AMoveAttr.Stopped=true \u5168\u4F53\u79FB\u52A8\u884C\u4E3A\u4E00\u8D77\u505C\uFF0Cfalse=\u6062\u590D\n-
+          <color=#FFD54F>\u5360\u9886</color>\uFF1A\u8D77\u98DE\u7F6E MoveAttr.Teleporting=true\uFF0CWASD
+          \u6C34\u5E73\u8BA9\u8DEF\u53EA\u7559\u91CD\u529B\uFF0C\u843D\u5730=false=\u6062\u590D\n-
+          <color=#FFD54F>\u4F4D\u7F6E</color>\uFF1A\u63A8 CharacterController\uFF0C\u65B9\u5411\u53D6\u8EAB\u4F53\u671D\u5411\r\n\r\n\u2014
+          \u5916\u90E8\u53C2\u6570 \u2014\r\n\u65E0\uFF0C\u672C\u884C\u4E3A\u5F00\u7BB1\u5373\u7528\uFF0C\u65E0\u9700\u914D\u7F6E\u3002\r\n\r\n\u2014
+          \u4F9D\u8D56\u7EC4\u4EF6\uFF08\u9884\u5236\u4F53\u4E0A\u5FC5\u987B\u6302\uFF09
+          \u2014\r\nCharacterController"
         Config:
           SourceSign: Obj_Player_SceneC_Player
-          DefaultWeaponID: "\u51B2\u950B\u67AA"
-          Weapons:
-          - WeaponID: "\u51B2\u950B\u67AA"
-            WeaponName: "\u51B2\u950B\u67AA"
-            Kind: 0
-            TargetType: Enemy
-            Range: 9999
-            Interval: 0.3
-            SpawnSign: Obj_Bullet_SceneC_Bullet
-            SpawnCount: 1
-            SpreadAngle: 0
-            Payload:
-            - ParamSign: Speed
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 50
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: Damage
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 50
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: DamageRadius
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 0.5
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: HitCooldown
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: -1
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: MaxHits
-              ValueType: 1
-              BoolValue: 0
-              IntValue: 1
-              FloatValue: 0
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: LifeTime
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 200
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-          - WeaponID: "\u5706\u73AF"
-            WeaponName: "\u5706\u73AF"
-            Kind: 2
-            TargetType: Enemy
-            Range: 20
-            Interval: 2
-            SpawnSign: Obj_Bullet_SceneC_Ring
-            SpawnCount: 1
-            SpreadAngle: 0
-            Payload:
-            - ParamSign: MaxRadius
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 5
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: ExpandSpeed
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 3
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: Damage
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 30
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: DamageRadius
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 0.5
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: HitCooldown
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: -1
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: MaxHits
-              ValueType: 1
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 0
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-          - WeaponID: "\u73AF\u7ED5\u7403"
-            WeaponName: "\u73AF\u7ED5\u7403"
-            Kind: 1
-            TargetType: Enemy
-            Range: 20
-            Interval: 0.5
-            SpawnSign: Obj_Bullet_SceneC_OrbitFollow
-            SpawnCount: 1
-            SpreadAngle: 120
-            Payload:
-            - ParamSign: OrbitCount
-              ValueType: 1
-              BoolValue: 0
-              IntValue: 1
-              FloatValue: 0
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: OrbitRadius
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 10
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: OrbitSpeed
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 180
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: Damage
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 10
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: OrbitAngle
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 0
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: DamageRadius
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 0.5
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: HitCooldown
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: -1
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: MaxHits
-              ValueType: 1
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 0
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
+          TeleportInputSign: Global/Space
+          Distance: 10
+          Duration: 0.2
+          SpeedCurve:
+            serializedVersion: 2
+            m_Curve:
+            - serializedVersion: 3
+              time: 0
+              value: 1
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0.33333334
+              outWeight: 0.33333334
+            - serializedVersion: 3
+              time: 0.3324141
+              value: 1.5
+              inSlope: -0.030874413
+              outSlope: -0.030874413
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0.33333334
+              outWeight: 0.1865526
+            - serializedVersion: 3
+              time: 1
+              value: 0
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0.33333334
+              outWeight: 0.33333334
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+          Cooldown: 0.1
+          TeleportPriority: 10
+    - rid: 8499331026626019329
+      type: {class: BehaviourNode_Knockback, ns: LazyPan, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 7efab1aa-a174-4af8-a576-8a794adfc47c
+        computeOrder: 5
+        position:
+          serializedVersion: 2
+          x: 3103.6257
+          y: -257.99994
+          width: 544
+          height: 314
+        expanded: 1
+        debug: 0
+        nodeLock: 0
+        NodeInitialized: 1
+        LastSyncedSign: Obj_Player_SceneC_Player
+        "\u53C2\u6570\u4FBF\u7B7E": "\u3010\u51FB\u9000\u3011\r\n\u3010\u51FB\u9000\u3011\u7BA1\u4E00\u4E2A\u5B9E\u4F53\u88AB\u6253\u98DE\uFF0C\u522B\u4EBA\u558A\uFF08\u63A5\u89E6\u4F24\u5BB3\u547D\u4E2D\uFF09\u624D\u98DE\uFF0C\u81EA\u5DF1\u4E0D\u76D1\u542C\u6309\u952E\u3002\n\u505C\u8D70\u547D\u4EE4\u770B\u5B9E\u4F53\u7EA7
+          MoveAttr\uFF0C\u8C01\u7F6E\u505C\u90FD\u505C\u3002\n\u2014 \u914D\u7F6E\u53C2\u6570\uFF08KnockbackSetting
+          \u91CC\u6309 SourceSign \u914D\uFF09\u2014\n- <color=#FFD54F>Duration</color>\uFF1A\u9ED8\u8BA4\u98DE\u591A\u4E45\uFF08\u79D2\uFF09\uFF0C\u558A\u7684\u4EBA\u6CA1\u7ED9\u65F6\u957F\u5C31\u7528\u8FD9\u4E2A\n-
+          <color=#FFD54F>DecayCurve</color>\uFF1A\u51CF\u901F\u66F2\u7EBF\uFF0Cx=\u8FDB\u5EA60~1\uFF0Cy=\u901F\u5EA6\u500D\u7387\uFF0C\u7A7A=\u5300\u901F\n-
+          <color=#FFD54F>KnockbackPriority</color>\uFF1A\u51FB\u9000\u4F18\u5148\u7EA7\uFF0C\u8DDF
+          MoveAttr.MovePriority/TeleportPriority \u6BD4\uFF0C\u9ED8\u8BA4\u6700\u5927\n\u2014
+          \u6570\u636E\u4EA4\u6D41\uFF08\u8BFB\u5199\u5B9E\u4F53\u7EA7 MoveAttr\uFF0C\u4E0D\u76F4\u63A5\u8C03\u522B\u7684\u884C\u4E3A\uFF09\u2014\n-
+          <color=#FFD54F>\u505C\u8D70</color>\uFF1AMoveAttr.Stopped=true \u5168\u4F53\u79FB\u52A8\u884C\u4E3A\u4E00\u8D77\u505C\uFF0Cfalse=\u6062\u590D\n-
+          <color=#FFD54F>\u5360\u9886</color>\uFF1A\u8D77\u98DE\u7F6E MoveAttr.KnockingBack=true\uFF0CWASD
+          \u548C\u77AC\u79FB\u6C34\u5E73\u8BA9\u8DEF\u53EA\u7559\u91CD\u529B\uFF0C\u843D\u5730=false=\u6062\u590D\n-
+          <color=#FFD54F>\u4F4D\u7F6E</color>\uFF1A\u63A8 CharacterController\uFF0C\u65B9\u5411\u662F\u558A\u7684\u4EBA\u7ED9\u7684\r\n\r\n\u2014
+          \u5916\u90E8\u53C2\u6570 \u2014\r\n\u65E0\uFF0C\u672C\u884C\u4E3A\u5F00\u7BB1\u5373\u7528\uFF0C\u65E0\u9700\u914D\u7F6E\u3002\r\n\r\n\u2014
+          \u4F9D\u8D56\u7EC4\u4EF6\uFF08\u9884\u5236\u4F53\u4E0A\u5FC5\u987B\u6302\uFF09
+          \u2014\r\nCharacterController"
+        Config:
+          SourceSign: Obj_Player_SceneC_Player
+          Duration: 0.4
+          DecayCurve:
+            serializedVersion: 2
+            m_Curve:
+            - serializedVersion: 3
+              time: 0
+              value: 1
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0.33333334
+              outWeight: 0.33333334
+            - serializedVersion: 3
+              time: 1
+              value: 0
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0.33333334
+              outWeight: 0.33333334
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+          KnockbackPriority: 20

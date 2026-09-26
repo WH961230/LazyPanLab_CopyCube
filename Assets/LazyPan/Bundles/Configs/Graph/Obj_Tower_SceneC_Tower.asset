@@ -23,8 +23,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -2, y: -3, z: 0}
-  scale: {x: 1.520875, y: 1.520875, z: 1}
+  position: {x: 452, y: 136, z: 0}
+  scale: {x: 1, y: 1, z: 1}
   references:
     version: 2
     RefIds:
@@ -44,7 +44,7 @@ MonoBehaviour:
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
-        LastSyncedSign: None
+        LastSyncedSign: Obj_Tower_SceneC_Tower
         "\u53C2\u6570\u4FBF\u7B7E": "\u3010\u5F00\u706B\u3011\r\n\u3010\u6B66\u5668\u5F00\u706B\u3011\u7BA1\u4E00\u628A\u67AA\u600E\u4E48\u6253\uFF0C\u519B\u706B\u5E93\u91CC\u4E00\u67AA\u4E00\u884C\u3002\n\u2014
           \u914D\u7F6E\u53C2\u6570\uFF08WeaponSetting \u91CC\u6309 SourceSign \u914D\uFF09\u2014\n-
           <color=#FFD54F>DefaultWeaponID</color>\uFF1A\u5F00\u5C40\u62FF\u54EA\u628A\n-
@@ -59,113 +59,9 @@ MonoBehaviour:
           Data \u91CC\uFF0CParamSign=\u54EA\u4E2A\u6570\uFF0C\u5BF9\u7740\u7C7B\u578B\u586B\u503C\r\n\r\n\u2014
           \u5916\u90E8\u53C2\u6570 \u2014\r\n\u65E0\uFF0C\u672C\u884C\u4E3A\u5F00\u7BB1\u5373\u7528\uFF0C\u65E0\u9700\u914D\u7F6E\u3002"
         Config:
-          SourceSign: None
+          SourceSign: Obj_Tower_SceneC_Tower
           DefaultWeaponID: "\u51B2\u950B\u67AA"
           Weapons:
-          - WeaponID: "\u51B2\u950B\u67AA"
-            WeaponName: "\u51B2\u950B\u67AA"
-            Kind: 0
-            TargetType: Enemy
-            Range: 9999
-            Interval: 0.3
-            SpawnSign: Obj_Bullet_SceneC_Bullet
-            SpawnCount: 1
-            SpreadAngle: 0
-            Payload:
-            - ParamSign: Speed
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 50
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: Damage
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 50
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: DamageRadius
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 0.5
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: HitCooldown
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: -1
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: MaxHits
-              ValueType: 1
-              BoolValue: 0
-              IntValue: 1
-              FloatValue: 0
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: LifeTime
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 200
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-          - WeaponID: "\u5706\u73AF"
-            WeaponName: "\u5706\u73AF"
-            Kind: 2
-            TargetType: Enemy
-            Range: 20
-            Interval: 2
-            SpawnSign: Obj_Bullet_SceneC_Ring
-            SpawnCount: 1
-            SpreadAngle: 0
-            Payload:
-            - ParamSign: MaxRadius
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 5
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: ExpandSpeed
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 3
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: Damage
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 30
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: DamageRadius
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 0.5
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: HitCooldown
-              ValueType: 2
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: -1
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-            - ParamSign: MaxHits
-              ValueType: 1
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 0
-              StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
           - WeaponID: "\u73AF\u7ED5\u7403"
             WeaponName: "\u73AF\u7ED5\u7403"
             Kind: 1
@@ -230,5 +126,109 @@ MonoBehaviour:
               BoolValue: 0
               IntValue: 0
               FloatValue: 0
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+          - WeaponID: "\u5706\u73AF"
+            WeaponName: "\u5706\u73AF"
+            Kind: 2
+            TargetType: Enemy
+            Range: 20
+            Interval: 2
+            SpawnSign: Obj_Bullet_SceneC_Ring
+            SpawnCount: 1
+            SpreadAngle: 0
+            Payload:
+            - ParamSign: MaxRadius
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 5
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: ExpandSpeed
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 3
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: Damage
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 30
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: DamageRadius
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 0.5
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: HitCooldown
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: -1
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: MaxHits
+              ValueType: 1
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 0
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+          - WeaponID: "\u51B2\u950B\u67AA"
+            WeaponName: "\u51B2\u950B\u67AA"
+            Kind: 0
+            TargetType: Enemy
+            Range: 100
+            Interval: 1
+            SpawnSign: Obj_Bullet_SceneC_Bullet
+            SpawnCount: 1
+            SpreadAngle: 0
+            Payload:
+            - ParamSign: Speed
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 50
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: Damage
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 25
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: DamageRadius
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 0.5
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: HitCooldown
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: -1
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: MaxHits
+              ValueType: 1
+              BoolValue: 0
+              IntValue: 1
+              FloatValue: 0
+              StringValue: 
+              Vector3Value: {x: 0, y: 0, z: 0}
+            - ParamSign: LifeTime
+              ValueType: 2
+              BoolValue: 0
+              IntValue: 0
+              FloatValue: 200
               StringValue: 
               Vector3Value: {x: 0, y: 0, z: 0}

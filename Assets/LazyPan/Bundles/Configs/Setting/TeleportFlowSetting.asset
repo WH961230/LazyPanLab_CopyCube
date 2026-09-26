@@ -12,26 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 725274dcad12b2b4c80dc2d15fc8f132, type: 3}
   m_Name: TeleportFlowSetting
   m_EditorClassIdentifier: 
-  MemoDoc: "【传送流程】管条件一到跳场景。\n— 配置参数（TeleportFlowSetting 里按 SourceSign 配）—\n- <color=#FFD54F>TargetSceneSign</color>：跳去哪个场景\n- <color=#FFD54F>Once</color>：true=只跳一次\n- <color=#FFD54F>Condition</color>：前置条件，空=谁喊跳谁跳\n— 条件怎么填 —\n- <color=#FFD54F>LeftEntitySign</color>+<color=#FFD54F>LeftParamSign</color>：看谁的哪个数，Self=自己\n- <color=#FFD54F>Compare</color>：比大小的方式\n- <color=#FFD54F>RightIsEntityParam</color>：true=右边也是数，false=右边是常量\n- 右边是常量时，对着类型填下面的值"
+  MemoDoc: "\u3010\u4F20\u9001\u6D41\u7A0B\u3011\u7BA1\u6761\u4EF6\u4E00\u5230\u8DF3\u573A\u666F\u3002\n\u2014
+    \u914D\u7F6E\u53C2\u6570\uFF08TeleportFlowSetting \u91CC\u6309 SourceSign \u914D\uFF09\u2014\n-
+    <color=#FFD54F>TargetSceneSign</color>\uFF1A\u8DF3\u53BB\u54EA\u4E2A\u573A\u666F\n-
+    <color=#FFD54F>Once</color>\uFF1Atrue=\u53EA\u8DF3\u4E00\u6B21\n- <color=#FFD54F>Condition</color>\uFF1A\u524D\u7F6E\u6761\u4EF6\uFF0C\u7A7A=\u8C01\u558A\u8DF3\u8C01\u8DF3\n\u2014
+    \u6761\u4EF6\u600E\u4E48\u586B \u2014\n- <color=#FFD54F>LeftEntitySign</color>+<color=#FFD54F>LeftParamSign</color>\uFF1A\u770B\u8C01\u7684\u54EA\u4E2A\u6570\uFF0CSelf=\u81EA\u5DF1\n-
+    <color=#FFD54F>Compare</color>\uFF1A\u6BD4\u5927\u5C0F\u7684\u65B9\u5F0F\n- <color=#FFD54F>RightIsEntityParam</color>\uFF1Atrue=\u53F3\u8FB9\u4E5F\u662F\u6570\uFF0Cfalse=\u53F3\u8FB9\u662F\u5E38\u91CF\n-
+    \u53F3\u8FB9\u662F\u5E38\u91CF\u65F6\uFF0C\u5BF9\u7740\u7C7B\u578B\u586B\u4E0B\u9762\u7684\u503C"
   Datas:
-  - SourceSign: Obj_Tower_SceneB_Tower
-    TargetSceneSign: SceneC
-    Once: 1
-    Condition:
-      LeftEntitySign: Obj_Tower_SceneB_Tower
-      LeftParamSign: Energy
-      LeftValueType: 2
-      Compare: 2
-      RightIsEntityParam: 1
-      RightEntitySign: Obj_Tower_SceneB_Tower
-      RightParamSign: MaxEnergy
-      RightValueType: 2
-      RightBoolValue: 0
-      RightIntValue: 0
-      RightConstValue: 0
-      RightStringValue: 
-      RightVector3Value: {x: 0, y: 0, z: 0}
-      RightConstType: 2
   - SourceSign: Obj_Logo_SceneA_BeginLogo
     TargetSceneSign: SceneB
     Once: 1
@@ -43,6 +31,24 @@ MonoBehaviour:
       RightIsEntityParam: 0
       RightEntitySign: Self
       RightParamSign: None
+      RightValueType: 2
+      RightBoolValue: 0
+      RightIntValue: 0
+      RightConstValue: 0
+      RightStringValue: 
+      RightVector3Value: {x: 0, y: 0, z: 0}
+      RightConstType: 2
+  - SourceSign: Obj_Tower_SceneB_Tower
+    TargetSceneSign: SceneC
+    Once: 1
+    Condition:
+      LeftEntitySign: Obj_Tower_SceneB_Tower
+      LeftParamSign: Energy
+      LeftValueType: 2
+      Compare: 2
+      RightIsEntityParam: 1
+      RightEntitySign: Obj_Tower_SceneB_Tower
+      RightParamSign: MaxEnergy
       RightValueType: 2
       RightBoolValue: 0
       RightIntValue: 0

@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0a64cfa72d0a594b998d82f899c3be3, type: 3}
   m_Name: FollowHolderSetting
   m_EditorClassIdentifier: 
-  MemoDoc: "【跟随主人】管一个东西围着主人转，主人没了就原地睡觉。\n跟谁不用你配，触发器会交过来。\n— 配置参数（FollowHolderSetting 里按 SourceSign 配）—\n- <color=#FFD54F>OrbitRadius</color>：转圈半径，建议 1~4\n- <color=#FFD54F>OrbitSpeed</color>：每秒转多少度，建议 90~360\n- <color=#FFD54F>OrbitAngle</color>：出生时站在几点钟方向，0~360"
-  Datas:
-  - SourceSign: Obj_Bullet_SceneC_OrbitFollow
-    OrbitRadius: 2
-    OrbitSpeed: 180
-    OrbitAngle: 0
+  MemoDoc: "\u3010\u8DDF\u968F\u4E3B\u4EBA\u3011\u7BA1\u4E00\u4E2A\u4E1C\u897F\u56F4\u7740\u4E3B\u4EBA\u8F6C\uFF0C\u4E3B\u4EBA\u6CA1\u4E86\u5C31\u539F\u5730\u7761\u89C9\u3002\n\u8DDF\u8C01\u4E0D\u7528\u4F60\u914D\uFF0C\u89E6\u53D1\u5668\u4F1A\u4EA4\u8FC7\u6765\u3002\n\u2014
+    \u914D\u7F6E\u53C2\u6570\uFF08FollowHolderSetting \u91CC\u6309 SourceSign \u914D\uFF09\u2014\n-
+    <color=#FFD54F>OrbitRadius</color>\uFF1A\u8F6C\u5708\u534A\u5F84\uFF0C\u5EFA\u8BAE
+    1~4\n- <color=#FFD54F>OrbitSpeed</color>\uFF1A\u6BCF\u79D2\u8F6C\u591A\u5C11\u5EA6\uFF0C\u5EFA\u8BAE
+    90~360\n- <color=#FFD54F>OrbitAngle</color>\uFF1A\u51FA\u751F\u65F6\u7AD9\u5728\u51E0\u70B9\u949F\u65B9\u5411\uFF0C0~360"
+  Datas: []

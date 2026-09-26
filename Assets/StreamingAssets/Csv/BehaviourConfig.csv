@@ -24,3 +24,5 @@ Behaviour_Auto_BodyExpand,体型扩散,体型扩散,,,
 Behaviour_Auto_ContactDamage,接触伤害,接触伤害,,,
 Behaviour_Auto_LifeTimeout,寿命,寿命,,,
 Behaviour_Auto_FollowHolder,跟随主人,跟随主人,,,
+Behaviour_Auto_Teleportation,瞬间移动,瞬间移动
+Behaviour_Auto_Knockback,击退,击退

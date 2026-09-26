@@ -16,6 +16,15 @@ namespace LazyPan {
         //三选一触发旗
         public const string WantPick = "WantPick";
 
+        //开场 Logo 到传送流程的交接词：只认纸条，不直接调传送行为
+        public const string WantTeleport = "WantTeleport";
+
+        //接触伤害到击退的交接词：只认纸条，互相不引用对方行为类
+        public const string KnockbackDir = "KnockbackDir";
+        public const string KnockbackDistance = "KnockbackDistance";
+        public const string KnockbackDuration = "KnockbackDuration";
+        public const string KnockbackSeq = "KnockbackSeq";
+
         //环绕球与主人
         public const string HolderID = "HolderID";
     }

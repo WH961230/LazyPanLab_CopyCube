@@ -18,9 +18,13 @@ namespace LazyPan {
             "- <color=#FFD54F>MoveSpeed</color>：移动速度，0=不动，建议 3~8\n" +
             "- <color=#FFD54F>RotateSpeed</color>：转向速度，0=不转身，建议 5~15\n" +
             "- <color=#FFD54F>Gravity</color>：重力加速度，一般填负数（如 -20），落地后自动压住\n" +
+            "- <color=#FFD54F>MovePriority</color>：移动优先级，跟瞬移的 TeleportPriority 比，0=常规会被默认瞬移压住，填大则反压\n" +
             "— 数据交流（读写实体级 MoveAttr，不直接调别的行为）—\n" +
             "- <color=#FFD54F>停走</color>：MoveAttr.Stopped=true 全体移动行为一起停，false=恢复\n" +
+            "- <color=#FFD54F>让路</color>：瞬移 Teleporting=true 且 TeleportPriority>=MovePriority 时，水平归零只留重力\n" +
             "- <color=#FFD54F>位置</color>：推 CharacterController，身体朝向跟着输入转";
+        /// <summary>硬依赖的 Unity 组件：检查按钮真去预制体上找，缺了判红</summary>
+        public static readonly string[] RequiredComponents = { "CharacterController" };
         private const string settingPath = "Setting/InputWASDMoveSetting";
 
         /// <summary>
@@ -69,6 +73,9 @@ namespace LazyPan {
             _moveData.Config.RotateSpeed = Mathf.Max(settingData.RotateSpeed, 0f);
             _moveData.Config.Gravity = settingData.Gravity;
             _moveAttr = EntityAttrRegistry.RegisterOrGetMove(entity);
+            if (_moveAttr != null) {
+                _moveAttr.MovePriority = settingData.MovePriority;
+            }
 
             InputRegister.Instance.Load(_moveData.Config.InputControlSign, OnMotion);
             Game.instance.OnUpdateEvent.AddListener(OnUpdate);
@@ -97,7 +104,16 @@ namespace LazyPan {
                 _moveData.InputVec = Vector2.zero;
             }
 
-            Vector2 input = _moveData.InputVec;
+            // 瞬移占领：优先级高的瞬移进行中，WASD 水平让路，只保留重力下沉
+            bool teleportWins = _moveAttr != null && _moveAttr.Teleporting
+                && _moveAttr.TeleportPriority >= _moveAttr.MovePriority;
+
+            // 击退占领：优先级最高的击退进行中，WASD 水平让路，只保留重力下沉
+            bool knockbackWins = _moveAttr != null && _moveAttr.KnockingBack
+                && _moveAttr.KnockbackPriority >= _moveAttr.MovePriority
+                && _moveAttr.KnockbackPriority >= _moveAttr.TeleportPriority;
+
+            Vector2 input = (teleportWins || knockbackWins) ? Vector2.zero : _moveData.InputVec;
             var cfg = _moveData.Config;
             Vector3 move = Vector3.zero;
             if (!stop && input.sqrMagnitude > 0.0001f) {

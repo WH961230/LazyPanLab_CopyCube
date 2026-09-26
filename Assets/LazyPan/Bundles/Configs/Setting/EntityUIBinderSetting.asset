@@ -38,19 +38,6 @@ MonoBehaviour:
         DataSign: Energy
         MaxDataSign: MaxEnergy
         Format: 
-  - SourceSign: Obj_Enemy_SceneC_Enemy
-    Items:
-    - UIPrefabSign: UI/UI_HealthBar
-      AttachLabel: UIRoot
-      Offset: {x: 0, y: 0, z: 0}
-      Billboard: 0
-      DataBinds:
-      - ComponentSign: Slider
-        ComponentType: 0
-        Mode: 0
-        DataSign: Health
-        MaxDataSign: MaxHealth
-        Format: 
   - SourceSign: Obj_Player_SceneC_Player
     Items:
     - UIPrefabSign: UI/UI_HealthBar
@@ -80,4 +67,17 @@ MonoBehaviour:
         Mode: 1
         DataSign: Level
         MaxDataSign: MaxLevel
+        Format: 
+  - SourceSign: Obj_Enemy_SceneC_Enemy
+    Items:
+    - UIPrefabSign: UI/UI_HealthBar
+      AttachLabel: UIRoot
+      Offset: {x: 0, y: 0, z: 0}
+      Billboard: 0
+      DataBinds:
+      - ComponentSign: Slider
+        ComponentType: 0
+        Mode: 0
+        DataSign: Health
+        MaxDataSign: MaxHealth
         Format: 

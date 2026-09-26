@@ -40,3 +40,5 @@ MonoBehaviour:
     Color: {r: 0.95, g: 0.65, b: 0.25, a: 1}
   - Name: "\u63A5\u89E6\u4F24\u5BB3"
     Color: {r: 0.95, g: 0.65, b: 0.25, a: 1}
+  - Name: "\u98DE\u884C\u8FFD\u8E2A"
+    Color: {r: 0.95, g: 0.65, b: 0.25, a: 1}

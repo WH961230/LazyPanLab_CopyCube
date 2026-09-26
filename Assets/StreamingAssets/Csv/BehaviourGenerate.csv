@@ -27,3 +27,7 @@ UIStatusDisplay,UI状态展示,Event,Init,Init,
 UIStatusDisplay,UI状态展示,Event,Clear,Clear,
 UIPickOneOfThree,UI三选一,Event,Init,Init,
 UIPickOneOfThree,UI三选一,Event,Clear,Clear,
+Teleportation,瞬间移动,Auto,Init,Init
+Teleportation,瞬间移动,Auto,Clear,Clear
+Knockback,击退,Auto,Init,Init
+Knockback,击退,Auto,Clear,Clear

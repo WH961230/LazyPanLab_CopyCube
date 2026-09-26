@@ -103,10 +103,21 @@ namespace LazyPan {
         }
 
         /// <summary>
-        /// 对外唯一入口 只写内部标记 跳转仍由 OnUpdate 统一执行 本行为不读不调任何其他行为
+        /// 对外唯一入口（薄皮）：只写传送纸条，由 OnUpdate 统一消费。本行为不读不调任何其他行为。
         /// </summary>
         public void RequestTeleport() {
             _innerRequest = true;
+            if (entity != null && entity.Data != null) {
+                BoolData wantTeleport = null;
+                if (!Cond.Instance.PeekData(entity, DataLabels.WantTeleport, out wantTeleport) || wantTeleport == null) {
+                    entity.Data.Add<BoolData>(DataLabels.WantTeleport, DataLabels.WantTeleport);
+                    Cond.Instance.PeekData(entity, DataLabels.WantTeleport, out wantTeleport);
+                }
+
+                if (wantTeleport != null) {
+                    wantTeleport.Bool = true;
+                }
+            }
         }
 
         private void OnUpdate() {
@@ -115,6 +126,11 @@ namespace LazyPan {
             }
 
             if (_config.UseRequest) {
+                if (Cond.Instance.PeekData(entity, DataLabels.WantTeleport, out BoolData wantTeleport) && wantTeleport != null && wantTeleport.Bool) {
+                    wantTeleport.Bool = false;
+                    _innerRequest = true;
+                }
+
                 if (!_innerRequest) {
                     return;
                 }

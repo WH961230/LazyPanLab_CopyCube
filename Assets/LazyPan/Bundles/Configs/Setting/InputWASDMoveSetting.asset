@@ -20,9 +20,12 @@ MonoBehaviour:
     <color=#FFD54F>MoveSpeed</color>\uFF1A\u79FB\u52A8\u901F\u5EA6\uFF0C0=\u4E0D\u52A8\uFF0C\u5EFA\u8BAE
     3~8\n- <color=#FFD54F>RotateSpeed</color>\uFF1A\u8F6C\u5411\u901F\u5EA6\uFF0C0=\u4E0D\u8F6C\u8EAB\uFF0C\u5EFA\u8BAE
     5~15\n- <color=#FFD54F>Gravity</color>\uFF1A\u91CD\u529B\u52A0\u901F\u5EA6\uFF0C\u4E00\u822C\u586B\u8D1F\u6570\uFF08\u5982
-    -20\uFF09\uFF0C\u843D\u5730\u540E\u81EA\u52A8\u538B\u4F4F\n\u2014 \u6570\u636E\u4EA4\u6D41\uFF08\u8BFB\u5199\u5B9E\u4F53\u7EA7
-    MoveAttr\uFF0C\u4E0D\u76F4\u63A5\u8C03\u522B\u7684\u884C\u4E3A\uFF09\u2014\n-
+    -20\uFF09\uFF0C\u843D\u5730\u540E\u81EA\u52A8\u538B\u4F4F\n- <color=#FFD54F>MovePriority</color>\uFF1A\u79FB\u52A8\u4F18\u5148\u7EA7\uFF0C\u8DDF\u77AC\u79FB\u7684
+    TeleportPriority \u6BD4\uFF0C0=\u5E38\u89C4\u4F1A\u88AB\u9ED8\u8BA4\u77AC\u79FB\u538B\u4F4F\uFF0C\u586B\u5927\u5219\u53CD\u538B\n\u2014
+    \u6570\u636E\u4EA4\u6D41\uFF08\u8BFB\u5199\u5B9E\u4F53\u7EA7 MoveAttr\uFF0C\u4E0D\u76F4\u63A5\u8C03\u522B\u7684\u884C\u4E3A\uFF09\u2014\n-
     <color=#FFD54F>\u505C\u8D70</color>\uFF1AMoveAttr.Stopped=true \u5168\u4F53\u79FB\u52A8\u884C\u4E3A\u4E00\u8D77\u505C\uFF0Cfalse=\u6062\u590D\n-
+    <color=#FFD54F>\u8BA9\u8DEF</color>\uFF1A\u77AC\u79FB Teleporting=true \u4E14
+    TeleportPriority>=MovePriority \u65F6\uFF0C\u6C34\u5E73\u5F52\u96F6\u53EA\u7559\u91CD\u529B\n-
     <color=#FFD54F>\u4F4D\u7F6E</color>\uFF1A\u63A8 CharacterController\uFF0C\u8EAB\u4F53\u671D\u5411\u8DDF\u7740\u8F93\u5165\u8F6C"
   Datas:
   - SourceSign: Obj_Player_SceneB_Player
@@ -30,8 +33,10 @@ MonoBehaviour:
     MoveSpeed: 5
     RotateSpeed: 5
     Gravity: -2
+    MovePriority: 0
   - SourceSign: Obj_Player_SceneC_Player
     InputControlSign: Player/Motion
     MoveSpeed: 5
-    RotateSpeed: 10
+    RotateSpeed: 20
     Gravity: -2
+    MovePriority: 0

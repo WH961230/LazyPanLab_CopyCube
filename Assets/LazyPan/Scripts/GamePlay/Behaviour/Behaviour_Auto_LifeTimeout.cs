@@ -71,10 +71,21 @@ namespace LazyPan {
                 return;
             }
 
-            if (entity.GetBehaviourData<DeathData>(out DeathData death)) {
-                death.Dead = true;
-            } else {
-                LogUtil.LogErrorFormat("行为:{0} 实体:{1} 未挂死亡行为，寿命到点无法喊死", BehaviourSign, entity.ObjConfig?.Sign);
+            //寿命到点自己死：有血条走注册表扣光，无血条写死亡纸条，全程不碰死亡行为的数据类型
+            if (EntityAttrRegistry.TryGetHealth(entity, out HealthAttr attr) && attr.HasBar && attr.Current > 0f) {
+                attr.Damage(attr.Current);
+            }
+
+            if (entity != null && entity.Data != null) {
+                BoolData deadFlag = null;
+                if (!Cond.Instance.PeekData(entity, DataLabels.Dead, out deadFlag) || deadFlag == null) {
+                    entity.Data.Add<BoolData>(DataLabels.Dead, DataLabels.Dead);
+                    Cond.Instance.PeekData(entity, DataLabels.Dead, out deadFlag);
+                }
+
+                if (deadFlag != null) {
+                    deadFlag.Bool = true;
+                }
             }
 
             if (Game.instance != null) {

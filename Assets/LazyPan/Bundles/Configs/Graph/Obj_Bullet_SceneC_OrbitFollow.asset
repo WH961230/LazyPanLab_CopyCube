@@ -17,7 +17,6 @@ MonoBehaviour:
   - rid: 8263989268591411209
   - rid: 8263989268591411210
   - rid: 8263989268591411211
-  - rid: 8263989268591411212
   edges: []
   groups: []
   stackNodes: []
@@ -26,8 +25,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 437, y: -165, z: 0}
-  scale: {x: 1.3225, y: 1.3225, z: 1}
+  position: {x: 293, y: 171, z: 0}
+  scale: {x: 1, y: 1, z: 1}
   references:
     version: 2
     RefIds:
@@ -41,9 +40,9 @@ MonoBehaviour:
           serializedVersion: 2
           x: 758.02045
           y: 192.14127
-          width: 360
+          width: 309
           height: 350
-        expanded: 0
+        expanded: 1
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
@@ -53,7 +52,7 @@ MonoBehaviour:
         Config:
           SourceSign: Obj_Bullet_SceneC_OrbitFollow
           DeathDelay: 0
-          DeathAction: 0
+          DeathAction: 1
           OnDeathParams: []
           Health: 0
           MaxHealth: 0
@@ -65,21 +64,21 @@ MonoBehaviour:
         computeOrder: 1
         position:
           serializedVersion: 2
-          x: 469.00003
-          y: 201
-          width: 394
-          height: 207
-        expanded: 0
+          x: 298.6327
+          y: 192
+          width: 348
+          height: 334
+        expanded: 1
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
-        LastSyncedSign: Obj_Bullet_SceneC_OrbitFollow
+        LastSyncedSign: Obj_Tower_SceneC_Tower
         "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Auto_FollowHolder\u3011\u9700\u914D
           Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n- OrbitRadius :
           Float\uFF08\u9ED8\u8BA4 2\uFF09\r\n- OrbitSpeed : Float\uFF08\u9ED8\u8BA4
           180\uFF09\r\n- OrbitAngle : Float\uFF08\u9ED8\u8BA4 0\uFF09\r\n"
         Config:
-          SourceSign: Obj_Bullet_SceneC_OrbitFollow
+          SourceSign: Obj_Tower_SceneC_Tower
           OrbitRadius: 2
           OrbitSpeed: 180
           OrbitAngle: 0
@@ -91,10 +90,10 @@ MonoBehaviour:
         computeOrder: 2
         position:
           serializedVersion: 2
-          x: 216.13446
-          y: 208.72664
-          width: 423
-          height: 207
+          x: -85.00394
+          y: 192
+          width: 240
+          height: 598
         expanded: 1
         debug: 0
         nodeLock: 0
@@ -107,74 +106,12 @@ MonoBehaviour:
           0\uFF09\r\n\u4F9D\u8D56\u6A21\u5757\uFF1A\u6B7B\u4EA1\r\n"
         Config:
           SourceSign: Obj_Bullet_SceneC_OrbitFollow
+          TargetType: Enemy
           Damage: 10
           DamageRadius: 0
           HitCooldown: -1
           MaxHits: 0
-    - rid: 8263989268591411212
-      type: {class: BehaviourNode_ParamValue, ns: LazyPan, asm: Assembly-CSharp}
-      data:
-        nodeCustomName: 
-        GUID: fbf21a11-a7e5-b063-1854-8c5b733e88f8
-        computeOrder: 3
-        position:
-          serializedVersion: 2
-          x: -128.88605
-          y: 209
-          width: 386
-          height: 755
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        NodeInitialized: 1
-        LastSyncedSign: Obj_Bullet_SceneC_OrbitFollow
-        "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Event_dfdfddfdfd\u3011\u9700\u914D
-          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n\u65E0 RequiredPayload\uFF0C\u672C\u884C\u4E3A\u65E0\u5916\u90E8\u53C2\u6570\u3002\r\n"
-        Config:
-          SourceSign: Obj_Bullet_SceneC_OrbitFollow
-          Items:
-          - TargetEntitySign: Obj_Bullet_SceneC_OrbitFollow
-            ParamSign: Damage
-            ValueType: 2
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: 10
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1
-          - TargetEntitySign: Obj_Bullet_SceneC_OrbitFollow
-            ParamSign: DamageRadius
-            ValueType: 2
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: 0.6
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1
-          - TargetEntitySign: Obj_Bullet_SceneC_OrbitFollow
-            ParamSign: HitCooldown
-            ValueType: 2
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: 1
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1
-          - TargetEntitySign: Obj_Bullet_SceneC_OrbitFollow
-            ParamSign: MaxHits
-            ValueType: 1
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: 0
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1
-          - TargetEntitySign: Obj_Bullet_SceneC_OrbitFollow
-            ParamSign: Dead
-            ValueType: 0
-            BoolValue: 0
-            IntValue: 0
-            FloatValue: 0
-            StringValue: 
-            Vector3Value: {x: 0, y: 0, z: 0}
-            ApplyOnInit: 1
+          KnockbackDistance: 0
+          KnockbackDuration: 0.3
+          DamageToType: 
+          Hits: []

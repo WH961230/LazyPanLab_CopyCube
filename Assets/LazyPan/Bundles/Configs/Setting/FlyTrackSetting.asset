@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c88cfa5c30f127e49a01044df3a13117, type: 3}
   m_Name: FlyTrackSetting
   m_EditorClassIdentifier: 
-  MemoDoc: "【飞行追踪】管一个东西往前飞，有目标就追着飞，没目标就直着飞。\n追谁不用你配，触发器会交过来。\n— 配置参数（FlyTrackSetting 里按 SourceSign 配）—\n- <color=#FFD54F>Speed</color>：飞多快，建议 5~15，0=睡觉不动"
+  MemoDoc: "\u3010\u98DE\u884C\u8FFD\u8E2A\u3011\u7BA1\u4E00\u4E2A\u4E1C\u897F\u5F80\u524D\u98DE\uFF0C\u6709\u76EE\u6807\u5C31\u8FFD\u7740\u98DE\uFF0C\u6CA1\u76EE\u6807\u5C31\u76F4\u7740\u98DE\u3002\n\u8FFD\u8C01\u4E0D\u7528\u4F60\u914D\uFF0C\u89E6\u53D1\u5668\u4F1A\u4EA4\u8FC7\u6765\u3002\n\u2014
+    \u914D\u7F6E\u53C2\u6570\uFF08FlyTrackSetting \u91CC\u6309 SourceSign \u914D\uFF09\u2014\n-
+    <color=#FFD54F>Speed</color>\uFF1A\u98DE\u591A\u5FEB\uFF0C\u5EFA\u8BAE 5~15\uFF0C0=\u7761\u89C9\u4E0D\u52A8"
   Datas:
   - SourceSign: Obj_Bullet_SceneC_Bullet
     Speed: 10

@@ -211,4 +211,28 @@ namespace LazyPan {
         public override string BehaviourSign => nameof(Behaviour_Event_WeaponFire);
     }
 
+    /// <summary>
+    /// 瞬间移动行为节点 对应 TeleportationSettingData 一条
+    /// 参数便签见 BehaviourPayloadDoc.Get(nameof(Behaviour_Auto_Teleportation))，节点身上只读显示
+    /// </summary>
+    [Serializable]
+    [NodeMenuItem("LazyPan/行为/瞬间移动")]
+    public class BehaviourNode_Teleportation : BehaviourGraphNode {
+        public TeleportationSettingData Config;
+        public override string name => "瞬间移动";
+        public override string BehaviourSign => nameof(Behaviour_Auto_Teleportation);
+    }
+
+    /// <summary>
+    /// 击退行为节点 对应 KnockbackSettingData 一条
+    /// 参数便签见 BehaviourPayloadDoc.Get(nameof(Behaviour_Auto_Knockback))，节点身上只读显示
+    /// </summary>
+    [Serializable]
+    [NodeMenuItem("LazyPan/行为/击退")]
+    public class BehaviourNode_Knockback : BehaviourGraphNode {
+        public KnockbackSettingData Config;
+        public override string name => "击退";
+        public override string BehaviourSign => nameof(Behaviour_Auto_Knockback);
+    }
+
 }

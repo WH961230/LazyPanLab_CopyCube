@@ -25,7 +25,7 @@ namespace LazyPan {
             { "Behaviour_Auto_FollowHolder", "FollowHolderSetting" },
             { "Behaviour_Auto_LifeTimeout", "LifeTimeoutSetting" },
             { "Behaviour_Auto_TrackingEntityByNavMeshAgent", "TrackingEntitySetting" },
-            { "Behaviour_Event_BeginLogo", "BeginLogoSetting" },
+            { "Behaviour_Auto_Knockback", "KnockbackSetting" },            { "Behaviour_Event_BeginLogo", "BeginLogoSetting" },
             { "Behaviour_Event_DelayGenerateEntity", "DelayGenerateEntitySetting" },
             { "Behaviour_Event_EntityUIBinder", "EntityUIBinderSetting" },
             { "Behaviour_Event_EquipmentMountManager", "EquipmentMountSetting" },
@@ -36,6 +36,7 @@ namespace LazyPan {
             { "Behaviour_Event_UIStatusDisplay", "UIStatusDisplaySetting" },
             { "Behaviour_Event_WaveManager", "WaveManagerSetting" },
             { "Behaviour_Event_WeaponFire", "WeaponSetting" },
+            { "Behaviour_Auto_Teleportation", "TeleportationSetting" },
         };
 
         public static void ClearCache() {
@@ -130,6 +131,14 @@ namespace LazyPan {
                 sb.AppendLine();
                 sb.AppendLine("— 依赖模块 —");
                 sb.AppendLine(string.Join("、", m));
+            }
+
+            FieldInfo compMods = t.GetField("RequiredComponents", BindingFlags.Public | BindingFlags.Static);
+            string[] cm = compMods?.GetValue(null) as string[];
+            if (cm != null && cm.Length > 0) {
+                sb.AppendLine();
+                sb.AppendLine("— 依赖组件（预制体上必须挂） —");
+                sb.AppendLine(string.Join("、", cm));
             }
             return sb.ToString().TrimEnd();
         }

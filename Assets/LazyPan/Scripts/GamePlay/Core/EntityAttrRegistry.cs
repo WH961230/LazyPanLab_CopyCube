@@ -92,9 +92,14 @@ namespace LazyPan {
         }
     }
 
-    /// <summary>实体级移动属性：停止开关，多移动行为共享一份，不许各存各的。</summary>
+    /// <summary>实体级移动属性：停止开关，多移动行为共享一份，不许各存各的。Teleporting/KnockingBack=true表示该行为正在占领移动，WASD按优先级让路。</summary>
     public class MoveAttr {
         public bool Stopped;
+        public bool Teleporting;
+        public int MovePriority;
+        public int TeleportPriority;
+        public bool KnockingBack;
+        public int KnockbackPriority;
     }
     /// <summary>实体级健康值对象：当前血/最大血，读写必须走方法，不许直接改数字。</summary>
     public class HealthAttr {

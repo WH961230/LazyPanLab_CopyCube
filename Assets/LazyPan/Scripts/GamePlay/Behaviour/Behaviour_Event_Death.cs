@@ -242,10 +242,16 @@ namespace LazyPan {
                 }
             } else if (_deathData.Dead && !_deathData.PrevDead) {
                 //无血条模式 外部把 Dead 置 true 就是喊死 在这里统一走死亡结算
+                //纸条版：别的死亡喊法只写 Data 纸条不碰本行为数据，这里收拢一次
                 _deathData.PrevDead = true;
                 Die();
             } else if (!_deathData.Dead) {
-                _deathData.PrevDead = false;
+                if (Cond.Instance.PeekData(entity, DEAD_LABEL, out BoolData deadPaper) && deadPaper != null && deadPaper.Bool) {
+                    deadPaper.Bool = false;
+                    SetDead();
+                } else {
+                    _deathData.PrevDead = false;
+                }
             }
 
             //死亡标记有效时进入延迟销毁计时

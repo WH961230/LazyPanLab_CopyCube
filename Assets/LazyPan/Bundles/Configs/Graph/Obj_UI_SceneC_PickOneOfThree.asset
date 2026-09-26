@@ -23,7 +23,7 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -492, y: -524, z: 0}
+  position: {x: -206, y: -727, z: 0}
   scale: {x: 1.520875, y: 1.520875, z: 1}
   references:
     version: 2
@@ -38,13 +38,23 @@ MonoBehaviour:
           serializedVersion: 2
           x: 558.03406
           y: 359.9244
-          width: 299
+          width: 322
           height: 100
-        expanded: 0
+        expanded: 1
         debug: 0
         nodeLock: 0
         NodeInitialized: 1
         LastSyncedSign: Obj_UI_SceneC_PickOneOfThree
+        "\u53C2\u6570\u4FBF\u7B7E": "\u3010UI\u4E09\u9009\u4E00\u3011\r\n\u3010\u4E09\u9009\u4E00\u3011\u7BA1\u5F00\u5956\u9762\u677F\uFF0C\u6446\u4E09\u5F20\u5361\u7ED9\u4EBA\u70B9\u4E00\u5F20\uFF0C\u70B9\u540E\u6548\u679C\u9010\u6761\u751F\u6548\u3002\n\u2014
+          \u914D\u7F6E\u53C2\u6570\uFF08UIPickOneOfThreeSetting \u91CC\u6309 SourceSign
+          \u914D\uFF09\u2014\n- <color=#FFD54F>PanelPrefabSign</color>\uFF1A\u9762\u677F\u7528\u54EA\u4E2A\n-
+          <color=#FFD54F>MountSign</color>\uFF1A\u6302\u5728\u54EA\u4E2A\u70B9\u4E0A\uFF0CRoot=\u4E3B\u754C\u9762\u6839\n-
+          <color=#FFD54F>WatchSign</color>\uFF1A\u89E6\u53D1\u65D7\u6807\u7B7E\uFF0C\u7A7A=\u4E0D\u76D1\u542C\n-
+          <color=#FFD54F>EnableTestAutoOpen</color>+<color=#FFD54F>AutoOpenDelay</color>\uFF1A\u6D4B\u8BD5\u81EA\u52A8\u5F00\u5956\uFF0C\u51E0\u79D2\u540E\u81EA\u52A8\u5F00\n-
+          <color=#FFD54F>Pool</color>\uFF1A\u5956\u6C60\uFF0C\u4E00\u5F20\u5361\u4E00\u884C\n\u2014
+          \u6BCF\u5F20\u5361\u600E\u4E48\u586B \u2014\n- <color=#FFD54F>Title</color>/<color=#FFD54F>Description</color>/<color=#FFD54F>IconName</color>\uFF1A\u6807\u9898\u63CF\u8FF0\u56FE\u6807\uFF0C\u56FE\u6807\u53EF\u7A7A\n-
+          <color=#FFD54F>Effects</color>\uFF1A\u70B9\u5361\u540E\u9010\u6761\u751F\u6548\uFF0CTargetEntitySign=\u7ED9\u8C01\uFF08Self=\u81EA\u5DF1\uFF09\uFF0CParamSign=\u6539\u54EA\u4E2A\u6570\uFF0C\u5BF9\u7740\u7C7B\u578B\u586B\u503C\r\n\r\n\u2014
+          \u5916\u90E8\u53C2\u6570 \u2014\r\n\u65E0\uFF0C\u672C\u884C\u4E3A\u5F00\u7BB1\u5373\u7528\uFF0C\u65E0\u9700\u914D\u7F6E\u3002"
         Config:
           SourceSign: Obj_UI_SceneC_PickOneOfThree
           PanelPrefabSign: UI/UI_PickOneOfThree
@@ -91,30 +101,4 @@ MonoBehaviour:
               IntValue: 0
               FloatValue: 300
               StringValue: 
-              Vector3Value: {x: 0, y: 0, z: 0}
-          - Title: D
-            Description: 换冲锋枪
-            IconName: 
-            Effects:
-            - TargetEntitySign: Obj_Tower_SceneC_Tower
-              ParamSign: CurrentWeapon
-              ValueType: 3
-              Modify: 0
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 0
-              StringValue: smg01
-              Vector3Value: {x: 0, y: 0, z: 0}
-          - Title: E
-            Description: 换圆环
-            IconName: 
-            Effects:
-            - TargetEntitySign: Obj_Tower_SceneC_Tower
-              ParamSign: CurrentWeapon
-              ValueType: 3
-              Modify: 0
-              BoolValue: 0
-              IntValue: 0
-              FloatValue: 0
-              StringValue: smg02
               Vector3Value: {x: 0, y: 0, z: 0}

@@ -17,8 +17,10 @@ namespace LazyPan {
             "- <color=#FFD54F>MoveSpeed</color>：移动速度，0=不动，建议 3~8\n" +
             "- <color=#FFD54F>RotateSpeed</color>：转向速度，0=不转身，建议 5~15\n" +
             "- <color=#FFD54F>Gravity</color>：重力加速度，一般填负数（如 -20），落地后自动压住\n" +
+            "- <color=#FFD54F>MovePriority</color>：移动优先级，跟瞬移的 TeleportPriority 比，0=常规会被默认瞬移压住，填大则反压\n" +
             "— 数据交流（读写实体级 MoveAttr，不直接调别的行为）—\n" +
             "- <color=#FFD54F>停走</color>：MoveAttr.Stopped=true 全体移动行为一起停，false=恢复\n" +
+            "- <color=#FFD54F>让路</color>：瞬移 Teleporting=true 且 TeleportPriority>=MovePriority 时，水平归零只留重力\n" +
             "- <color=#FFD54F>位置</color>：推 CharacterController，身体朝向跟着输入转";
         public List<InputWASDMoveSettingData> Datas = new List<InputWASDMoveSettingData>();
 
@@ -58,5 +60,9 @@ namespace LazyPan {
         [Header("Gravity 重力")]
         [Tooltip("重力加速度，一般填负数（如 -20）。落地后自动压住，填正数会往天上飘")]
         public float Gravity;
+
+        [Header("MovePriority 移动优先级")]
+        [Tooltip("跟瞬移的 TeleportPriority 比大小。填 0=常规，会被默认瞬移（优先级10）压住；填得比瞬移大，瞬移时 WASD 照走不让路")]
+        public int MovePriority;
     }
 }
