@@ -107,16 +107,8 @@ namespace LazyPan {
         /// </summary>
         public void RequestTeleport() {
             _innerRequest = true;
-            if (entity != null && entity.Data != null) {
-                BoolData wantTeleport = null;
-                if (!Cond.Instance.PeekData(entity, DataLabels.WantTeleport, out wantTeleport) || wantTeleport == null) {
-                    entity.Data.Add<BoolData>(DataLabels.WantTeleport, DataLabels.WantTeleport);
-                    Cond.Instance.PeekData(entity, DataLabels.WantTeleport, out wantTeleport);
-                }
-
-                if (wantTeleport != null) {
-                    wantTeleport.Bool = true;
-                }
+            if (entity != null) {
+                EntityAttrRegistry.SetBool(entity, DataLabels.WantTeleport, true);
             }
         }
 
@@ -126,8 +118,8 @@ namespace LazyPan {
             }
 
             if (_config.UseRequest) {
-                if (Cond.Instance.PeekData(entity, DataLabels.WantTeleport, out BoolData wantTeleport) && wantTeleport != null && wantTeleport.Bool) {
-                    wantTeleport.Bool = false;
+                if (EntityAttrRegistry.TryGetBool(entity, DataLabels.WantTeleport, out bool want) && want) {
+                    EntityAttrRegistry.SetBool(entity, DataLabels.WantTeleport, false);
                     _innerRequest = true;
                 }
 
@@ -199,7 +191,7 @@ namespace LazyPan {
         }
 
         /// <summary>
-        /// 通用读值 按类型读 Int/Float/Bool/String/Vector3 拿不到返回 false
+        /// 通用读值 统一走注册表 拿不到返回 false
         /// </summary>
         private bool TryReadValue(Entity dataEntity, string sign, ParamValueType valueType, out object value) {
             value = null;
@@ -209,36 +201,30 @@ namespace LazyPan {
 
             switch (valueType) {
                 case ParamValueType.Bool:
-                    if (Cond.Instance.GetData<BoolData>(dataEntity, sign, out BoolData boolData)) {
-                        value = boolData.Bool;
+                    if (EntityAttrRegistry.TryGetBool(dataEntity, sign, out bool b)) {
+                        value = b;
                         return true;
                     }
 
                     return false;
                 case ParamValueType.Int:
-                    if (Cond.Instance.GetData<IntData>(dataEntity, sign, out IntData intData)) {
-                        value = intData.Int;
-                        return true;
-                    }
-
-                    return false;
                 case ParamValueType.Float:
-                    if (Cond.Instance.GetData<FloatData>(dataEntity, sign, out FloatData floatData)) {
-                        value = floatData.Float;
+                    if (EntityAttrRegistry.TryGetNumber(dataEntity, sign, out float f)) {
+                        value = f;
                         return true;
                     }
 
                     return false;
                 case ParamValueType.String:
-                    if (Cond.Instance.GetData<StringData>(dataEntity, sign, out StringData stringData)) {
-                        value = stringData.String;
+                    if (EntityAttrRegistry.TryGetText(dataEntity, sign, out string s)) {
+                        value = s;
                         return true;
                     }
 
                     return false;
                 case ParamValueType.Vector3:
-                    if (Cond.Instance.GetData<Vector3Data>(dataEntity, sign, out Vector3Data vector3Data)) {
-                        value = vector3Data.Vector3;
+                    if (EntityAttrRegistry.TryGetVector(dataEntity, sign, out Vector3 v)) {
+                        value = v;
                         return true;
                     }
 

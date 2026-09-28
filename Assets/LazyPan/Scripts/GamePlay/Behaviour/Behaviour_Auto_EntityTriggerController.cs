@@ -283,38 +283,36 @@ namespace LazyPan {
 
             switch (action.ValueType) {
                 case ParamValueType.Bool:
-                    if (Cond.Instance.TryGetData(target, action.ParamSign, out BoolData boolData)) {
-                        boolData.Bool = action.BoolValue;
+                    EntityAttrRegistry.SetBool(target, action.ParamSign, action.BoolValue);
+                    break;
+                case ParamValueType.Int: {
+                    EntityAttrRegistry.TryGetNumber(target, action.ParamSign, out float curInt);
+                    float intResult = action.Modify == TriggerModifyType.Set ? action.IntValue : curInt + action.IntValue * scale;
+                    EntityAttrRegistry.SetNumber(target, action.ParamSign, Mathf.RoundToInt(Mathf.Clamp(intResult, action.Min, action.Max)));
+                    break;
+                }
+                case ParamValueType.Float: {
+                    EntityAttrRegistry.TryGetNumber(target, action.ParamSign, out float curFloat);
+                    {
+                        float floatResult = action.Modify == TriggerModifyType.Set ? action.FloatValue : curFloat + action.FloatValue * scale;
+                        float clamped = Mathf.Clamp(floatResult, action.Min, action.Max);
+                        EntityAttrRegistry.SetNumber(target, action.ParamSign, clamped);
+                        //钳制上界兼做血条上界：Max+参数名（如 MaxEnergy）没人写过就按钳制上界登记，界面画条有分母
+                        if (action.Max > 0f && !EntityAttrRegistry.TryGetNumber(target, string.Concat("Max", action.ParamSign), out _)) {
+                            EntityAttrRegistry.SetNumber(target, string.Concat("Max", action.ParamSign), action.Max);
+                        }
                     }
 
                     break;
-                case ParamValueType.Int:
-                    if (Cond.Instance.TryGetData(target, action.ParamSign, out IntData intData)) {
-                        float intResult = action.Modify == TriggerModifyType.Set ? action.IntValue : intData.Int + action.IntValue * scale;
-                        intData.Int = Mathf.RoundToInt(Mathf.Clamp(intResult, action.Min, action.Max));
-                    }
-
-                    break;
-                case ParamValueType.Float:
-                    if (Cond.Instance.TryGetData(target, action.ParamSign, out FloatData floatData)) {
-                        float floatResult = action.Modify == TriggerModifyType.Set ? action.FloatValue : floatData.Float + action.FloatValue * scale;
-                        floatData.Float = Mathf.Clamp(floatResult, action.Min, action.Max);
-                    }
-
-                    break;
+                }
                 case ParamValueType.String:
-                    if (Cond.Instance.TryGetData(target, action.ParamSign, out StringData stringData)) {
-                        stringData.String = action.StringValue;
-                    }
-
+                    EntityAttrRegistry.SetText(target, action.ParamSign, action.StringValue ?? "");
                     break;
                 case ParamValueType.Vector3:
-                    if (Cond.Instance.TryGetData(target, action.ParamSign, out Vector3Data vector3Data)) {
-                        vector3Data.Vector3 = action.Modify == TriggerModifyType.Set
+                    EntityAttrRegistry.TryGetVector(target, action.ParamSign, out Vector3 curVec);
+                    EntityAttrRegistry.SetVector(target, action.ParamSign, action.Modify == TriggerModifyType.Set
                             ? action.Vector3Value
-                            : vector3Data.Vector3 + action.Vector3Value * scale;
-                    }
-
+                            : curVec + action.Vector3Value * scale);
                     break;
             }
         }

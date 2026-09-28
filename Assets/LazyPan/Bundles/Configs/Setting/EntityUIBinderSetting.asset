@@ -25,19 +25,6 @@ MonoBehaviour:
     <color=#FFD54F>DataSign</color>+<color=#FFD54F>MaxDataSign</color>\uFF1A\u8BFB\u5B9E\u4F53\u7684\u54EA\u4E2A\u6570\uFF0C\u5982
     Health\n- <color=#FFD54F>Format</color>\uFF1A\u663E\u793A\u683C\u5F0F\uFF0C\u7A7A=\u6574\u6570"
   Datas:
-  - SourceSign: Obj_Tower_SceneB_Tower
-    Items:
-    - UIPrefabSign: UI/UI_EnergyBar
-      AttachLabel: UIRoot_Energy
-      Offset: {x: 0, y: 0, z: 0}
-      Billboard: 0
-      DataBinds:
-      - ComponentSign: Energy
-        ComponentType: 2
-        Mode: 0
-        DataSign: Energy
-        MaxDataSign: MaxEnergy
-        Format: 
   - SourceSign: Obj_Player_SceneC_Player
     Items:
     - UIPrefabSign: UI/UI_HealthBar
@@ -80,4 +67,30 @@ MonoBehaviour:
         Mode: 0
         DataSign: Health
         MaxDataSign: MaxHealth
+        Format: 
+  - SourceSign: Obj_Tower_SceneB_Tower
+    Items:
+    - UIPrefabSign: UI/UI_EnergyBar
+      AttachLabel: UIRoot_Energy
+      Offset: {x: 0, y: 0, z: 0}
+      Billboard: 0
+      DataBinds:
+      - ComponentSign: Energy
+        ComponentType: 2
+        Mode: 0
+        DataSign: Energy
+        MaxDataSign: MaxEnergy
+        Format: 
+  - SourceSign: Obj_Tower_SceneC_Tower
+    Items:
+    - UIPrefabSign: UI/UI_EnergyBar
+      AttachLabel: UIRoot_Energy
+      Offset: {x: 0, y: 0, z: 0}
+      Billboard: 0
+      DataBinds:
+      - ComponentSign: Energy
+        ComponentType: 2
+        Mode: 0
+        DataSign: Energy
+        MaxDataSign: MaxEnergy
         Format: 

@@ -156,14 +156,15 @@ namespace LazyPan {
                 return;
             }
 
-            Cond.Instance.PeekData(entity, "Damage", out FloatData damage);
-            Cond.Instance.PeekData(entity, "DamageRadius", out FloatData damageRadius);
-            Cond.Instance.PeekData(entity, "HitCooldown", out FloatData hitCooldown);
-            Cond.Instance.PeekData(entity, "MaxHits", out IntData maxHits);
-            Cond.Instance.PeekData(entity, DataLabels.TargetType, out StringData targetType);
-            // 行为自己兜底：Data 缺失或遗留 0 值时回退 Setting，再回退契约默认，不再被自动创建的 0 盖死
-            // Data 是全局覆盖：写了就对所有条目的同名字段生效，没写各条目用自己的 Setting
-            string dataType = targetType != null ? targetType.String : null;
+            EntityAttrRegistry.TryGetNumber(entity, "Damage", out float damageVal);
+            EntityAttrRegistry.TryGetNumber(entity, "DamageRadius", out float damageRadiusVal);
+            EntityAttrRegistry.TryGetNumber(entity, "HitCooldown", out float hitCooldownVal);
+            bool hasDamage = EntityAttrRegistry.TryGetNumber(entity, "Damage", out _);
+            bool hasRadius = EntityAttrRegistry.TryGetNumber(entity, "DamageRadius", out _);
+            bool hasCooldown = EntityAttrRegistry.TryGetNumber(entity, "HitCooldown", out _);
+            bool hasMaxHits = EntityAttrRegistry.TryGetNumber(entity, "MaxHits", out float maxHitsVal);
+            string dataType = EntityAttrRegistry.TryGetText(entity, DataLabels.TargetType, out string ttype) ? ttype : null;
+            // 注册表全局覆盖：写了就对所有条目的同名字段生效，没写各条目用自己的 Setting
 
             Vector3 selfPos = MoveRoot().position;
             foreach (HitRuntime hit in _hits) {
@@ -171,15 +172,15 @@ namespace LazyPan {
                     return;
                 }
 
-                ApplyHit(hit, selfPos, damage, damageRadius, hitCooldown, maxHits, dataType);
+                ApplyHit(hit, selfPos, hasDamage ? (float?)damageVal : null, hasRadius ? (float?)damageRadiusVal : null, hasCooldown ? (float?)hitCooldownVal : null, hasMaxHits ? (float?)maxHitsVal : null, dataType);
             }
         }
 
         /// <summary>
-        /// 单条打击：解算自己这条的数值（Data 全局覆盖优先），量尺子，扣血写纸条，次数打满自己死
+        /// 单条打击：解算自己这条的数值（注册表全局覆盖优先），量尺子，扣血写纸条，次数打满自己死
         /// </summary>
-        private void ApplyHit(HitRuntime hit, Vector3 selfPos, FloatData damage, FloatData damageRadius, FloatData hitCooldown, IntData maxHits, string dataType) {
-            float amount = damage != null ? damage.Float : 0f;
+        private void ApplyHit(HitRuntime hit, Vector3 selfPos, float? damage, float? damageRadius, float? hitCooldown, float? maxHits, string dataType) {
+            float amount = damage.HasValue ? damage.Value : 0f;
             if (amount <= 0f) {
                 amount = hit.Damage > 0f ? hit.Damage : RequiredPayload[0].FloatDefault;
             }
@@ -192,10 +193,10 @@ namespace LazyPan {
                 return;
             }
 
-            float hitR = damageRadius != null && damageRadius.Float > 0f ? Mathf.Max(damageRadius.Float, 0.1f)
+            float hitR = damageRadius.HasValue && damageRadius.Value > 0f ? Mathf.Max(damageRadius.Value, 0.1f)
                 : (hit.Radius > 0f ? Mathf.Max(hit.Radius, 0.1f) : RequiredPayload[1].FloatDefault);
-            float cooldown = hitCooldown != null ? hitCooldown.Float : hit.Cooldown;
-            int max = maxHits != null ? Mathf.Max(maxHits.Int, 0) : Mathf.Max(hit.MaxHits, 0);
+            float cooldown = hitCooldown.HasValue ? hitCooldown.Value : hit.Cooldown;
+            int max = maxHits.HasValue ? Mathf.Max(Mathf.RoundToInt(maxHits.Value), 0) : Mathf.Max(hit.MaxHits, 0);
 
             if (!EntityRegister.TryGetEntitiesWithinDistance(type, selfPos, hitR, out List<Entity> touched)) {
                 return;
@@ -316,7 +317,7 @@ namespace LazyPan {
         /// 往受害者身上写击退纸条：一帧多人命中后写盖先写，击退看到序号变化飞最新的一次
         /// </summary>
         private static void WriteKnockbackIntent(Entity target, Vector3 dir, float distance, float duration) {
-            if (target == null || target.Data == null || distance <= 0f) {
+            if (target == null || distance <= 0f) {
                 return;
             }
 
@@ -330,55 +331,27 @@ namespace LazyPan {
             WriteFloat(target, DataLabels.KnockbackDistance, distance);
             WriteFloat(target, DataLabels.KnockbackDuration, duration);
             int seq = 0;
-            if (Cond.Instance.PeekData(target, DataLabels.KnockbackSeq, out IntData seqData) && seqData != null) {
-                seq = seqData.Int;
+            if (EntityAttrRegistry.TryGetNumber(target, DataLabels.KnockbackSeq, out float seqVal)) {
+                seq = Mathf.RoundToInt(seqVal);
             }
 
             WriteInt(target, DataLabels.KnockbackSeq, seq + 1);
         }
 
         private static void WriteFloat(Entity target, string sign, float value) {
-            if (!Cond.Instance.PeekData(target, sign, out FloatData data) || data == null) {
-                target.Data.Add<FloatData>(sign, sign);
-                Cond.Instance.PeekData(target, sign, out data);
-            }
-
-            if (data != null) {
-                data.Float = value;
-            }
+            EntityAttrRegistry.SetNumber(target, sign, value);
         }
 
         private static void WriteInt(Entity target, string sign, int value) {
-            if (!Cond.Instance.PeekData(target, sign, out IntData data) || data == null) {
-                target.Data.Add<IntData>(sign, sign);
-                Cond.Instance.PeekData(target, sign, out data);
-            }
-
-            if (data != null) {
-                data.Int = value;
-            }
+            EntityAttrRegistry.SetNumber(target, sign, value);
         }
 
         private static void WriteVector3(Entity target, string sign, Vector3 value) {
-            if (!Cond.Instance.PeekData(target, sign, out Vector3Data data) || data == null) {
-                target.Data.Add<Vector3Data>(sign, sign);
-                Cond.Instance.PeekData(target, sign, out data);
-            }
-
-            if (data != null) {
-                data.Vector3 = value;
-            }
+            EntityAttrRegistry.SetVector(target, sign, value);
         }
 
         private static void WriteBool(Entity target, string sign, bool value) {
-            if (!Cond.Instance.PeekData(target, sign, out BoolData data) || data == null) {
-                target.Data.Add<BoolData>(sign, sign);
-                Cond.Instance.PeekData(target, sign, out data);
-            }
-
-            if (data != null) {
-                data.Bool = value;
-            }
+            EntityAttrRegistry.SetBool(target, sign, value);
         }
 
         public override void Clear() {

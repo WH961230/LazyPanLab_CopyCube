@@ -362,7 +362,7 @@ namespace LazyPan {
         }
 
         /// <summary>
-        /// 读取数值 只走实体属性注册表 老 Data 通道已下线
+        /// 读取数值 注册表优先，Data 散装账本兜底（触发器等只写 Data 的生产者，界面照样有数）
         /// 比例模式读主键与最大值键 直接模式只读主键
         /// </summary>
         private bool TryReadValue(DataBinding binding, out float value) {

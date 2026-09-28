@@ -23,7 +23,11 @@ namespace LazyPan {
             "- <color=#FFD54F>Range</color>/<color=#FFD54F>Interval</color>：射程和开火间隔秒数\n" +
             "- <color=#FFD54F>SpawnSign</color>：打出什么，直射范围填，环绕不填\n" +
             "- <color=#FFD54F>SpawnCount</color>/<color=#FFD54F>SpreadAngle</color>：一次打几个，散布总角度，0=无散布\n" +
-            "- <color=#FFD54F>Payload</color>：传话包，写进打出东西的 Data 里，ParamSign=哪个数，对着类型填值";
+            "- <color=#FFD54F>UseFireCondition</color>：勾上才看开火条件，不勾一直打\n" +
+            "- <color=#FFD54F>ConditionParam</color>：看自己哪个数，如Energy\n" +
+            "- <color=#FFD54F>ConditionCompare</color>：0大于 1大于等于 2等于 3小于等于 4小于 5不等\n" +
+            "- <color=#FFD54F>ConditionValue</color>：和多少比，如50\n" +
+            "- <color=#FFD54F>Payload</color>：传话包，写进打出东西的注册表里，ParamSign=哪个数，对着类型填值";
         private const string settingPath = "Setting/WeaponSetting";
 
         /// <summary>
@@ -139,6 +143,15 @@ namespace LazyPan {
                 return;
             }
 
+            //开火条件：勾了开关才看，看自己注册表里的数，不满足直接歇着
+            if (weapon.UseFireCondition && !string.IsNullOrEmpty(weapon.ConditionParam)) {
+                EntityAttrRegistry.TryGetNumber(entity, weapon.ConditionParam, out float curVal);
+                if (!CompareFireCondition(curVal, weapon.ConditionValue, weapon.ConditionCompare)) {
+                    ClearOrbitBalls();
+                    return;
+                }
+            }
+
             //换枪了 旧环绕球散场(只认 ID 不调球的方法)
             if (weapon.WeaponID != _orbitWeaponID) {
                 ClearOrbitBalls();
@@ -164,6 +177,21 @@ namespace LazyPan {
 
             Fire(weapon, target);
             _config.Cooldown = Mathf.Max(weapon.Interval, 0.01f);
+        }
+
+        /// <summary>
+        /// 开火条件比较 注册表左边数 vs 右边常量
+        /// </summary>
+        private bool CompareFireCondition(float left, float right, TeleportCompare compare) {
+            switch (compare) {
+                case TeleportCompare.Greater: return left > right;
+                case TeleportCompare.GreaterEqual: return left >= right;
+                case TeleportCompare.Equal: return Mathf.Abs(left - right) < 0.001f;
+                case TeleportCompare.LessEqual: return left <= right;
+                case TeleportCompare.Less: return left < right;
+                case TeleportCompare.NotEqual: return Mathf.Abs(left - right) >= 0.001f;
+                default: return left >= right;
+            }
         }
 
         /// <summary>
@@ -256,9 +284,9 @@ namespace LazyPan {
         /// </summary>
         private WeaponItem CurrentWeapon() {
             string weaponID = _config.DefaultWeaponID;
-            if (Cond.Instance.GetData<StringData>(entity, currentWeaponSign, out StringData current)
-                && !string.IsNullOrEmpty(current.String)) {
-                weaponID = current.String;
+            if (EntityAttrRegistry.TryGetText(entity, currentWeaponSign, out string currentID)
+                && !string.IsNullOrEmpty(currentID)) {
+                weaponID = currentID;
             }
 
             foreach (WeaponItem weapon in _arsenal) {

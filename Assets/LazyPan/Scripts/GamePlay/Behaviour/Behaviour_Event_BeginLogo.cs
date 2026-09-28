@@ -49,8 +49,8 @@ namespace LazyPan {
         private float delayDeployTime;
         private bool isRunning;
 
-        //data 倒计时镜像 其他行为只读此标签做判定
-        private FloatData _remainData;
+        //data 倒计时镜像 注册表统一，其他行为只读此标签做判定
+        private bool _hasRemain;
 
         public Behaviour_Event_BeginLogo(Entity entity, string behaviourSign) : base(entity, behaviourSign) {
             _beginLogoEntityData = AttachBehaviourData<BeginLogoData>();
@@ -70,12 +70,8 @@ namespace LazyPan {
             delayDeployTime = Mathf.Max(settingData.LogoContinueTime, 0f);
             isRunning = true;
 
-            if (!Cond.Instance.TryGetData(entity, REMAIN_LABEL, out _remainData)) {
-                LogUtil.LogErrorFormat("行为:{0} 实体:{1} 倒计时标签初始化失败!", BehaviourSign, entity.ObjConfig.Sign);
-                return;
-            }
-
-            _remainData.Float = delayDeployTime;
+            EntityAttrRegistry.SetNumber(entity, REMAIN_LABEL, delayDeployTime);
+            _hasRemain = true;
 
             InitBinding(settingData);
 
@@ -98,26 +94,18 @@ namespace LazyPan {
             if (!isRunning) return;
             if (delayDeployTime > 0) {
                 delayDeployTime -= Time.deltaTime;
-                if (_remainData != null) {
-                    _remainData.Float = Mathf.Max(delayDeployTime, 0f);
+                if (_hasRemain) {
+                    EntityAttrRegistry.SetNumber(entity, REMAIN_LABEL, Mathf.Max(delayDeployTime, 0f));
                 }
             } else {
                 isRunning = false;
-                if (_remainData != null) {
-                    _remainData.Float = 0f;
+                if (_hasRemain) {
+                    EntityAttrRegistry.SetNumber(entity, REMAIN_LABEL, 0f);
                 }
 
                 // 倒计时结束 只往自己身上写传送纸条，不直接调传送行为，由传送行为自己轮询消费
-                if (entity != null && entity.Data != null) {
-                    BoolData wantTeleport = null;
-                    if (!Cond.Instance.PeekData(entity, DataLabels.WantTeleport, out wantTeleport) || wantTeleport == null) {
-                        entity.Data.Add<BoolData>(DataLabels.WantTeleport, DataLabels.WantTeleport);
-                        Cond.Instance.PeekData(entity, DataLabels.WantTeleport, out wantTeleport);
-                    }
-
-                    if (wantTeleport != null) {
-                        wantTeleport.Bool = true;
-                    }
+                if (entity != null) {
+                    EntityAttrRegistry.SetBool(entity, DataLabels.WantTeleport, true);
                 }
             }
         }

@@ -101,6 +101,22 @@ namespace LazyPan {
         [Header("传话包 写进生成物Data")]
         [Tooltip("传话包，触发器照单全写进新生实体 Data。生成物各认各的词，点开火节点上的一键补齐自动填，不用手打。环绕认 OrbitCount/OrbitRadius/OrbitSpeed/OrbitDamage")]
         public List<WeaponPayloadItem> Payload = new List<WeaponPayloadItem>();
+
+        [Header("开火条件开关 不勾=一直开火")]
+        [Tooltip("勾上才看下面的条件，不勾就是老样子一直打")]
+        public bool UseFireCondition;
+
+        [Header("条件看哪个数 如Energy")]
+        [Tooltip("读自己注册表里的哪个数，如 Energy。空=不限制")]
+        public string ConditionParam = "";
+
+        [Header("比较方式")]
+        [Tooltip("0=大于 1=大于等于 2=等于 3=小于等于 4=小于 5=不等")]
+        public TeleportCompare ConditionCompare = TeleportCompare.GreaterEqual;
+
+        [Header("和多少比 如50")]
+        [Tooltip("右边常量，和左边比大小")]
+        public float ConditionValue;
     }
 
     [Serializable]

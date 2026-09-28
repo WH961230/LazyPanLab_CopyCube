@@ -94,6 +94,10 @@ MonoBehaviour:
         FloatValue: 0
         StringValue: 
         Vector3Value: {x: 0, y: 0, z: 0}
+      UseFireCondition: 0
+      ConditionParam: 
+      ConditionCompare: 1
+      ConditionValue: 0
     - WeaponID: "\u5706\u73AF"
       WeaponName: "\u5706\u73AF"
       Kind: 2
@@ -146,6 +150,10 @@ MonoBehaviour:
         FloatValue: 0
         StringValue: 
         Vector3Value: {x: 0, y: 0, z: 0}
+      UseFireCondition: 0
+      ConditionParam: 
+      ConditionCompare: 1
+      ConditionValue: 0
     - WeaponID: "\u51B2\u950B\u67AA"
       WeaponName: "\u51B2\u950B\u67AA"
       Kind: 0
@@ -198,3 +206,7 @@ MonoBehaviour:
         FloatValue: 200
         StringValue: 
         Vector3Value: {x: 0, y: 0, z: 0}
+      UseFireCondition: 1
+      ConditionParam: Energy
+      ConditionCompare: 0
+      ConditionValue: 0

@@ -48,8 +48,8 @@ namespace LazyPan {
                 settingLife = data.LifeTime;
             }
 
-            Cond.Instance.TryGetData(entity, "LifeTime", out FloatData lifeTime);
-            remain = lifeTime != null ? lifeTime.Float : settingLife;
+            EntityAttrRegistry.TryGetNumber(entity, "LifeTime", out float lifeTimeVal);
+            remain = lifeTimeVal > 0f ? lifeTimeVal : settingLife;
             if (remain <= 0f) {
                 return;
             }
@@ -76,16 +76,8 @@ namespace LazyPan {
                 attr.Damage(attr.Current);
             }
 
-            if (entity != null && entity.Data != null) {
-                BoolData deadFlag = null;
-                if (!Cond.Instance.PeekData(entity, DataLabels.Dead, out deadFlag) || deadFlag == null) {
-                    entity.Data.Add<BoolData>(DataLabels.Dead, DataLabels.Dead);
-                    Cond.Instance.PeekData(entity, DataLabels.Dead, out deadFlag);
-                }
-
-                if (deadFlag != null) {
-                    deadFlag.Bool = true;
-                }
+            if (entity != null) {
+                EntityAttrRegistry.SetBool(entity, DataLabels.Dead, true);
             }
 
             if (Game.instance != null) {

@@ -148,36 +148,25 @@ namespace LazyPan {
 
                 switch (config.ValueType) {
                     case ParamValueType.Bool:
-                        if (Cond.Instance.TryGetData(target, config.ParamSign, out BoolData boolData)) {
-                            boolData.Bool = config.BoolValue;
-                            EntityAttrRegistry.SetBool(target, config.ParamSign, config.BoolValue);
-                        }
-
+                        EntityAttrRegistry.SetBool(target, config.ParamSign, config.BoolValue);
                         break;
-                    case ParamValueType.Int:
-                        if (Cond.Instance.TryGetData(target, config.ParamSign, out IntData intData)) {
-                            intData.Int = config.Modify == ParamModifyType.Add ? intData.Int + config.IntValue : config.IntValue;
-                            EntityAttrRegistry.SetNumber(target, config.ParamSign, intData.Int);
-                        }
-
+                    case ParamValueType.Int: {
+                        EntityAttrRegistry.TryGetNumber(target, config.ParamSign, out float ci);
+                        float v = config.Modify == ParamModifyType.Add ? ci + config.IntValue : config.IntValue;
+                        EntityAttrRegistry.SetNumber(target, config.ParamSign, Mathf.RoundToInt(v));
                         break;
-                    case ParamValueType.Float:
-                        if (Cond.Instance.TryGetData(target, config.ParamSign, out FloatData floatData)) {
-                            floatData.Float = config.Modify == ParamModifyType.Add ? floatData.Float + config.FloatValue : config.FloatValue;
-                            EntityAttrRegistry.SetNumber(target, config.ParamSign, floatData.Float);
-                        }
-
+                    }
+                    case ParamValueType.Float: {
+                        EntityAttrRegistry.TryGetNumber(target, config.ParamSign, out float cf);
+                        EntityAttrRegistry.SetNumber(target, config.ParamSign, config.Modify == ParamModifyType.Add ? cf + config.FloatValue : config.FloatValue);
                         break;
+                    }
                     case ParamValueType.String:
-                        if (Cond.Instance.TryGetData(target, config.ParamSign, out StringData stringData)) {
-                            stringData.String = config.StringValue;
-                            EntityAttrRegistry.SetText(target, config.ParamSign, config.StringValue);
-                        }
-
+                        EntityAttrRegistry.SetText(target, config.ParamSign, config.StringValue ?? "");
                         break;
-                    case ParamValueType.Vector3:
-                        if (Cond.Instance.TryGetData(target, config.ParamSign, out Vector3Data vector3Data)) {
-                            vector3Data.Vector3 = config.Modify == ParamModifyType.Add ? vector3Data.Vector3 + config.Vector3Value : config.Vector3Value;
+                    case ParamValueType.Vector3: {
+                        EntityAttrRegistry.TryGetVector(target, config.ParamSign, out Vector3 cv);
+                        EntityAttrRegistry.SetVector(target, config.ParamSign, config.Modify == ParamModifyType.Add ? cv + config.Vector3Value : config.Vector3Value);
                         }
 
                         break;
@@ -246,8 +235,8 @@ namespace LazyPan {
                 _deathData.PrevDead = true;
                 Die();
             } else if (!_deathData.Dead) {
-                if (Cond.Instance.PeekData(entity, DEAD_LABEL, out BoolData deadPaper) && deadPaper != null && deadPaper.Bool) {
-                    deadPaper.Bool = false;
+                if (EntityAttrRegistry.TryGetBool(entity, DEAD_LABEL, out bool deadPaper) && deadPaper) {
+                    EntityAttrRegistry.SetBool(entity, DEAD_LABEL, false);
                     SetDead();
                 } else {
                     _deathData.PrevDead = false;

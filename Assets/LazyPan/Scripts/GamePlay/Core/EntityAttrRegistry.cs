@@ -11,6 +11,7 @@ namespace LazyPan {
         private static readonly Dictionary<int, Dictionary<string, float>> numberMap = new Dictionary<int, Dictionary<string, float>>();
         private static readonly Dictionary<int, Dictionary<string, string>> textMap = new Dictionary<int, Dictionary<string, string>>();
         private static readonly Dictionary<int, Dictionary<string, bool>> boolMap = new Dictionary<int, Dictionary<string, bool>>();
+        private static readonly Dictionary<int, Dictionary<string, UnityEngine.Vector3>> vectorMap = new Dictionary<int, Dictionary<string, UnityEngine.Vector3>>();
 
         public static bool RegisterHealth(Entity entity, HealthAttr attr) {
             if (entity == null || attr == null) return false;
@@ -82,6 +83,21 @@ namespace LazyPan {
             return boolMap.TryGetValue(entity.ID, out var map) && map.TryGetValue(sign, out value);
         }
 
+        public static void SetVector(Entity entity, string sign, UnityEngine.Vector3 value) {
+            if (entity == null || string.IsNullOrEmpty(sign)) return;
+            if (!vectorMap.TryGetValue(entity.ID, out var map)) {
+                map = new Dictionary<string, UnityEngine.Vector3>();
+                vectorMap[entity.ID] = map;
+            }
+            map[sign] = value;
+        }
+
+        public static bool TryGetVector(Entity entity, string sign, out UnityEngine.Vector3 value) {
+            value = default;
+            if (entity == null || string.IsNullOrEmpty(sign)) return false;
+            return vectorMap.TryGetValue(entity.ID, out var map) && map.TryGetValue(sign, out value);
+        }
+
         public static void Unregister(Entity entity) {
             if (entity == null) return;
             healthMap.Remove(entity.ID);
@@ -89,6 +105,7 @@ namespace LazyPan {
             numberMap.Remove(entity.ID);
             textMap.Remove(entity.ID);
             boolMap.Remove(entity.ID);
+            vectorMap.Remove(entity.ID);
         }
     }
 

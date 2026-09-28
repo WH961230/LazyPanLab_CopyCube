@@ -59,8 +59,8 @@ namespace LazyPan {
             WriteFloat(target, DataLabels.KnockbackDistance, distance);
             WriteFloat(target, DataLabels.KnockbackDuration, duration > 0f ? duration : 0.3f);
             int seq = 0;
-            if (Cond.Instance.PeekData(target, DataLabels.KnockbackSeq, out IntData seqData) && seqData != null) {
-                seq = seqData.Int;
+            if (EntityAttrRegistry.TryGetNumber(target, DataLabels.KnockbackSeq, out float seqF)) {
+                seq = Mathf.RoundToInt(seqF);
             }
 
             WriteInt(target, DataLabels.KnockbackSeq, seq + 1);
@@ -129,28 +129,28 @@ namespace LazyPan {
         /// 只看自己身上的纸条：序号变了才起飞，不认识碰伤是谁。纸条缺失或方向距离无效就当没看见。
         /// </summary>
         private void PollKnockbackIntent() {
-            if (!Cond.Instance.PeekData(entity, DataLabels.KnockbackSeq, out IntData seqData) || seqData == null) {
+            if (!EntityAttrRegistry.TryGetNumber(entity, DataLabels.KnockbackSeq, out float seqF2)) {
                 return;
             }
 
-            if (seqData.Int == _lastSeq) {
+            int seqNow = Mathf.RoundToInt(seqF2);
+            if (seqNow == _lastSeq) {
                 return;
             }
 
-            _lastSeq = seqData.Int;
-            if (!Cond.Instance.PeekData(entity, DataLabels.KnockbackDir, out Vector3Data dirData) || dirData == null) {
+            _lastSeq = seqNow;
+            if (!EntityAttrRegistry.TryGetVector(entity, DataLabels.KnockbackDir, out Vector3 dir)) {
                 return;
             }
 
-            Vector3 dir = dirData.Vector3;
             dir.y = 0f;
             if (dir.sqrMagnitude < 0.0001f) {
                 return;
             }
 
             float distance = 0f;
-            if (Cond.Instance.PeekData(entity, DataLabels.KnockbackDistance, out FloatData distData) && distData != null) {
-                distance = distData.Float;
+            if (EntityAttrRegistry.TryGetNumber(entity, DataLabels.KnockbackDistance, out float distF)) {
+                distance = distF;
             }
 
             if (distance <= 0f) {
@@ -158,8 +158,8 @@ namespace LazyPan {
             }
 
             float duration = _moveData.Config.Duration;
-            if (Cond.Instance.PeekData(entity, DataLabels.KnockbackDuration, out FloatData durData) && durData != null && durData.Float > 0f) {
-                duration = durData.Float;
+            if (EntityAttrRegistry.TryGetNumber(entity, DataLabels.KnockbackDuration, out float durF) && durF > 0f) {
+                duration = durF;
             }
 
             _moveData.Direction = dir.normalized;
@@ -181,36 +181,15 @@ namespace LazyPan {
         }
 
         private static void WriteFloat(Entity target, string sign, float value) {
-            if (!Cond.Instance.PeekData(target, sign, out FloatData data) || data == null) {
-                target.Data.Add<FloatData>(sign, sign);
-                Cond.Instance.PeekData(target, sign, out data);
-            }
-
-            if (data != null) {
-                data.Float = value;
-            }
+            EntityAttrRegistry.SetNumber(target, sign, value);
         }
 
         private static void WriteInt(Entity target, string sign, int value) {
-            if (!Cond.Instance.PeekData(target, sign, out IntData data) || data == null) {
-                target.Data.Add<IntData>(sign, sign);
-                Cond.Instance.PeekData(target, sign, out data);
-            }
-
-            if (data != null) {
-                data.Int = value;
-            }
+            EntityAttrRegistry.SetNumber(target, sign, value);
         }
 
         private static void WriteVector3(Entity target, string sign, Vector3 value) {
-            if (!Cond.Instance.PeekData(target, sign, out Vector3Data data) || data == null) {
-                target.Data.Add<Vector3Data>(sign, sign);
-                Cond.Instance.PeekData(target, sign, out data);
-            }
-
-            if (data != null) {
-                data.Vector3 = value;
-            }
+            EntityAttrRegistry.SetVector(target, sign, value);
         }
 
         public override void Clear() {

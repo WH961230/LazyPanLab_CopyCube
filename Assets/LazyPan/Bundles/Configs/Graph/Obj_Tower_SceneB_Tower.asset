@@ -25,8 +25,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -357, y: 123, z: 0}
-  scale: {x: 1.15, y: 1.15, z: 1}
+  position: {x: 234, y: 170, z: 0}
+  scale: {x: 1.3225, y: 1.3225, z: 1}
   references:
     version: 2
     RefIds:
@@ -40,7 +40,7 @@ MonoBehaviour:
           serializedVersion: 2
           x: -208
           y: -6
-          width: 247
+          width: 406
           height: 704
         expanded: 1
         debug: 0
@@ -140,14 +140,14 @@ MonoBehaviour:
             LeftEntitySign: Obj_Tower_SceneB_Tower
             LeftParamSign: Energy
             LeftValueType: 2
-            Compare: 2
-            RightIsEntityParam: 1
+            Compare: 1
+            RightIsEntityParam: 0
             RightEntitySign: Obj_Tower_SceneB_Tower
             RightParamSign: MaxEnergy
             RightValueType: 2
             RightBoolValue: 0
             RightIntValue: 0
-            RightConstValue: 0
+            RightConstValue: 100
             RightStringValue: 
             RightVector3Value: {x: 0, y: 0, z: 0}
             RightConstType: 2
