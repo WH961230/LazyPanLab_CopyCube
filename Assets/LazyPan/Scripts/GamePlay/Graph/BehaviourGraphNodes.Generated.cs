@@ -235,4 +235,15 @@ namespace LazyPan {
         public override string BehaviourSign => nameof(Behaviour_Auto_Knockback);
     }
 
+    /// <summary>
+    /// 环绕养球行为节点 复用 WeaponSettingData 只看环绕行
+    /// </summary>
+    [Serializable]
+    [NodeMenuItem("LazyPan/行为/环绕养球")]
+    public class BehaviourNode_OrbitKeeper : BehaviourGraphNode {
+        public WeaponSettingData Config;
+        public override string name => "环绕养球";
+        public override string BehaviourSign => nameof(Behaviour_Event_OrbitKeeper);
+    }
+
 }

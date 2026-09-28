@@ -36,6 +36,7 @@ namespace LazyPan {
             { "Behaviour_Event_UIStatusDisplay", "UIStatusDisplaySetting" },
             { "Behaviour_Event_WaveManager", "WaveManagerSetting" },
             { "Behaviour_Event_WeaponFire", "WeaponSetting" },
+            { "Behaviour_Event_OrbitKeeper", "OrbitKeeperSetting" },
             { "Behaviour_Auto_Teleportation", "TeleportationSetting" },
         };
 

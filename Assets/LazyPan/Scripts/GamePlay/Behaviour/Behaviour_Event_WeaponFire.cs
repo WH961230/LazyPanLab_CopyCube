@@ -87,8 +87,6 @@ namespace LazyPan {
 
         //runtime
         private bool isConfigValid;
-        private string _orbitWeaponID = "";
-        private List<int> _orbitBallIDs = new List<int>();
 
         public Behaviour_Event_WeaponFire(Entity entity, string behaviourSign) : base(entity, behaviourSign) {
             _fireData = AttachBehaviourData<WeaponFireData>();
@@ -139,7 +137,11 @@ namespace LazyPan {
 
             WeaponItem weapon = CurrentWeapon();
             if (weapon == null) {
-                ClearOrbitBalls();
+                return;
+            }
+
+            //环绕枪搬去养球行为，这里只打点射和范围
+            if (weapon.Kind == WeaponKind.Orbit) {
                 return;
             }
 
@@ -147,19 +149,8 @@ namespace LazyPan {
             if (weapon.UseFireCondition && !string.IsNullOrEmpty(weapon.ConditionParam)) {
                 EntityAttrRegistry.TryGetNumber(entity, weapon.ConditionParam, out float curVal);
                 if (!CompareFireCondition(curVal, weapon.ConditionValue, weapon.ConditionCompare)) {
-                    ClearOrbitBalls();
                     return;
                 }
-            }
-
-            //换枪了 旧环绕球散场(只认 ID 不调球的方法)
-            if (weapon.WeaponID != _orbitWeaponID) {
-                ClearOrbitBalls();
-            }
-
-            if (weapon.Kind == WeaponKind.Orbit) {
-                UpdateOrbit(weapon);
-                return;
             }
 
             if (!BehaviourSigns.Require(weapon.TargetType, BehaviourSign, entity.ObjConfig?.Sign, nameof(WeaponItem.TargetType))) {
@@ -195,92 +186,7 @@ namespace LazyPan {
         }
 
         /// <summary>
-        /// 环绕 球不够补 球多了(配置改少了)散多余的 球认 HolderID 自己围转 开火只管数
-        /// </summary>
-        private void UpdateOrbit(WeaponItem weapon) {
-            if (!BehaviourSigns.Require(weapon.SpawnSign, BehaviourSign, entity.ObjConfig?.Sign, nameof(WeaponItem.SpawnSign))) {
-                return;
-            }
-
-            for (int i = _orbitBallIDs.Count - 1; i >= 0; i--) {
-                if (!EntityRegister.TryGetEntityByID(_orbitBallIDs[i], out Entity ball) || ball == null) {
-                    _orbitBallIDs.RemoveAt(i);
-                }
-            }
-
-            int want = 1;
-            if (weapon.Payload != null) {
-                foreach (WeaponPayloadItem item in weapon.Payload) {
-                    if (item != null && item.ParamSign == "OrbitCount" && item.ValueType == ParamValueType.Int) {
-                        want = Mathf.Max(item.IntValue, 1);
-                        break;
-                    }
-                }
-            }
-
-            while (_orbitBallIDs.Count > want) {
-                DismissBall(_orbitBallIDs[_orbitBallIDs.Count - 1]);
-                _orbitBallIDs.RemoveAt(_orbitBallIDs.Count - 1);
-            }
-
-            while (_orbitBallIDs.Count < want) {
-                Entity ball = Obj.Instance.LoadEntity(weapon.SpawnSign);
-                if (ball == null) {
-                    LogUtil.LogErrorFormat("行为:{0} 环绕球生成失败:{1}", BehaviourSign, weapon.SpawnSign);
-                    return;
-                }
-
-                _orbitBallIDs.Add(ball.ID);
-                _orbitWeaponID = weapon.WeaponID;
-
-                if (Cond.Instance.TryGetData(ball, DataLabels.HolderID, out IntData holderID)) {
-                    holderID.Int = entity.ID;
-                }
-
-                if (Cond.Instance.TryGetData(ball, DataLabels.TargetType, out StringData targetType)) {
-                    targetType.String = weapon.TargetType;
-                }
-
-                if (Cond.Instance.TryGetData(ball, "OrbitAngle", out FloatData angle)) {
-                    angle.Float = 360f * _orbitBallIDs.Count / Mathf.Max(want, 1);
-                }
-
-                if (weapon.Payload != null) {
-                    foreach (WeaponPayloadItem item in weapon.Payload) {
-                        if (item == null || string.IsNullOrEmpty(item.ParamSign)) {
-                            continue;
-                        }
-
-                        WritePayload(ball, item);
-                    }
-                }
-            }
-
-            _orbitWeaponID = weapon.WeaponID;
-        }
-
-        /// <summary>
-        /// 散场 只改球的 Dead 不调球的方法 球的环绕行为自己会停
-        /// </summary>
-        private void ClearOrbitBalls() {
-            foreach (int id in _orbitBallIDs) {
-                DismissBall(id);
-            }
-
-            _orbitBallIDs.Clear();
-            _orbitWeaponID = "";
-        }
-
-        private void DismissBall(int id) {
-            if (EntityRegister.TryGetEntityByID(id, out Entity ball) && ball != null) {
-                if (Cond.Instance.TryGetData(ball, DataLabels.Dead, out BoolData dead)) {
-                    dead.Bool = true;
-                }
-            }
-        }
-
-        /// <summary>
-        /// 当前武器 Data 里 CurrentWeapon 优先 没有才用默认枪 换枪=改一个字符串 开火原地不动
+        /// 当前武器 注册表 CurrentWeapon 优先 没有才用默认枪 换枪=改一个字符串 开火原地不动
         /// </summary>
         private WeaponItem CurrentWeapon() {
             string weaponID = _config.DefaultWeaponID;
@@ -384,69 +290,40 @@ namespace LazyPan {
         private void WritePayload(Entity spawned, WeaponPayloadItem item) {
             switch (item.ValueType) {
                 case ParamValueType.Bool:
-                    WriteBool(spawned, item.ParamSign, item.BoolValue);
+                    EntityAttrRegistry.SetBool(spawned, item.ParamSign, item.BoolValue);
                     break;
                 case ParamValueType.Int:
-                    WriteInt(spawned, item.ParamSign, item.IntValue);
+                    EntityAttrRegistry.SetNumber(spawned, item.ParamSign, item.IntValue);
                     break;
                 case ParamValueType.Float:
-                    WriteFloat(spawned, item.ParamSign, item.FloatValue);
+                    EntityAttrRegistry.SetNumber(spawned, item.ParamSign, item.FloatValue);
                     break;
                 case ParamValueType.String:
-                    WriteString(spawned, item.ParamSign, item.StringValue);
+                    EntityAttrRegistry.SetText(spawned, item.ParamSign, item.StringValue ?? "");
                     break;
                 case ParamValueType.Vector3:
-                    if (Cond.Instance.TryGetData(spawned, item.ParamSign, out Vector3Data vector3Data)) {
-                        vector3Data.Vector3 = item.Vector3Value;
-                    } else {
-                        LogUtil.LogErrorFormat("行为:{0} 生成物:{1} 缺少 Vector3 参数:{2}!", BehaviourSign, spawned.ObjConfig.Sign, item.ParamSign);
-                    }
-
-                    break;
-                default:
-                    LogUtil.LogErrorFormat("行为:{0} 不支持的参数类型:{1}", BehaviourSign, item.ValueType);
+                    EntityAttrRegistry.SetVector(spawned, item.ParamSign, item.Vector3Value);
                     break;
             }
         }
 
         private void WriteInt(Entity spawned, string sign, int value) {
-            if (Cond.Instance.TryGetData(spawned, sign, out IntData intData)) {
-                intData.Int = value;
-                return;
-            }
-
-            LogUtil.LogErrorFormat("行为:{0} 生成物:{1} 缺少 Int 参数:{2}!", BehaviourSign, spawned.ObjConfig.Sign, sign);
+            EntityAttrRegistry.SetNumber(spawned, sign, value);
         }
 
         private void WriteBool(Entity spawned, string sign, bool value) {
-            if (Cond.Instance.TryGetData(spawned, sign, out BoolData boolData)) {
-                boolData.Bool = value;
-                return;
-            }
-
-            LogUtil.LogErrorFormat("行为:{0} 生成物:{1} 缺少 Bool 参数:{2}!", BehaviourSign, spawned.ObjConfig.Sign, sign);
+            EntityAttrRegistry.SetBool(spawned, sign, value);
         }
 
         private void WriteFloat(Entity spawned, string sign, float value) {
-            if (Cond.Instance.TryGetData(spawned, sign, out FloatData floatData)) {
-                floatData.Float = value;
-                return;
-            }
-
-            LogUtil.LogErrorFormat("行为:{0} 生成物:{1} 缺少 Float 参数:{2}!", BehaviourSign, spawned.ObjConfig.Sign, sign);
+            EntityAttrRegistry.SetNumber(spawned, sign, value);
         }
 
         private void WriteString(Entity spawned, string sign, string value) {
-            if (Cond.Instance.TryGetData(spawned, sign, out StringData stringData)) {
-                stringData.String = value;
-                return;
-            }
-
-            LogUtil.LogErrorFormat("行为:{0} 生成物:{1} 缺少 String 参数:{2}!", BehaviourSign, spawned.ObjConfig.Sign, sign);
+            EntityAttrRegistry.SetText(spawned, sign, value ?? "");
         }
 
         public override void Clear() {
-            ClearOrbitBalls();
             if (Game.instance != null) {
                 Game.instance.OnUpdateEvent.RemoveListener(OnUpdate);
             }

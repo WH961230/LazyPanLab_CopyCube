@@ -25,6 +25,9 @@ MonoBehaviour:
     <color=#FFD54F>Payload</color>\uFF1A\u4F20\u8BDD\u5305\uFF0C\u5199\u8FDB\u6253\u51FA\u4E1C\u897F\u7684
     Data \u91CC\uFF0CParamSign=\u54EA\u4E2A\u6570\uFF0C\u5BF9\u7740\u7C7B\u578B\u586B\u503C"
   Datas:
+  - SourceSign: Obj_Player_SceneC_Player
+    DefaultWeaponID: 
+    Weapons: []
   - SourceSign: Obj_Tower_SceneC_Tower
     DefaultWeaponID: "\u51B2\u950B\u67AA"
     Weapons:
