@@ -20,24 +20,6 @@ MonoBehaviour:
     <color=#FFD54F>Compare</color>\uFF1A\u6BD4\u5927\u5C0F\u7684\u65B9\u5F0F\n- <color=#FFD54F>RightIsEntityParam</color>\uFF1Atrue=\u53F3\u8FB9\u4E5F\u662F\u6570\uFF0Cfalse=\u53F3\u8FB9\u662F\u5E38\u91CF\n-
     \u53F3\u8FB9\u662F\u5E38\u91CF\u65F6\uFF0C\u5BF9\u7740\u7C7B\u578B\u586B\u4E0B\u9762\u7684\u503C"
   Datas:
-  - SourceSign: Obj_Logo_SceneA_BeginLogo
-    TargetSceneSign: SceneB
-    Once: 1
-    Condition:
-      LeftEntitySign: Obj_Logo_SceneA_BeginLogo
-      LeftParamSign: LogoRemainTime
-      LeftValueType: 2
-      Compare: 2
-      RightIsEntityParam: 0
-      RightEntitySign: Self
-      RightParamSign: None
-      RightValueType: 2
-      RightBoolValue: 0
-      RightIntValue: 0
-      RightConstValue: 0
-      RightStringValue: 
-      RightVector3Value: {x: 0, y: 0, z: 0}
-      RightConstType: 2
   - SourceSign: Obj_Tower_SceneB_Tower
     TargetSceneSign: SceneC
     Once: 1
@@ -53,6 +35,24 @@ MonoBehaviour:
       RightBoolValue: 0
       RightIntValue: 0
       RightConstValue: 100
+      RightStringValue: 
+      RightVector3Value: {x: 0, y: 0, z: 0}
+      RightConstType: 2
+  - SourceSign: Obj_Logo_SceneA_BeginLogo
+    TargetSceneSign: SceneB
+    Once: 1
+    Condition:
+      LeftEntitySign: Obj_Logo_SceneA_BeginLogo
+      LeftParamSign: LogoRemainTime
+      LeftValueType: 2
+      Compare: 2
+      RightIsEntityParam: 0
+      RightEntitySign: Self
+      RightParamSign: None
+      RightValueType: 2
+      RightBoolValue: 0
+      RightIntValue: 0
+      RightConstValue: 0
       RightStringValue: 
       RightVector3Value: {x: 0, y: 0, z: 0}
       RightConstType: 2

@@ -82,6 +82,7 @@
 行为预览行为配置数据方法代码标识标题,Method Code Sign:,方法代码标识:,メソッドコード識別子:
 行为预览行为配置数据方法标题,Method:,方法:,方法：
 行为操作一键跳转到行为脚本文本,Jump to behaviour script,一键跳转到行为脚本,ワンクリックで動作スクリプトにジャンプ
+行为操作查看行为说明文本,View behaviour doc,查看行为说明,動作説明を見る
 行为操作步骤一文本,Step 1: Generation of behavior in the behavior template directory,步骤一：一键生成行为在行为模板目录,ステップ 1: ワンクリックで動作テンプレート ディレクトリに動作を生成する
 行为操作步骤二文本,Step 2: Move and overwrite to the behavior directory,步骤二：一键移动并覆盖到行为目录,ステップ 2: ワンクリックで動作ディレクトリに移動して上書きします
 行为操作步骤三文本,Step 3: Configuration of behavior to behavior configuration,步骤三：一键将行为配置到行为配置,ステップ 3: ワンクリックで動作間構成を構成する

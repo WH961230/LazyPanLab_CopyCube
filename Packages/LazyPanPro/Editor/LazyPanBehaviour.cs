@@ -348,6 +348,9 @@ namespace LazyPan {
                     string path = AssetDatabase.GUIDToAssetPath(scriptPaths[0]);
                     AssetDatabase.OpenAsset(AssetDatabase.LoadAssetAtPath<MonoScript>(path));
                 }
+            } else if (operationName == "行为操作查看行为说明文本") {
+                BehaviourDocWindow.Show(infos.Length > 0 ? infos[0] : string.Empty,
+                    infos.Length > 1 ? infos[1] : string.Empty);
             }
         }
         
@@ -488,6 +491,7 @@ namespace LazyPan {
             operationNameOptions.Clear();
             operationNameOptions.Add("行为操作操作文本");
             operationNameOptions.Add("行为操作一键跳转到行为脚本文本");
+            operationNameOptions.Add("行为操作查看行为说明文本");
         }
         
         private void RefreshGenerateOperationNameOptions() {

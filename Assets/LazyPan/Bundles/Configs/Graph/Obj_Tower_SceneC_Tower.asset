@@ -25,8 +25,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -2502, y: 437, z: 0}
-  scale: {x: 2, y: 2, z: 1}
+  position: {x: -2158, y: 77, z: 0}
+  scale: {x: 1.7490063, y: 1.7490063, z: 1}
   references:
     version: 2
     RefIds:
@@ -40,7 +40,7 @@ MonoBehaviour:
           serializedVersion: 2
           x: 331.58087
           y: 48.132153
-          width: 348
+          width: 240
           height: 795
         expanded: 1
         debug: 0
@@ -256,7 +256,7 @@ MonoBehaviour:
           serializedVersion: 2
           x: 842
           y: 55
-          width: 406
+          width: 240
           height: 769
         expanded: 1
         debug: 0
@@ -317,7 +317,7 @@ MonoBehaviour:
           serializedVersion: 2
           x: 1429.0018
           y: 54.754253
-          width: 345
+          width: 240
           height: 722
         expanded: 1
         debug: 0

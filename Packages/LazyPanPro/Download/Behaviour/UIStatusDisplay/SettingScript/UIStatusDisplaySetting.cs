@@ -1,0 +1,116 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace LazyPan {
+    /// <summary>
+    /// 屏幕状态展示 — 把任意实体 Data 刷到屏幕 UI 上。
+    /// 跟 EntityUIBinder 是两兄弟：EntityUIBinder 是挂头顶血条（世界坐标，跟实体走），
+    /// 这个是刷主界面 HUD（屏幕坐标，比如 UI_SceneC 显示玩家血量/等级/经验/波次）。
+    /// 只读不写，不改任何数值，数值归 ParamValue / StageProgress / Death 管。
+    /// 配置来源 Setting/UIStatusDisplaySetting，一个实体一条，里面可配多个屏幕 UI 块。
+    /// </summary>
+    [CreateAssetMenu(fileName = "UIStatusDisplaySetting", menuName = "LazyPan/UIStatusDisplaySetting")]
+    public class UIStatusDisplaySetting : Setting {
+        [Header("节点便签说明 自由修改")]
+        [Tooltip("屏幕UI节点上的行为说明书，改这里就行，不用改代码。清空则回退到代码里的默认文案")]
+        [TextArea(5, 15)]
+        public string MemoDoc =
+            "【屏幕UI】管屏幕上挂几块 HUD，数值跟着实体走。\n" +
+            "— 配置参数（UIStatusDisplaySetting 里按 SourceSign 配）—\n" +
+            "- <color=#FFD54F>Displays</color>：UI 块列表，一块一行\n" +
+            "— 每块怎么填 —\n" +
+            "- <color=#FFD54F>UIName</color>：挂到哪个屏幕UI，空=当前流程主界面\n" +
+            "- <color=#FFD54F>UIPrefabSign</color>：用哪个 HUD，空=直接绑主界面\n" +
+            "- <color=#FFD54F>MountSign</color>：挂在哪个点上，Root=主界面根\n" +
+            "- <color=#FFD54F>InstanceSign</color>：实例名，空=用预制体名\n" +
+            "- <color=#FFD54F>DataBinds</color>：数值绑定，一条绑一个数\n" +
+            "— 数值绑定每条怎么填 —\n" +
+            "- <color=#FFD54F>ComponentSign</color>+<color=#FFD54F>ComponentType</color>：UI上哪个零件\n" +
+            "- <color=#FFD54F>Mode</color>：比例=当前/最大，直给=当前值\n" +
+            "- <color=#FFD54F>SourceEntitySign</color>：取谁的数，Self=自己\n" +
+            "- <color=#FFD54F>DataSign</color>+<color=#FFD54F>MaxDataSign</color>：哪个数，如 Health\n" +
+            "- <color=#FFD54F>Format</color>：显示格式，空=整数";
+        public List<UIStatusDisplaySettingData> Datas = new List<UIStatusDisplaySettingData>();
+
+        public bool TryGet(string sourceSign, out UIStatusDisplaySettingData data) {
+            foreach (var tmp in Datas) {
+                if (tmp.SourceSign == sourceSign) {
+                    data = tmp;
+                    return true;
+                }
+            }
+
+            data = default;
+            LogUtil.LogErrorFormat("UIStatusDisplaySetting 缺少 SourceSign:{0} 的配置条目", sourceSign);
+            return false;
+        }
+    }
+
+    [Serializable]
+    public class UIStatusDisplaySettingData {
+        [EntitySign]
+        [Header("挂这个行为的实体类型 SourceSign")]
+        [Tooltip("挂这个行为的实体类型，必须与 ObjConfig.Sign 一致，如 Obj_Player_SceneC_Player。行为挂谁身上，刷新就由谁驱动")]
+        public string SourceSign;
+
+        [Header("屏幕UI块列表")]
+        [Tooltip("屏幕UI块列表，一般配1块就够。想同时刷两个界面才配多块")]
+        public List<UIStatusDisplayItem> Displays;
+    }
+
+    [Serializable]
+    public class UIStatusDisplayItem {
+        [Header("屏幕UI名 为空=当前流程主界面")]
+        [Tooltip("屏幕UI名，如 UI_SceneC。留空=自动取当前流程的 GetUI()，一般留空就行。填了就按名字去 UI.Instance.Get 取")]
+        public string UIName;
+
+        [Header("HUD预制体标识 为空=直接绑主界面")]
+        [Tooltip("HUD预制体标识，Bundles/Prefabs 下相对路径，如 UI/UI_HUD_Status。填了=实例化到主界面挂点下再绑，组件从预制体Comp里拿。留空=老路，直接绑主界面Comp")]
+        public string UIPrefabSign;
+
+        [Header("挂点标签 Root=主界面根")]
+        [Tooltip("HUD预制体挂到主界面哪个Transform下。Root=主界面根节点，其他填主界面Comp里配置的Transform Sign。仅 UIPrefabSign 填了才用")]
+        public string MountSign = BehaviourSigns.Root;
+
+        [Header("实例名 为空=用预制体名")]
+        [Tooltip("实例化出来的HUD物体名，方便层级里找。留空=用预制体文件名。仅 UIPrefabSign 填了才用")]
+        public string InstanceSign;
+
+        [Header("数值绑定列表")]
+        [Tooltip("数值绑定列表。注入模式下组件从HUD预制体Comp按标签取，老路下从屏幕UI的Comp按标签取，数值都从任意实体Data按标签取")]
+        public List<UIStatusDisplayBind> DataBinds = new List<UIStatusDisplayBind>();
+    }
+
+    [Serializable]
+    public class UIStatusDisplayBind {
+        [Header("组件标签 屏幕UI的Comp里配置的Sign")]
+        [Tooltip("组件标签，屏幕UI的Comp里配置的Sign，如 Slider / HealthText。无Comp时按子物体名兜底")]
+        public string ComponentSign;
+
+        [Header("组件类型")]
+        [Tooltip("绑定组件类型：Slider=滑条/血条，Text=文本，Image=填充图")]
+        public UIDataBindComponentType ComponentType;
+
+        [Header("取值模式 比例=当前/最大 直接=当前值")]
+        [Tooltip("Ratio=当前/最大(如 Health/MaxHealth)；Direct=直接取值")]
+        public UIDataBindValueMode Mode;
+
+        [EntitySign]
+        [Header("取数实体 Self=自己")]
+        [Tooltip("去谁身上取数。Self=挂行为的自己。想在玩家界面上显示波次就填 Obj_Wave_SceneC_WaveManager")]
+        public string SourceEntitySign = BehaviourSigns.Self;
+
+        [Header("数据标签 如Health")]
+        [Tooltip("数据标签，取数实体Data里的Sign，如 Health / Level / WaveIndex")]
+        public string DataSign;
+
+        [Tooltip("比例模式的最大值标签，如 MaxHealth。Direct 模式可空")]
+        [ShowIf("Mode", UIDataBindValueMode.Ratio, "最大值数据标签 比例模式用 如MaxHealth")]
+        public string MaxDataSign;
+
+        [Header("文本格式 F0整数 F1一位小数 空则F0")]
+        [Tooltip("文本格式化，F0=整数/F1=一位小数，空则F0（仅 Text 用）")]
+        public string Format;
+    }
+}

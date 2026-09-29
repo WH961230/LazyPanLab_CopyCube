@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace LazyPan {
     public class LazyPanToolbox : EditorWindow {
+        private LazyPanTool _tool;
         private bool isFoldoutBehaviour;
         private bool isFoldoutTemplate;
 
@@ -100,10 +101,12 @@ namespace LazyPan {
         }
 
         public void OnStart(LazyPanTool lazyPanTool) {
+            _tool = lazyPanTool;
+            _tool.InitScroll();
         }
 
         public void OnCustomGUI(float areaX) {
-            GUILayout.BeginArea(new Rect(areaX, 60, Screen.width, Screen.height));
+            GUILayout.BeginArea(new Rect(areaX + _tool.scrollOffsetX, 60 + _tool.scrollOffsetY, Screen.width, Screen.height * 10));
             Title();//标题
             BehaviourDownload();//行为拉取
             TemplateDownload();//模板下载
