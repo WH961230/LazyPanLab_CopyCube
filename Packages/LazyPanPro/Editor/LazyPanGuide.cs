@@ -384,7 +384,7 @@ namespace LazyPan {
 
         private void AutoInstallAddressableData() {
             /*游戏总配置*/
-            string targetGameSettingPath = $"Packages/evoreek.lazypan/Runtime/Bundles/GameSetting/GameSetting.asset";
+            string targetGameSettingPath = System.IO.Path.Combine(LazyPanTool.GetPackageRoot(), "Runtime/Bundles/GameSetting/GameSetting.asset").Replace('\\', '/');
             AddAssetToAddressableEntries(targetGameSettingPath);
 
             /*游戏配置*/
@@ -450,7 +450,7 @@ namespace LazyPan {
         }
 
         public void CopyFilesToDirectory(string sourceDirectory, string destinationDirectory) {
-            string sourcePath = $"Packages/evoreek.lazypan/Runtime/{sourceDirectory}"; // 源文件夹路径
+            string sourcePath = Path.Combine(LazyPanTool.GetPackageRoot(), "Runtime", sourceDirectory); // 源文件夹路径
             string targetPath = $"Assets/{destinationDirectory}"; // 目标文件夹路径
             // 检查源目录是否存在
             if (!Directory.Exists(sourcePath)) {

@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using UnityEditor;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using CompressionLevel = System.IO.Compression.CompressionLevel;
 
@@ -423,6 +425,18 @@ namespace LazyPan {
             return $"<{key} not found>";
         }
 
+        public static string GetPackageRoot() {
+            foreach (var pkg in UnityEditor.PackageManager.PackageInfo.GetAllRegisteredPackages()) {
+                if (pkg.assetPath.StartsWith("Packages/") &&
+                    File.Exists(Path.Combine(pkg.resolvedPath, "Editor/Language/Language.csv"))) {
+                    return pkg.resolvedPath;
+                }
+            }
+            var guess = Directory.GetDirectories(Path.GetFullPath(Path.Combine(Application.dataPath, "..", "Packages")))
+                .FirstOrDefault(d => File.Exists(Path.Combine(d, "Editor/Language/Language.csv")));
+            return guess ?? Path.GetFullPath(Path.Combine(Application.dataPath, "..", "Packages", "LazyPanPro"));
+        }
+
         /// <summary>
         /// 读取语言配置
         /// </summary>
@@ -430,7 +444,7 @@ namespace LazyPan {
         /// <param name="content"></param>
         /// <param name="lines"></param>
         private static void ReadLanguageCSV(string fileName, out string content, out string[] lines) {
-            string filePath = Path.GetFullPath(Path.Combine(Application.dataPath, "..", "Packages", "LazyPanPro", "Editor", "Language", $"{fileName}.csv"));
+            string filePath = Path.GetFullPath(Path.Combine(GetPackageRoot(), "Editor", "Language", $"{fileName}.csv"));
 
             // 检查文件是否存在
             if (!File.Exists(filePath)) {
