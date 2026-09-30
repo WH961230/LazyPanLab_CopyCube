@@ -47,7 +47,7 @@ namespace LazyPan {
         public class ParamModifyConfig {
             [Header("被修改实体 Self=自己")] public string TargetEntitySign = BehaviourSigns.Self;
             [Header("参数标签")] public string ParamSign;
-            [Header("参数类型")] public ParamValueType ValueType;
+            [Header("参数类型")] public DataValueType ValueType;
             [Header("修改方式 Set直接赋值 Add累加")] public ParamModifyType Modify;
             [Header("布尔值")] public bool BoolValue;
             [Header("整数值")] public int IntValue;

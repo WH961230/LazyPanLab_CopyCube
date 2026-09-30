@@ -289,19 +289,19 @@ namespace LazyPan {
 
         private void WritePayload(Entity spawned, WeaponPayloadItem item) {
             switch (item.ValueType) {
-                case ParamValueType.Bool:
+                case DataValueType.Bool:
                     EntityAttrRegistry.SetBool(spawned, item.ParamSign, item.BoolValue);
                     break;
-                case ParamValueType.Int:
+                case DataValueType.Int:
                     EntityAttrRegistry.SetNumber(spawned, item.ParamSign, item.IntValue);
                     break;
-                case ParamValueType.Float:
+                case DataValueType.Float:
                     EntityAttrRegistry.SetNumber(spawned, item.ParamSign, item.FloatValue);
                     break;
-                case ParamValueType.String:
+                case DataValueType.String:
                     EntityAttrRegistry.SetText(spawned, item.ParamSign, item.StringValue ?? "");
                     break;
-                case ParamValueType.Vector3:
+                case DataValueType.Vector3:
                     EntityAttrRegistry.SetVector(spawned, item.ParamSign, item.Vector3Value);
                     break;
             }

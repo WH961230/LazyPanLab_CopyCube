@@ -17,11 +17,6 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: e8d801e81289c9941899b0482b219f92
   m_SerializeEntries:
-  - m_GUID: 7c35e4bd4d075be40b97bad778ec1d70
-    m_Address: Packages/evoreek.lazypan/Runtime/Bundles/GameSetting/GameSetting.asset
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9bb8d859d388d8747b0338d6da249f17
     m_Address: Assets/LazyPan/Bundles/Configs
     m_ReadOnly: 0

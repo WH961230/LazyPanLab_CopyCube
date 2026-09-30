@@ -147,24 +147,24 @@ namespace LazyPan {
                 }
 
                 switch (config.ValueType) {
-                    case ParamValueType.Bool:
+                    case DataValueType.Bool:
                         EntityAttrRegistry.SetBool(target, config.ParamSign, config.BoolValue);
                         break;
-                    case ParamValueType.Int: {
+                    case DataValueType.Int: {
                         EntityAttrRegistry.TryGetNumber(target, config.ParamSign, out float ci);
                         float v = config.Modify == ParamModifyType.Add ? ci + config.IntValue : config.IntValue;
                         EntityAttrRegistry.SetNumber(target, config.ParamSign, Mathf.RoundToInt(v));
                         break;
                     }
-                    case ParamValueType.Float: {
+                    case DataValueType.Float: {
                         EntityAttrRegistry.TryGetNumber(target, config.ParamSign, out float cf);
                         EntityAttrRegistry.SetNumber(target, config.ParamSign, config.Modify == ParamModifyType.Add ? cf + config.FloatValue : config.FloatValue);
                         break;
                     }
-                    case ParamValueType.String:
+                    case DataValueType.String:
                         EntityAttrRegistry.SetText(target, config.ParamSign, config.StringValue ?? "");
                         break;
-                    case ParamValueType.Vector3: {
+                    case DataValueType.Vector3: {
                         EntityAttrRegistry.TryGetVector(target, config.ParamSign, out Vector3 cv);
                         EntityAttrRegistry.SetVector(target, config.ParamSign, config.Modify == ParamModifyType.Add ? cv + config.Vector3Value : config.Vector3Value);
                         }
@@ -184,12 +184,12 @@ namespace LazyPan {
                 return false;
             }
 
-            if (config.ParamSign == HEALTH_LABEL && config.ValueType == ParamValueType.Float) {
+            if (config.ParamSign == HEALTH_LABEL && config.ValueType == DataValueType.Float) {
                 death.Health = config.Modify == ParamModifyType.Add ? death.Health + config.FloatValue : config.FloatValue;
                 return true;
             }
 
-            if (config.ParamSign == DEAD_LABEL && config.ValueType == ParamValueType.Bool) {
+            if (config.ParamSign == DEAD_LABEL && config.ValueType == DataValueType.Bool) {
                 death.Dead = config.BoolValue;
                 return true;
             }
@@ -198,7 +198,7 @@ namespace LazyPan {
         }
 
         /// <summary>
-        /// 绑定运行时数据 血量自带不再依赖ParamValue配Dead/Health
+        /// 绑定运行时数据 血量自带不再依赖实体参数配Dead/Health
         /// </summary>
         private void BindRuntimeData() {
             if (_deathData.HasHealthBar && _deathData.Health <= 0f) {

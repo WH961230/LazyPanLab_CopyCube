@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace LazyPan {
-    /// <summary>死亡 — 只做生命归零后的死亡处理与延迟销毁，不管血量数值。数值参数 Health/MaxHealth/Dead 归实体参数值(ParamValue)配置初始化，本行为只读写。</summary>
+    /// <summary>死亡 — 只做生命归零后的死亡处理与延迟销毁，不管血量数值。数值参数 Health/MaxHealth/Dead 归实体参数值(实体参数)配置初始化，本行为只读写。</summary>
     [CreateAssetMenu(fileName = "DeathSetting", menuName = "LazyPan/DeathSetting")]
     public class DeathSetting : Setting {
         [Header("节点便签说明 自由修改")]
@@ -56,7 +56,7 @@ namespace LazyPan {
         public List<ParamModifyItem> OnDeathParams;
 
         [Header("初始血量 0=无血条")]
-        [Tooltip("有血条(人/怪/塔)填正数，无血条(子弹/特效)填0。替代原来ParamValue里配Health/MaxHealth")]
+        [Tooltip("有血条(人/怪/塔)填正数，无血条(子弹/特效)填0。替代原来实体参数里配Health/MaxHealth")]
         public float Health;
 
         [Header("最大血量 0=无血条")]

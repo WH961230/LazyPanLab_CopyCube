@@ -38,9 +38,9 @@ namespace LazyPan {
         /// 对外契约 HolderID 由触发器交接不用配
         /// </summary>
         public static readonly PayloadContractDef[] RequiredPayload = {
-            new PayloadContractDef() { Sign = "OrbitRadius", ValueType = ParamValueType.Float, FloatDefault = 2f },
-            new PayloadContractDef() { Sign = "OrbitSpeed", ValueType = ParamValueType.Float, FloatDefault = 180f },
-            new PayloadContractDef() { Sign = "OrbitAngle", ValueType = ParamValueType.Float },
+            new PayloadContractDef() { Sign = "OrbitRadius", ValueType = DataValueType.Float, FloatDefault = 2f },
+            new PayloadContractDef() { Sign = "OrbitSpeed", ValueType = DataValueType.Float, FloatDefault = 180f },
+            new PayloadContractDef() { Sign = "OrbitAngle", ValueType = DataValueType.Float },
         };
 
         //runtime

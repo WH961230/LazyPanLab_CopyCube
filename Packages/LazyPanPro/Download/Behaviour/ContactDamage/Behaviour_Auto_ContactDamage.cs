@@ -101,10 +101,10 @@ namespace LazyPan {
         /// 对外契约 打击数值优先读 Data 传话包 缺失回退 Setting 保底
         /// </summary>
         public static readonly PayloadContractDef[] RequiredPayload = {
-            new PayloadContractDef() { Sign = "Damage", ValueType = ParamValueType.Float, FloatDefault = 10f },
-            new PayloadContractDef() { Sign = "DamageRadius", ValueType = ParamValueType.Float, FloatDefault = 0.5f },
-            new PayloadContractDef() { Sign = "HitCooldown", ValueType = ParamValueType.Float, FloatDefault = -1f },
-            new PayloadContractDef() { Sign = "MaxHits", ValueType = ParamValueType.Int },
+            new PayloadContractDef() { Sign = "Damage", ValueType = DataValueType.Float, FloatDefault = 10f },
+            new PayloadContractDef() { Sign = "DamageRadius", ValueType = DataValueType.Float, FloatDefault = 0.5f },
+            new PayloadContractDef() { Sign = "HitCooldown", ValueType = DataValueType.Float, FloatDefault = -1f },
+            new PayloadContractDef() { Sign = "MaxHits", ValueType = DataValueType.Int },
         };
 
         /// <summary>

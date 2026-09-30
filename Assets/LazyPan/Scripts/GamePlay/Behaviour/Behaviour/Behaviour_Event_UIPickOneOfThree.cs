@@ -399,27 +399,27 @@ namespace LazyPan {
                 }
 
                 switch (effect.ValueType) {
-                    case ParamValueType.Bool:
+                    case DataValueType.Bool:
                         if (Cond.Instance.TryGetData(target, effect.ParamSign, out BoolData boolData)) {
                             boolData.Bool = effect.BoolValue;
                         }
                         break;
-                    case ParamValueType.Int:
+                    case DataValueType.Int:
                         if (Cond.Instance.TryGetData(target, effect.ParamSign, out IntData intData)) {
                             intData.Int = effect.Modify == ParamModifyType.Add ? intData.Int + effect.IntValue : effect.IntValue;
                         }
                         break;
-                    case ParamValueType.Float:
+                    case DataValueType.Float:
                         if (Cond.Instance.TryGetData(target, effect.ParamSign, out FloatData floatData)) {
                             floatData.Float = effect.Modify == ParamModifyType.Add ? floatData.Float + effect.FloatValue : effect.FloatValue;
                         }
                         break;
-                    case ParamValueType.String:
+                    case DataValueType.String:
                         if (Cond.Instance.TryGetData(target, effect.ParamSign, out StringData stringData)) {
                             stringData.String = effect.StringValue;
                         }
                         break;
-                    case ParamValueType.Vector3:
+                    case DataValueType.Vector3:
                         if (Cond.Instance.TryGetData(target, effect.ParamSign, out Vector3Data vector3Data)) {
                             vector3Data.Vector3 = effect.Modify == ParamModifyType.Add ? vector3Data.Vector3 + effect.Vector3Value : effect.Vector3Value;
                         }

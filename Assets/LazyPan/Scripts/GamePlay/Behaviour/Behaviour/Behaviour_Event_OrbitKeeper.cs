@@ -26,10 +26,10 @@ namespace LazyPan {
         /// 对外契约 与开火一致 球认的词一样（一键补齐照这份填）
         /// </summary>
         public static readonly PayloadContractDef[] RequiredPayload = {
-            new PayloadContractDef() { Sign = "Damage", ValueType = ParamValueType.Float, FloatDefault = 10f },
-            new PayloadContractDef() { Sign = "DamageRadius", ValueType = ParamValueType.Float, FloatDefault = 0.5f },
-            new PayloadContractDef() { Sign = "HitCooldown", ValueType = ParamValueType.Float, FloatDefault = -1f },
-            new PayloadContractDef() { Sign = "MaxHits", ValueType = ParamValueType.Int },
+            new PayloadContractDef() { Sign = "Damage", ValueType = DataValueType.Float, FloatDefault = 10f },
+            new PayloadContractDef() { Sign = "DamageRadius", ValueType = DataValueType.Float, FloatDefault = 0.5f },
+            new PayloadContractDef() { Sign = "HitCooldown", ValueType = DataValueType.Float, FloatDefault = -1f },
+            new PayloadContractDef() { Sign = "MaxHits", ValueType = DataValueType.Int },
         };
 
         /// <summary>
@@ -119,8 +119,8 @@ namespace LazyPan {
             if (weapon.Payload != null) {
                 foreach (var item in weapon.Payload) {
                     if (item != null && item.ParamSign == "OrbitCount") {
-                        if (item.ValueType == ParamValueType.Int) want = Mathf.Max(item.IntValue, 1);
-                        else if (item.ValueType == ParamValueType.Float) want = Mathf.Max(Mathf.RoundToInt(item.FloatValue), 1);
+                        if (item.ValueType == DataValueType.Int) want = Mathf.Max(item.IntValue, 1);
+                        else if (item.ValueType == DataValueType.Float) want = Mathf.Max(Mathf.RoundToInt(item.FloatValue), 1);
                         break;
                     }
                 }
@@ -146,11 +146,11 @@ namespace LazyPan {
 
         private void WritePayload(Entity ball, WeaponPayloadItem item) {
             switch (item.ValueType) {
-                case ParamValueType.Bool: EntityAttrRegistry.SetBool(ball, item.ParamSign, item.BoolValue); break;
-                case ParamValueType.Int: EntityAttrRegistry.SetNumber(ball, item.ParamSign, item.IntValue); break;
-                case ParamValueType.Float: EntityAttrRegistry.SetNumber(ball, item.ParamSign, item.FloatValue); break;
-                case ParamValueType.String: EntityAttrRegistry.SetText(ball, item.ParamSign, item.StringValue ?? ""); break;
-                case ParamValueType.Vector3: EntityAttrRegistry.SetVector(ball, item.ParamSign, item.Vector3Value); break;
+                case DataValueType.Bool: EntityAttrRegistry.SetBool(ball, item.ParamSign, item.BoolValue); break;
+                case DataValueType.Int: EntityAttrRegistry.SetNumber(ball, item.ParamSign, item.IntValue); break;
+                case DataValueType.Float: EntityAttrRegistry.SetNumber(ball, item.ParamSign, item.FloatValue); break;
+                case DataValueType.String: EntityAttrRegistry.SetText(ball, item.ParamSign, item.StringValue ?? ""); break;
+                case DataValueType.Vector3: EntityAttrRegistry.SetVector(ball, item.ParamSign, item.Vector3Value); break;
             }
         }
 

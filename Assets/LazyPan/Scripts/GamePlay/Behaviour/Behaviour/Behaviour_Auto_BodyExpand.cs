@@ -4,8 +4,8 @@ namespace LazyPan {
     /// <summary>
     /// 零件 - 体型扩散
     /// 只干一件事: 按 ExpandSpeed 长大 到 MaxRadius 停下并 Dead 全程只改自己 不认识圆环
-    /// 参数节点自带：直读 BodyExpandSettingData 的 MaxRadius/ExpandSpeed，不用再配 ParamValue；
-    /// 老资产填 0 则回退读 Data（ParamValue 写的 MaxRadius/ExpandSpeed），兼容旧配置
+    /// 参数节点自带：直读 BodyExpandSettingData 的 MaxRadius/ExpandSpeed，不用再配 实体参数；
+    /// 老资产填 0 则回退读 Data（实体参数 写的 MaxRadius/ExpandSpeed），兼容旧配置
     /// 没 MaxRadius 睡觉 半径1的体型约定(直径=2倍半径) 视觉与伤害圈对齐
     /// </summary>
     public class Behaviour_Auto_BodyExpand : Behaviour {
@@ -36,14 +36,6 @@ namespace LazyPan {
             "- <color=#FFD54F>ExpandSpeed</color>：每秒长大多少，建议 1~5，0=沿用节点上配的数\n" +
             "— 外部怎么互动 —\n" +
             "- <color=#FFD54F>停下</color>：长满自动停并喊死，不用你管";
-        /// <summary>
-        /// 对外契约（仅兼容老配置：Setting 为 0 时才读这些 Data）
-        /// </summary>
-        public static readonly PayloadContractDef[] RequiredPayload = {
-            new PayloadContractDef() { Sign = "MaxRadius", ValueType = ParamValueType.Float, FloatDefault = 5f },
-            new PayloadContractDef() { Sign = "ExpandSpeed", ValueType = ParamValueType.Float, FloatDefault = 3f },
-        };
-
         /// <summary>
         /// 模块依赖 扩满散场走死亡 无血条分支
         /// </summary>

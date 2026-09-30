@@ -98,16 +98,6 @@ namespace LazyPan {
             "- <color=#FFD54F>KnockbackDuration</color>：推人飞多久（秒），方向固定 B 减 A 压平指向 B\n" +
             "- <color=#FFD54F>Hits</color>：多段打击，一条打一类人，各自独立，空=用上面老单组";
         /// <summary>
-        /// 对外契约 打击数值优先读 Data 传话包 缺失回退 Setting 保底
-        /// </summary>
-        public static readonly PayloadContractDef[] RequiredPayload = {
-            new PayloadContractDef() { Sign = "Damage", ValueType = ParamValueType.Float, FloatDefault = 10f },
-            new PayloadContractDef() { Sign = "DamageRadius", ValueType = ParamValueType.Float, FloatDefault = 0.5f },
-            new PayloadContractDef() { Sign = "HitCooldown", ValueType = ParamValueType.Float, FloatDefault = -1f },
-            new PayloadContractDef() { Sign = "MaxHits", ValueType = ParamValueType.Int },
-        };
-
-        /// <summary>
         /// 模块依赖 命中数满散场走死亡 无血条分支
         /// </summary>
         public static readonly string[] RequiredModules = { "死亡" };
@@ -182,7 +172,7 @@ namespace LazyPan {
         private void ApplyHit(HitRuntime hit, Vector3 selfPos, float? damage, float? damageRadius, float? hitCooldown, float? maxHits, string dataType) {
             float amount = damage.HasValue ? damage.Value : 0f;
             if (amount <= 0f) {
-                amount = hit.Damage > 0f ? hit.Damage : RequiredPayload[0].FloatDefault;
+                amount = hit.Damage > 0f ? hit.Damage : 10f;
             }
             if (amount <= 0f) {
                 return;
@@ -194,7 +184,7 @@ namespace LazyPan {
             }
 
             float hitR = damageRadius.HasValue && damageRadius.Value > 0f ? Mathf.Max(damageRadius.Value, 0.1f)
-                : (hit.Radius > 0f ? Mathf.Max(hit.Radius, 0.1f) : RequiredPayload[1].FloatDefault);
+                : (hit.Radius > 0f ? Mathf.Max(hit.Radius, 0.1f) : 0.5f);
             float cooldown = hitCooldown.HasValue ? hitCooldown.Value : hit.Cooldown;
             int max = maxHits.HasValue ? Mathf.Max(Mathf.RoundToInt(maxHits.Value), 0) : Mathf.Max(hit.MaxHits, 0);
 

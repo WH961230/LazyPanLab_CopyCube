@@ -25,9 +25,6 @@ public class WeaponFireNodeView : BaseNodeView {
             return;
         }
 
-        var setting = AssetDatabase.LoadAssetAtPath<ParamValueSetting>(
-            "Assets/LazyPan/Bundles/Configs/Setting/ParamValueSetting.asset");
-
         foreach (WeaponItem weapon in c.Weapons) {
             if (weapon == null || string.IsNullOrEmpty(weapon.WeaponID)) {
                 continue;
@@ -56,10 +53,9 @@ public class WeaponFireNodeView : BaseNodeView {
                 }
             }
 
-            var defaults = FindSpawnDefaultSigns(setting, weapon.SpawnSign);
             var missing = new List<string>();
             foreach (PayloadContractDef def in FindPayloadContracts(behaviours)) {
-                if (!payload.Contains(def.Sign) && !defaults.Contains(def.Sign) && !missing.Contains(def.Sign)) {
+                if (!payload.Contains(def.Sign) && !missing.Contains(def.Sign)) {
                     missing.Add(def.Sign);
                 }
             }
@@ -72,30 +68,6 @@ public class WeaponFireNodeView : BaseNodeView {
                 yellow.Add($"跨实体提醒：枪 {weapon.WeaponID} 生成物缺模块依赖 {module}");
             }
         }
-    }
-
-    /// <summary>
-    /// 生成物 ParamValue 自带的默认值标签，传话包不用重复写。
-    /// </summary>
-    static HashSet<string> FindSpawnDefaultSigns(ParamValueSetting setting, string spawnSign) {
-        var defaults = new HashSet<string>();
-        if (setting == null || setting.Datas == null) {
-            return defaults;
-        }
-
-        foreach (ParamValueSettingData entry in setting.Datas) {
-            if (entry == null || entry.SourceSign != spawnSign || entry.Items == null) {
-                continue;
-            }
-
-            foreach (ParamValueItem item in entry.Items) {
-                if (item != null && !string.IsNullOrEmpty(item.ParamSign)) {
-                    defaults.Add(item.ParamSign);
-                }
-            }
-        }
-
-        return defaults;
     }
 
     /// <summary>

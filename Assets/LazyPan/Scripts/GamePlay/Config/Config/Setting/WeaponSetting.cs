@@ -127,31 +127,31 @@ namespace LazyPan {
 
         [Header("参数类型")]
         [Tooltip("参数类型，决定写哪一种 Data")]
-        public ParamValueType ValueType;
+        public DataValueType ValueType;
 
         [Header("布尔值")]
         [Tooltip("ValueType=Bool 时写入的值")]
-        [ShowIf("ValueType", ParamValueType.Bool, "布尔值")]
+        [ShowIf("ValueType", DataValueType.Bool, "布尔值")]
         public bool BoolValue;
 
         [Header("整数值")]
         [Tooltip("ValueType=Int 时写入的值")]
-        [ShowIf("ValueType", ParamValueType.Int, "整数值")]
+        [ShowIf("ValueType", DataValueType.Int, "整数值")]
         public int IntValue;
 
         [Header("浮点值")]
         [Tooltip("ValueType=Float 时写入的值")]
-        [ShowIf("ValueType", ParamValueType.Float, "浮点值")]
+        [ShowIf("ValueType", DataValueType.Float, "浮点值")]
         public float FloatValue;
 
         [Header("字符串值")]
         [Tooltip("ValueType=String 时写入的值")]
-        [ShowIf("ValueType", ParamValueType.String, "字符串值")]
+        [ShowIf("ValueType", DataValueType.String, "字符串值")]
         public string StringValue;
 
         [Header("向量值")]
         [Tooltip("ValueType=Vector3 时写入的值")]
-        [ShowIf("ValueType", ParamValueType.Vector3, "向量值")]
+        [ShowIf("ValueType", DataValueType.Vector3, "向量值")]
         public Vector3 Vector3Value;
     }
 

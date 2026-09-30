@@ -120,6 +120,7 @@ namespace LazyPan {
             GUILayout.BeginArea(new Rect(areaX + _tool.scrollOffsetX, 60 + _tool.scrollOffsetY, Screen.width, Screen.height * 10));
             Title();
             AutoTool();
+            BehaviourDownloadInstaller.DrawTool();
             PreviewBehaviourConfigData();
             ManualGenerateBehaviourTool();
             GUILayout.EndArea();

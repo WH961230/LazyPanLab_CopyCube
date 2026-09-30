@@ -30,7 +30,7 @@ namespace LazyPan {
         /// 对外契约 TargetID/TargetType 由触发器交接不用配
         /// </summary>
         public static readonly PayloadContractDef[] RequiredPayload = {
-            new PayloadContractDef() { Sign = "Speed", ValueType = ParamValueType.Float, FloatDefault = 10f },
+            new PayloadContractDef() { Sign = "Speed", ValueType = DataValueType.Float, FloatDefault = 10f },
         };
 
         //runtime

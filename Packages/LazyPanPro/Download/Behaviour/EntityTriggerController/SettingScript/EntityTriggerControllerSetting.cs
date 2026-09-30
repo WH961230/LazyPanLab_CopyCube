@@ -94,7 +94,7 @@ namespace LazyPan {
 
         [Header("参数类型")]
         [Tooltip("参数类型，决定读写哪一种 Data")]
-        public ParamValueType ValueType;
+        public DataValueType ValueType;
 
         [Header("修改方式")]
         [Tooltip("Set=直接赋值 Add=累加增量 AddPerSecond=按 deltaTime 累加(仅停留/范围外每帧相位有意义)")]

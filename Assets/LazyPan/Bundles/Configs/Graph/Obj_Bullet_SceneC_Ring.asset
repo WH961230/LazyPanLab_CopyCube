@@ -48,7 +48,7 @@ MonoBehaviour:
         NodeInitialized: 1
         LastSyncedSign: Obj_Bullet_SceneC_Ring
         "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Event_Death\u3011\u9700\u914D
-          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n\u65E0 RequiredPayload\uFF0C\u672C\u884C\u4E3A\u65E0\u5916\u90E8\u53C2\u6570\u3002\r\n"
+          Data\uFF08\u53BB 实体参数 \u91CC\u914D\uFF09\uFF1A\r\n\u65E0 RequiredPayload\uFF0C\u672C\u884C\u4E3A\u65E0\u5916\u90E8\u53C2\u6570\u3002\r\n"
         Config:
           SourceSign: Obj_Bullet_SceneC_Ring
           DeathDelay: 0
@@ -72,7 +72,7 @@ MonoBehaviour:
         NodeInitialized: 1
         LastSyncedSign: Obj_Bullet_SceneC_Ring
         "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Auto_BodyExpand\u3011\u9700\u914D
-          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n- MaxRadius : Float\uFF08\u9ED8\u8BA4
+          Data\uFF08\u53BB 实体参数 \u91CC\u914D\uFF09\uFF1A\r\n- MaxRadius : Float\uFF08\u9ED8\u8BA4
           5\uFF09\r\n- ExpandSpeed : Float\uFF08\u9ED8\u8BA4 3\uFF09\r\n\u4F9D\u8D56\u6A21\u5757\uFF1A\u6B7B\u4EA1\r\n"
         Config:
           SourceSign: Obj_Bullet_SceneC_Ring
@@ -96,7 +96,7 @@ MonoBehaviour:
         NodeInitialized: 1
         LastSyncedSign: Obj_Bullet_SceneC_Ring
         "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Auto_ContactDamage\u3011\u9700\u914D
-          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n- Damage : Float\uFF08\u9ED8\u8BA4
+          Data\uFF08\u53BB 实体参数 \u91CC\u914D\uFF09\uFF1A\r\n- Damage : Float\uFF08\u9ED8\u8BA4
           10\uFF09\r\n- DamageRadius : Float\uFF08\u9ED8\u8BA4 0.5\uFF09\r\n- HitCooldown
           : Float\uFF08\u9ED8\u8BA4 -1\uFF09\r\n- MaxHits : Int\uFF08\u9ED8\u8BA4
           0\uFF09\r\n\u4F9D\u8D56\u6A21\u5757\uFF1A\u6B7B\u4EA1\r\n"

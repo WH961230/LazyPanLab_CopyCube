@@ -47,7 +47,7 @@ MonoBehaviour:
         NodeInitialized: 1
         LastSyncedSign: Obj_Logo_SceneA_BeginLogo
         "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Event_BeginLogo\u3011\u9700\u914D
-          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n\u65E0 RequiredPayload\uFF0C\u672C\u884C\u4E3A\u65E0\u5916\u90E8\u53C2\u6570\u3002\r\n"
+          Data\uFF08\u53BB 实体参数 \u91CC\u914D\uFF09\uFF1A\r\n\u65E0 RequiredPayload\uFF0C\u672C\u884C\u4E3A\u65E0\u5916\u90E8\u53C2\u6570\u3002\r\n"
         Config:
           SourceSign: Obj_Logo_SceneA_BeginLogo
           UIParentPrefabSign: UI/UI_SceneA
@@ -71,7 +71,7 @@ MonoBehaviour:
         NodeInitialized: 1
         LastSyncedSign: Obj_Logo_SceneA_BeginLogo
         "\u53C2\u6570\u4FBF\u7B7E": "\u3010Behaviour_Event_TeleportFlow\u3011\u9700\u914D
-          Data\uFF08\u53BB ParamValue \u91CC\u914D\uFF09\uFF1A\r\n\u65E0 RequiredPayload\uFF0C\u672C\u884C\u4E3A\u65E0\u5916\u90E8\u53C2\u6570\u3002\r\n"
+          Data\uFF08\u53BB 实体参数 \u91CC\u914D\uFF09\uFF1A\r\n\u65E0 RequiredPayload\uFF0C\u672C\u884C\u4E3A\u65E0\u5916\u90E8\u53C2\u6570\u3002\r\n"
         Config:
           SourceSign: Obj_Logo_SceneA_BeginLogo
           TargetSceneSign: SceneB

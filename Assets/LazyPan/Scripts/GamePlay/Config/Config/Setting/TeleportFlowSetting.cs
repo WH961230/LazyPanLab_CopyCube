@@ -72,7 +72,7 @@ namespace LazyPan {
 
         [Header("左边参数类型")]
         [Tooltip("左边参数类型 决定读取哪一种 Data")]
-        public ParamValueType LeftValueType = ParamValueType.Float;
+        public DataValueType LeftValueType = DataValueType.Float;
 
         [Header("比较方式")]
         [Tooltip("左右值的比较方式 非数值类型仅支持 相等/不等")]
@@ -93,7 +93,7 @@ namespace LazyPan {
 
         [Header("右边参数类型 右边是参数时有效")]
         [Tooltip("右边参数类型 决定读取哪一种 Data 仅 RightIsEntityParam 勾上时有效")]
-        public ParamValueType RightValueType = ParamValueType.Float;
+        public DataValueType RightValueType = DataValueType.Float;
 
         [Header("右边布尔常量")]
         [Tooltip("右边常量类型=布尔时有效")]
@@ -117,7 +117,7 @@ namespace LazyPan {
 
         [Header("右边常量类型 右边不用参数时有效")]
         [Tooltip("右边常量类型 决定用上面哪个常量值参与比较")]
-        public ParamValueType RightConstType = ParamValueType.Float;
+        public DataValueType RightConstType = DataValueType.Float;
     }
 
     public enum TeleportCompare {

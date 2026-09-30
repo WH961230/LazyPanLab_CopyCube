@@ -282,16 +282,16 @@ namespace LazyPan {
             float scale = action.Modify == TriggerModifyType.AddPerSecond ? dt : 1f;
 
             switch (action.ValueType) {
-                case ParamValueType.Bool:
+                case DataValueType.Bool:
                     EntityAttrRegistry.SetBool(target, action.ParamSign, action.BoolValue);
                     break;
-                case ParamValueType.Int: {
+                case DataValueType.Int: {
                     EntityAttrRegistry.TryGetNumber(target, action.ParamSign, out float curInt);
                     float intResult = action.Modify == TriggerModifyType.Set ? action.IntValue : curInt + action.IntValue * scale;
                     EntityAttrRegistry.SetNumber(target, action.ParamSign, Mathf.RoundToInt(Mathf.Clamp(intResult, action.Min, action.Max)));
                     break;
                 }
-                case ParamValueType.Float: {
+                case DataValueType.Float: {
                     EntityAttrRegistry.TryGetNumber(target, action.ParamSign, out float curFloat);
                     {
                         float floatResult = action.Modify == TriggerModifyType.Set ? action.FloatValue : curFloat + action.FloatValue * scale;
@@ -305,10 +305,10 @@ namespace LazyPan {
 
                     break;
                 }
-                case ParamValueType.String:
+                case DataValueType.String:
                     EntityAttrRegistry.SetText(target, action.ParamSign, action.StringValue ?? "");
                     break;
-                case ParamValueType.Vector3:
+                case DataValueType.Vector3:
                     EntityAttrRegistry.TryGetVector(target, action.ParamSign, out Vector3 curVec);
                     EntityAttrRegistry.SetVector(target, action.ParamSign, action.Modify == TriggerModifyType.Set
                             ? action.Vector3Value

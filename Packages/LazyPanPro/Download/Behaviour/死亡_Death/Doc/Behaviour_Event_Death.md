@@ -1,6 +1,6 @@
 # Behaviour_Event_Death 死亡
 
-一句话：只做生命归零后的死亡处理与延迟销毁，不管血量数值。数值参数 Health/MaxHealth/Dead 归实体参数（ParamValue）配置初始化，本行为只读写。
+一句话：只做生命归零后的死亡处理与延迟销毁，不管血量数值。数值参数 Health/MaxHealth/Dead 归实体参数（实体参数）配置初始化，本行为只读写。
 
 原理：监听实体 Data 的 Dead 标记，Kill()置 Dead 触发 Die，Revive()清除 Dead 并复位计时；DeathAction=DestroyEntity 且 DeathDelay>0 时 OnUpdate 倒计时再销毁。
 
@@ -14,7 +14,7 @@
 
 ## 前置要求
 
-实体必须在 ParamValueSetting 里配好 Health（Float）、MaxHealth（Float）、Dead（Bool），缺 Dead 会报错。
+实体必须在 实体参数配置里配好 Health（Float）、MaxHealth（Float）、Dead（Bool），缺 Dead 会报错。
 
 ## 对外接口
 

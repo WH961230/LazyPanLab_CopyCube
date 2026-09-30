@@ -373,35 +373,35 @@ namespace LazyPan {
                 }
 
                 switch (config.ValueType) {
-                    case ParamValueType.Bool:
+                    case DataValueType.Bool:
                         if (Cond.Instance.TryGetData(target, config.ParamSign, out BoolData boolData)) {
                             boolData.Bool = config.BoolValue;
                             EntityAttrRegistry.SetBool(target, config.ParamSign, config.BoolValue);
                         }
 
                         break;
-                    case ParamValueType.Int:
+                    case DataValueType.Int:
                         if (Cond.Instance.TryGetData(target, config.ParamSign, out IntData intData)) {
                             intData.Int = config.Modify == ParamModifyType.Add ? intData.Int + config.IntValue : config.IntValue;
                             EntityAttrRegistry.SetNumber(target, config.ParamSign, intData.Int);
                         }
 
                         break;
-                    case ParamValueType.Float:
+                    case DataValueType.Float:
                         if (Cond.Instance.TryGetData(target, config.ParamSign, out FloatData floatData)) {
                             floatData.Float = config.Modify == ParamModifyType.Add ? floatData.Float + config.FloatValue : config.FloatValue;
                             EntityAttrRegistry.SetNumber(target, config.ParamSign, floatData.Float);
                         }
 
                         break;
-                    case ParamValueType.String:
+                    case DataValueType.String:
                         if (Cond.Instance.TryGetData(target, config.ParamSign, out StringData stringData)) {
                             stringData.String = config.StringValue;
                             EntityAttrRegistry.SetText(target, config.ParamSign, config.StringValue);
                         }
 
                         break;
-                    case ParamValueType.Vector3:
+                    case DataValueType.Vector3:
                         if (Cond.Instance.TryGetData(target, config.ParamSign, out Vector3Data vector3Data)) {
                             vector3Data.Vector3 = config.Modify == ParamModifyType.Add ? vector3Data.Vector3 + config.Vector3Value : config.Vector3Value;
                         }

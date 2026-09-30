@@ -29,7 +29,7 @@ namespace LazyPan {
         /// 对外契约
         /// </summary>
         public static readonly PayloadContractDef[] RequiredPayload = {
-            new PayloadContractDef() { Sign = "LifeTime", ValueType = ParamValueType.Float, FloatDefault = 3f },
+            new PayloadContractDef() { Sign = "LifeTime", ValueType = DataValueType.Float, FloatDefault = 3f },
         };
 
         /// <summary>

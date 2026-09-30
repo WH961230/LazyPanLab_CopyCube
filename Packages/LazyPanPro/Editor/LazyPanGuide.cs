@@ -383,10 +383,6 @@ namespace LazyPan {
         }
 
         private void AutoInstallAddressableData() {
-            /*游戏总配置*/
-            string targetGameSettingPath = System.IO.Path.Combine(LazyPanTool.GetPackageRoot(), "Runtime/Bundles/GameSetting/GameSetting.asset").Replace('\\', '/');
-            AddAssetToAddressableEntries(targetGameSettingPath);
-
             /*游戏配置*/
             string targetBundlesConfigsPath = "Assets/LazyPan/Bundles/Configs";
             if (Directory.Exists(targetBundlesConfigsPath)) {
@@ -444,9 +440,11 @@ namespace LazyPan {
                         }
 
                         entry.address = path;
+                        EditorUtility.SetDirty(settings);
                     }
                 }
             }
+            AssetDatabase.SaveAssets();
         }
 
         public void CopyFilesToDirectory(string sourceDirectory, string destinationDirectory) {

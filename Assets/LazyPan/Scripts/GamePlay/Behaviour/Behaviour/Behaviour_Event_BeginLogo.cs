@@ -4,7 +4,7 @@ using UnityEngine;
 namespace LazyPan {
     /// <summary>
     /// 行为 - 开头Logo
-    /// 只做一件事: 挂载 Logo 界面并倒计时 结束时调同实体传送行为的内部请求 不写 Data 不配 ParamValue
+    /// 只做一件事: 挂载 Logo 界面并倒计时 结束时调同实体传送行为的内部请求 不写 Data 不配 实体参数
     /// 倒计时镜像到自己实体的 LogoRemainTime 标签(只写不读 供传送等其他行为按配置读取判定)
     /// 跳转由同实体的传送流程行为执行 两行为仅经方法调用解耦
     /// </summary>

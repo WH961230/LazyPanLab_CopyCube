@@ -38,7 +38,11 @@ namespace LazyPan {
                 string behaviourSign = Path.GetFileNameWithoutExtension(file);
                 Match settingMatch = Regex.Match(text, @"LoadAsset<(\w+Setting)>");
                 Match dataMatch = Regex.Match(text, @"out\s+(\w+SettingData)\b");
-                if (!settingMatch.Success || !dataMatch.Success) {
+                string dataTypeName = dataMatch.Success ? dataMatch.Groups[1].Value : null;
+                if (settingMatch.Success && string.IsNullOrEmpty(dataTypeName)) {
+                    dataTypeName = ResolveSettingDataType(settingMatch.Groups[1].Value);
+                }
+                if (!settingMatch.Success || string.IsNullOrEmpty(dataTypeName)) {
                     Debug.LogWarning($"跳过 {behaviourSign}: 未识别到 Setting 类型或 SettingData 类型 请检查构造写法是否参考 Death/BeginLogo!");
                     skipped++;
                     continue;
@@ -60,13 +64,13 @@ namespace LazyPan {
                 EnsureSettingAsset(settingMatch.Groups[1].Value);
 
                 sb.AppendLine("    /// <summary>");
-                sb.AppendLine($"    /// {cnName}行为节点 对应 {dataMatch.Groups[1].Value} 一条");
+                sb.AppendLine($"    /// {cnName}行为节点 对应 {dataTypeName} 一条");
                 sb.AppendLine($"    /// 参数便签见 BehaviourPayloadDoc.Get(nameof({behaviourSign}))，节点身上只读显示");
                 sb.AppendLine("    /// </summary>");
                 sb.AppendLine("    [Serializable]");
                 sb.AppendLine($"    [NodeMenuItem(\"LazyPan/行为/{cnName}\")]");
                 sb.AppendLine($"    public class {nodeName} : BehaviourGraphNode {{");
-                sb.AppendLine($"        public {dataMatch.Groups[1].Value} Config;");
+                sb.AppendLine($"        public {dataTypeName} Config;");
                 sb.AppendLine($"        public override string name => \"{cnName}\";");
                 sb.AppendLine($"        public override string BehaviourSign => nameof({behaviourSign});");
                 sb.AppendLine("    }");
@@ -110,6 +114,36 @@ namespace LazyPan {
             }
 
             return map;
+        }
+
+        /// <summary>
+        /// 兜底：源码写 out var 时正则抠不出 Data 类型，就按 Setting 类的 Datas 列表元素类型反推。
+        /// 比如 TrackingEntitySetting.Datas 是 List(TrackingEntitySettingData)，直接拿 TrackingEntitySettingData。
+        /// </summary>
+        static string ResolveSettingDataType(string settingTypeName) {
+            if (string.IsNullOrEmpty(settingTypeName)) {
+                return null;
+            }
+            foreach (var asm in System.AppDomain.CurrentDomain.GetAssemblies()) {
+                Type[] types;
+                try {
+                    types = asm.GetTypes();
+                } catch {
+                    continue;
+                }
+                foreach (var t in types) {
+                    if (t.Name != settingTypeName || !typeof(Setting).IsAssignableFrom(t)) {
+                        continue;
+                    }
+                    var datasField = t.GetField("Datas");
+                    if (datasField == null || !datasField.FieldType.IsGenericType) {
+                        return null;
+                    }
+                    var args = datasField.FieldType.GetGenericArguments();
+                    return args.Length == 1 ? args[0].Name : null;
+                }
+            }
+            return null;
         }
 
         static HashSet<string> CollectExistingBehaviourSigns(string content) {

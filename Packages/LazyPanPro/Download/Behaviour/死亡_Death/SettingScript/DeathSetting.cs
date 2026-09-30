@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace LazyPan {
-    /// <summary>死亡 — 只做生命归零后的死亡处理与延迟销毁，不管血量数值。数值参数 Health/MaxHealth/Dead 归实体参数值(ParamValue)配置初始化，本行为只读写。</summary>
+    /// <summary>死亡 — 只做生命归零后的死亡处理与延迟销毁，不管血量数值。数值参数 Health/MaxHealth/Dead 归实体参数值(实体参数)配置初始化，本行为只读写。</summary>
     [CreateAssetMenu(fileName = "DeathSetting", menuName = "LazyPan/DeathSetting")]
     public class DeathSetting : Setting {
         public List<DeathSettingData> Datas = new List<DeathSettingData>();

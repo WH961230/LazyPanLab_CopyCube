@@ -17,7 +17,11 @@ namespace LazyPan {
         }
 
         public static GameSetting LoadGameSetting() {
-            return Addressables.LoadAssetAsync<GameSetting>($"Packages/evoreek.lazypan/Runtime/Bundles/GameSetting/GameSetting.asset").WaitForCompletion();
+            GameSetting setting = Resources.Load<GameSetting>("GameSetting");
+            if (setting == null) {
+                Debug.LogError("GameSetting 丢了：Assets/LazyPan/Resources/GameSetting.asset 不存在，请跑引导第二步重新拷贝！");
+            }
+            return setting;
         }
 
         public static T LoadAsset<T>(AssetType type, string assetName) {

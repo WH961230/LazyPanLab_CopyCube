@@ -5,7 +5,7 @@ namespace LazyPan {
     /// 行为 - 传送流程
     /// 只做一件事: 前置条件满足时按配置跳一次场景 不引用任何其他行为
     /// 有条件=只看条件(只读 Data 不写 Data) 无条件=只看内部请求标记(调 RequestTeleport)
-    /// 请求标记只活在行为内部 不进 Data 不配 ParamValue 跳转只走 Flow.Next
+    /// 请求标记只活在行为内部 不进 Data 不配 实体参数 跳转只走 Flow.Next
     /// 配置来源 Setting/TeleportFlowSetting 快照同步到自身 TeleportFlowData 便于查看与调试
     /// </summary>
     public class Behaviour_Event_TeleportFlow : Behaviour {
@@ -161,7 +161,7 @@ namespace LazyPan {
             }
 
             object rightValue;
-            ParamValueType rightType = condition.LeftValueType;
+            DataValueType rightType = condition.LeftValueType;
             if (condition.RightIsEntityParam) {
                 if (!BehaviourSigns.Require(condition.RightParamSign, BehaviourSign, leftEntity.ObjConfig?.Sign, nameof(TeleportCondition.RightParamSign))) {
                     return false;
@@ -193,36 +193,36 @@ namespace LazyPan {
         /// <summary>
         /// 通用读值 统一走注册表 拿不到返回 false
         /// </summary>
-        private bool TryReadValue(Entity dataEntity, string sign, ParamValueType valueType, out object value) {
+        private bool TryReadValue(Entity dataEntity, string sign, DataValueType valueType, out object value) {
             value = null;
             if (dataEntity == null || string.IsNullOrEmpty(sign)) {
                 return false;
             }
 
             switch (valueType) {
-                case ParamValueType.Bool:
+                case DataValueType.Bool:
                     if (EntityAttrRegistry.TryGetBool(dataEntity, sign, out bool b)) {
                         value = b;
                         return true;
                     }
 
                     return false;
-                case ParamValueType.Int:
-                case ParamValueType.Float:
+                case DataValueType.Int:
+                case DataValueType.Float:
                     if (EntityAttrRegistry.TryGetNumber(dataEntity, sign, out float f)) {
                         value = f;
                         return true;
                     }
 
                     return false;
-                case ParamValueType.String:
+                case DataValueType.String:
                     if (EntityAttrRegistry.TryGetText(dataEntity, sign, out string s)) {
                         value = s;
                         return true;
                     }
 
                     return false;
-                case ParamValueType.Vector3:
+                case DataValueType.Vector3:
                     if (EntityAttrRegistry.TryGetVector(dataEntity, sign, out Vector3 v)) {
                         value = v;
                         return true;
@@ -239,15 +239,15 @@ namespace LazyPan {
         /// </summary>
         private object GetConstValue(TeleportCondition condition) {
             switch (condition.RightConstType) {
-                case ParamValueType.Bool:
+                case DataValueType.Bool:
                     return condition.RightBoolValue;
-                case ParamValueType.Int:
+                case DataValueType.Int:
                     return condition.RightIntValue;
-                case ParamValueType.Float:
+                case DataValueType.Float:
                     return condition.RightConstValue;
-                case ParamValueType.String:
+                case DataValueType.String:
                     return condition.RightStringValue;
-                case ParamValueType.Vector3:
+                case DataValueType.Vector3:
                     return condition.RightVector3Value;
                 default:
                     return condition.RightConstValue;
@@ -257,14 +257,14 @@ namespace LazyPan {
         /// <summary>
         /// 通用比较 数值含 Bool 按大小比 字符串/向量只比相等与不等
         /// </summary>
-        private bool CompareValues(object leftValue, object rightValue, ParamValueType valueType, TeleportCompare compare) {
+        private bool CompareValues(object leftValue, object rightValue, DataValueType valueType, TeleportCompare compare) {
             switch (valueType) {
-                case ParamValueType.Bool:
+                case DataValueType.Bool:
                     return CompareNumbers(ToNumber(leftValue), ToNumber(rightValue), compare);
-                case ParamValueType.Int:
-                case ParamValueType.Float:
+                case DataValueType.Int:
+                case DataValueType.Float:
                     return CompareNumbers(ToNumber(leftValue), ToNumber(rightValue), compare);
-                case ParamValueType.String: {
+                case DataValueType.String: {
                     string left = leftValue as string ?? "";
                     string right = rightValue as string ?? "";
                     if (compare == TeleportCompare.Equal) {
@@ -278,7 +278,7 @@ namespace LazyPan {
                     LogUtil.LogErrorFormat("行为:{0} 字符串只支持相等/不等比较!", BehaviourSign);
                     return false;
                 }
-                case ParamValueType.Vector3: {
+                case DataValueType.Vector3: {
                     if (!(leftValue is Vector3 left) || !(rightValue is Vector3 right)) {
                         return false;
                     }

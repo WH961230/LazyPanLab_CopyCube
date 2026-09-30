@@ -4,8 +4,8 @@ namespace LazyPan {
     /// <summary>
     /// 行为 - 死亡
     /// 只做一件事: 监听实体 Data 的 Dead 标记 执行死亡处理与延迟销毁 不管理数值不做伤害判定
-    /// 数值参数 Health/MaxHealth/Dead 归实体参数值(ParamValue)初始化与写入 血量增减规则归数值类行为 本行为只消费 Dead
-    /// 配置来源 Setting/DeathSetting 运行时状态写自身 Data(Dead 归 ParamValue 初始化)
+    /// 数值参数 Health/MaxHealth/Dead 归实体参数值(实体参数)初始化与写入 血量增减规则归数值类行为 本行为只消费 Dead
+    /// 配置来源 Setting/DeathSetting 运行时状态写自身 Data(Dead 归 实体参数 初始化)
     /// </summary>
     public class Behaviour_Event_Death : Behaviour {
         private const string settingPath = "Setting/DeathSetting";
@@ -45,7 +45,7 @@ namespace LazyPan {
             _config.DeathAction = settingData.DeathAction;
 
             if (!BindRuntimeData()) {
-                LogUtil.LogErrorFormat("行为:{0} 实体:{1} 缺少 Dead 参数 请在 ParamValueSetting 为该实体配置 Bool 参数 Dead!", BehaviourSign, entity.ObjConfig.Sign);
+                LogUtil.LogErrorFormat("行为:{0} 实体:{1} 缺少 Dead 参数 请在实体参数配置中为该实体配置 Bool 参数 Dead!", BehaviourSign, entity.ObjConfig.Sign);
                 return;
             }
 
@@ -56,7 +56,7 @@ namespace LazyPan {
         }
 
         /// <summary>
-        /// 绑定实体 Data 标签 Health/MaxHealth 只读用于展示 Dead 必须存在 归 ParamValue 初始化
+        /// 绑定实体 Data 标签 Health/MaxHealth 只读用于展示 Dead 必须存在 归 实体参数 初始化
         /// </summary>
         private bool BindRuntimeData() {
             bool hasHealth = Cond.Instance.TryGetData(entity, HEALTH_LABEL, out _healthFloatData);

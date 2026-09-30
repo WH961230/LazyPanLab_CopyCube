@@ -1,6 +1,6 @@
 # Behaviour_Event_UIStatusDisplay UIStatusDisplay
 
-一句话：屏幕状态展示 — 把任意实体 Data 刷到屏幕 UI 上。 跟 EntityUIBinder 是两兄弟：EntityUIBinder 是挂头顶血条（世界坐标，跟实体走）， 这个是刷主界面 HUD（屏幕坐标，比如 UI_SceneC 显示玩家血量/等级/经验/波次）。 只读不写，不改任何数值，数值归 ParamValue / StageProgress / Death 管。 配置来源 Setting/UIStatusDisplaySetting，一个实体一条，里面可配多个屏幕 UI 块。
+一句话：屏幕状态展示 — 把任意实体 Data 刷到屏幕 UI 上。 跟 EntityUIBinder 是两兄弟：EntityUIBinder 是挂头顶血条（世界坐标，跟实体走）， 这个是刷主界面 HUD（屏幕坐标，比如 UI_SceneC 显示玩家血量/等级/经验/波次）。 只读不写，不改任何数值，数值归 实体参数 / StageProgress / Death 管。 配置来源 Setting/UIStatusDisplaySetting，一个实体一条，里面可配多个屏幕 UI 块。
 
 ## Setting 字段
 

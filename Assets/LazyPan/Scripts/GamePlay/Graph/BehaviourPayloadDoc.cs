@@ -29,7 +29,6 @@ namespace LazyPan {
             { "Behaviour_Event_DelayGenerateEntity", "DelayGenerateEntitySetting" },
             { "Behaviour_Event_EntityUIBinder", "EntityUIBinderSetting" },
             { "Behaviour_Event_EquipmentMountManager", "EquipmentMountSetting" },
-            { "Behaviour_Event_ParamValue", "ParamValueSetting" },
             { "Behaviour_Event_StageProgress", "StageProgressSetting" },
             { "Behaviour_Event_TeleportFlow", "TeleportFlowSetting" },
             { "Behaviour_Event_UIPickOneOfThree", "UIPickOneOfThreeSetting" },
@@ -118,7 +117,7 @@ namespace LazyPan {
                 sb.AppendLine("— 外部参数 —");
                 sb.AppendLine("无，本行为开箱即用，无需配置。");
             } else {
-                sb.AppendLine("— 需配参数（去 ParamValue 里配）—");
+                sb.AppendLine("— 需配参数（去实体参数配置里配）—");
                 foreach (object d in defs) {
                     if (d is PayloadContractDef c) {
                         sb.AppendLine($"- {c.Sign}：{c.ValueType}，默认 {DefaultOf(c)}");
@@ -167,11 +166,11 @@ namespace LazyPan {
 
         static string DefaultOf(PayloadContractDef c) {
             switch (c.ValueType) {
-                case ParamValueType.Bool: return c.BoolDefault.ToString();
-                case ParamValueType.Int: return c.IntDefault.ToString();
-                case ParamValueType.Float: return c.FloatDefault.ToString();
-                case ParamValueType.String: return c.StringDefault ?? "";
-                case ParamValueType.Vector3: return c.Vector3Default.ToString();
+                case DataValueType.Bool: return c.BoolDefault.ToString();
+                case DataValueType.Int: return c.IntDefault.ToString();
+                case DataValueType.Float: return c.FloatDefault.ToString();
+                case DataValueType.String: return c.StringDefault ?? "";
+                case DataValueType.Vector3: return c.Vector3Default.ToString();
                 default: return "";
             }
         }

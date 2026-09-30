@@ -8,7 +8,7 @@
 2. 通用型的结论，直接写进本规范，后面所有 Behaviour 共用。
 3. 单次特例（某一个怪、某一个塔的数值），只改那一条配置，不写进规范。
 
-## 1. 数据统一规范（全局一致，ParamValue已干掉）
+## 1. 数据统一规范（全局一致，旧参数配置已干掉）
 
 1. 跨行为传数一律走 `EntityAttrRegistry` 注册表：`SetNumber/TryGetNumber、SetBool/TryGetBool、SetText/TryGetText、SetVector/TryGetVector、Health/Move`。
 2. `entity.Data` 里的 `FloatData/IntData/BoolData` 不许跨行为读写，只允许行为内部 `AttachBehaviourData<T>` 存自己的 Config + 私有运行时字段（如 `hasTeleported、_innerRequest`）。
@@ -27,7 +27,7 @@
 1. 一节点一行为，`SourceSign` 必须等于 `ObjConfig.Sign`，对不上红字报错。
 2. 左边填变量，右边能用常量就用常量。如 `Energy >= 100` 优于 `Energy >= MaxEnergy`。
 3. 四个词全框架通用：`Self=自己 Any=谁都行 Triggerer=撞过来的人 Root=实体根`，不许造新词。
-4. 枚举查代码为准：`ParamValueType 0=Bool 1=Int 2=Float 3=String 4=Vector3`；`TeleportCompare 0=大于 1=大于等于 2=等于 3=小于等于 4=小于 5=不等`。
+4. 枚举查代码为准：`DataValueType 0=Bool 1=Int 2=Float 3=String 4=Vector3`；`TeleportCompare 0=大于 1=大于等于 2=等于 3=小于等于 4=小于 5=不等`。
 5. 改 `Setting/*.asset` 必须同步改 `Graph/Obj_*_*.asset` 里那份拷贝，否则图一保存就覆盖。
 
 ## 4. AI 造新积木规范
