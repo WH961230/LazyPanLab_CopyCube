@@ -24,6 +24,12 @@ namespace LazyPan {
                 return;
             }
 
+            //新项目引导只建 Behaviour/Config/Data/Flow，没有 Graph 目录，先补上，不然写文件直接抛异常中断
+            string graphDir = Path.GetDirectoryName(generatedPath);
+            if (!Directory.Exists(graphDir)) {
+                Directory.CreateDirectory(graphDir);
+            }
+
             List<string> behaviourFiles = Directory.GetFiles(behaviourDir, "Behaviour_*.cs", SearchOption.AllDirectories)
                 .Where(p => !p.Contains("Template")).ToList();
             Dictionary<string, string> nameMap = LoadBehaviourNames();
