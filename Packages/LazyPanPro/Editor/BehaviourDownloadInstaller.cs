@@ -135,9 +135,29 @@ namespace LazyPan {
             copied += CopyFiles(Path.Combine(dir, "Setting"), SettingAssetDir, "*.asset");
             RegisterCsv(sign, Path.GetFileName(dir));
             BehaviourNodeGenerator.GenerateAll();
-            if (log) {
+            string problem = VerifyNodeGenerated(sign);
+            if (!string.IsNullOrEmpty(problem)) {
+                Debug.LogError($"行为已安装：{sign}，但节点没生成：{problem}");
+            } else if (log) {
                 Debug.Log($"行为已安装：{sign}，拷了 {copied} 个文件，中文名已登记，节点已生成。");
             }
+        }
+
+        /// <summary>
+        /// 验节点：生成文件里有没有这个行为的节点类，没有就定位断在哪一环，免得右键菜单空了还不知道
+        /// </summary>
+        public static string VerifyNodeGenerated(string sign) {
+            string path = "Assets/LazyPan/Scripts/GamePlay/Graph/BehaviourGraphNodes.Generated.cs";
+            if (!File.Exists(path)) {
+                return "节点文件不存在，请点菜单“Assets/Create/LazyPan/一键生成行为节点”跑一次";
+            }
+            if (File.ReadAllText(path, Encoding.UTF8).Contains("nameof(" + sign + ")")) {
+                return null;
+            }
+            if (!IsRegistered(sign)) {
+                return "登记表缺行：BehaviourConfig.csv 里没有 " + sign + "，去工具箱点一次重装（自动登记）";
+            }
+            return "源码未识别：行为源码里没找到 Setting 写法，节点生成器跳过了（看控制台黄色警告）";
         }
 
         /// <summary>
