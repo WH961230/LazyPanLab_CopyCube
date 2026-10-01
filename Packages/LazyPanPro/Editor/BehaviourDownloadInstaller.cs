@@ -134,8 +134,9 @@ namespace LazyPan {
             copied += CopyFiles(Path.Combine(dir, "NodeView"), EditorDir, "*NodeView.cs");
             copied += CopyFiles(Path.Combine(dir, "Setting"), SettingAssetDir, "*.asset");
             RegisterCsv(sign, Path.GetFileName(dir));
+            BehaviourNodeGenerator.GenerateAll();
             if (log) {
-                Debug.Log($"行为已安装：{sign}，拷了 {copied} 个文件，中文名已登记。接下来去点一键生成节点（已自动触发一次）。");
+                Debug.Log($"行为已安装：{sign}，拷了 {copied} 个文件，中文名已登记，节点已生成。");
             }
         }
 
