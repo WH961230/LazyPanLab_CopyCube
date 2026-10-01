@@ -17,9 +17,9 @@ namespace LazyPan {
         private static bool _foldout = true;
         private static Vector2 _scroll;
 
-        private const string BehaviourDir = "Assets/LazyPan/Scripts/GamePlay/Behaviour/Behaviour";
-        private const string SettingDir = "Assets/LazyPan/Scripts/GamePlay/Config/Config/Setting";
-        private const string DataDir = "Assets/LazyPan/Scripts/GamePlay/Data/Data";
+        private const string BehaviourDir = "Assets/LazyPan/Scripts/GamePlay/Behaviour";
+        private const string SettingDir = "Assets/LazyPan/Scripts/GamePlay/Config/Setting";
+        private const string DataDir = "Assets/LazyPan/Scripts/GamePlay/Data";
         private const string SettingAssetDir = "Assets/LazyPan/Bundles/Configs/Setting";
         private const string EditorDir = "Assets/Editor";
 
