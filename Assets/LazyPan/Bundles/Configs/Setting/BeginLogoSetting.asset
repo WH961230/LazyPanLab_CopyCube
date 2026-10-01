@@ -9,17 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6adb7bad120893468e19e3ea2465789, type: 3}
+  m_Script: {fileID: 11500000, guid: 6dac34a0b3d9d8c42af94ec1500d032d, type: 3}
   m_Name: BeginLogoSetting
   m_EditorClassIdentifier: 
-  MemoDoc: "\u3010\u5F00\u5934Logo\u3011\u7BA1\u5F00\u573A\u64AD\u51E0\u79D2 Logo\uFF0C\u64AD\u5B8C\u81EA\u52A8\u8DF3\u4E0B\u4E00\u6B65\u3002\n\u2014
-    \u914D\u7F6E\u53C2\u6570\uFF08BeginLogoSetting \u91CC\u6309 SourceSign \u914D\uFF09\u2014\n-
-    <color=#FFD54F>UIParentPrefabSign</color>\uFF1ALogo \u6302\u5728\u54EA\u4E2A\u754C\u9762\u4E0A\uFF0C\u5982
-    UI/UI_SceneA\n- <color=#FFD54F>UIChildPrefabSign</color>\uFF1A\u6302\u54EA\u4E2A
-    Logo\uFF0C\u5982 UI/UI_Logo\n- <color=#FFD54F>LogoContinueTime</color>\uFF1A\u64AD\u51E0\u79D2\uFF0C\u5EFA\u8BAE
-    3~8\uFF0C0=\u4E00\u95EA\u800C\u8FC7"
   Datas:
-  - SourceSign: Obj_Logo_SceneA_BeginLogo
+  - SourceSign: Obj_Logo_BeginLogo1
     UIParentPrefabSign: UI/UI_SceneA
     UIChildPrefabSign: UI/UI_Logo
     LogoContinueTime: 8
+    EndJumpToScene: SceneB

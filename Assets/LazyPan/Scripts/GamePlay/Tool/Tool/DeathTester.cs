@@ -79,9 +79,9 @@ namespace LazyPan {
             }
 
             if (EntityAttrRegistry.TryGetHealth(targetEntity, out HealthAttr attr)
-                && targetEntity.GetBehaviourData<DeathData>(out DeathData death)) {
+                && Cond.Instance.TryGetData(targetEntity, Behaviour_Event_Death.DEAD_LABEL, out BoolData deadData)) {
                 LogUtil.LogFormat("[测试] 实体:{0} 注册表读取 血量:{1}/{2} 死亡:{3}",
-                    targetEntity.ObjConfig.Sign, attr.Current, attr.Max, death.Dead);
+                    targetEntity.ObjConfig.Sign, attr.Current, attr.Max, deadData.Bool);
             } else {
                 LogUtil.LogErrorFormat("[测试] 实体:{0} 未初始化生命参数 请检查是否挂了死亡行为", targetEntity.ObjConfig.Sign);
             }

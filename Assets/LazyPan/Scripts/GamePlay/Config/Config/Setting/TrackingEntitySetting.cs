@@ -3,25 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace LazyPan {
-    /// <summary>追踪实体配置：以 SourceSign 为键。行为只消费自身配置。</summary>
+    /// <summary>追踪 — 驱动 NavMeshAgent 追目标。读 MovementStop 可暂停。</summary>
     [CreateAssetMenu(fileName = "TrackingEntitySetting", menuName = "LazyPan/TrackingEntitySetting")]
     public class TrackingEntitySetting : Setting {
-        [Header("节点便签说明 自由修改")]
-        [Tooltip("追踪节点上的行为说明书，改这里就行，不用改代码。清空则回退到代码里的默认文案")]
-        [TextArea(5, 15)]
-        public string MemoDoc =
-            "【追踪实体】管一个怪自动找路追人，目标没了就原地等。\n" +
-            "停走命令看实体级 MoveAttr，谁置停都停。\n" +
-            "— 配置参数（TrackingEntitySetting 里按 SourceSign 配）—\n" +
-            "- <color=#FFD54F>TargetType</color>：追谁，按实体类型名填，找不到就原地等\n" +
-            "- <color=#FFD54F>NavMeshTerrainSign</color>：寻路用的地形实体，如 Obj_Terrain_SceneC_Terrain，不填不查 NavMesh\n" +
-            "- <color=#FFD54F>TrackingSpeed</color>：追多快，建议 2~6\n" +
-            "- <color=#FFD54F>TrackingStop</color>：true=这个追踪自己先停住，false=跟着大家一起走";
         public List<TrackingEntitySettingData> Datas = new List<TrackingEntitySettingData>();
 
-        /// <summary>
-        /// 按来源类型获取行为配置 条目不存在时输出错误 避免静默失败
-        /// </summary>
         public bool TryGet(string sourceSign, out TrackingEntitySettingData data) {
             foreach (var tmp in Datas) {
                 if (tmp.SourceSign == sourceSign) {
@@ -36,22 +22,27 @@ namespace LazyPan {
         }
     }
 
-    /// <summary>
-    /// 追踪行为配置 以来源类型为键 行为不感知实体业务
-    /// </summary>
     [Serializable]
     public struct TrackingEntitySettingData {
+        [Header("发起追踪的实体类型")]
+        [Tooltip("发起追踪的实体类型，必须与 ObjConfig.Sign 一致，如 Obj_Enemy_Enemy1")]
+        public string SourceSign;
+
+        [Header("追踪速度")]
+        [Tooltip("追踪速度，直接写到 NavMeshAgent.speed")]
+        public float TrackingSpeed;
+
+        [Header("追踪是否停止")]
+        [Tooltip("为 true 则原地停并清空路径；同实体 Data 上 MovementStop(Bool)为 true 也会暂停")]
+        public bool TrackingStop;
+
+        [Header("被追踪的实体类型")]
+        [Tooltip("被追踪的实体类型(ObjConfig.Type 列)，如 Player，运行时随机取该类型的一个实体")]
+        public string TargetType;
+
+        [Header("导航地形实体")]
+        [Tooltip("烘焙导航网格的地形实体 Sign，只用于编辑器实查地形预制体上有没有导航组件，不参与运行")]
         [EntitySign]
-        [Tooltip("发起追踪的实体类型，与 ObjConfig.Sign 一致，如 Obj_Enemy_SceneC_Enemy")]
-        [Header("发起追踪的实体类型")] public string SourceSign;
-        [Tooltip("追踪速度，代理速度，如 3.5")]
-        [Header("追踪速度")] public float TrackingSpeed;
-        [Tooltip("配置级停止，勾上后行为不再追踪")]
-        [Header("追踪是否停止")] public bool TrackingStop;
-        [Tooltip("被追踪的实体类型，如 Player 或 Obj_Player_SceneC_Player")]
-        [Header("被追踪的实体类型")] public string TargetType;
-        [EntitySign]
-        [Tooltip("寻路用的地形实体，如 Obj_Terrain_SceneC_Terrain。检查时真去它所在场景查 NavMesh 烘没烘焙")]
-        [Header("寻路地形实体")] public string NavMeshTerrainSign;
+        public string NavMeshTerrainSign;
     }
 }

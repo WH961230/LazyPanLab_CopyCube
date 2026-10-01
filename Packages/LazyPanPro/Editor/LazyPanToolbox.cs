@@ -7,8 +7,7 @@ using UnityEngine;
 namespace LazyPan {
     public class LazyPanToolbox : EditorWindow {
         private LazyPanTool _tool;
-        private bool isFoldoutBehaviour;
-        private bool isFoldoutTemplate;
+        private bool isFoldoutBehaviour = true;
 
         /// <summary>
         /// 项目根目录磁盘路径
@@ -108,8 +107,7 @@ namespace LazyPan {
         public void OnCustomGUI(float areaX) {
             GUILayout.BeginArea(new Rect(areaX + _tool.scrollOffsetX, 60 + _tool.scrollOffsetY, Screen.width, Screen.height * 10));
             Title();//标题
-            BehaviourDownload();//行为拉取
-            TemplateDownload();//模板下载
+            BehaviourDownload();
             GUILayout.EndArea();
         }
 
@@ -123,15 +121,45 @@ namespace LazyPan {
                 height += GUILayoutUtility.GetLastRect().height;
                 GUILayout.BeginVertical();
 
+                GUIStyle style = LazyPanTool.GetGUISkin("AButtonGUISkin").GetStyle("button");
+                GUIStyle rowStyle = new GUIStyle(style);
+                rowStyle.fontSize = 12;
+                rowStyle.padding = new RectOffset(4, 4, 0, 0);
+                rowStyle.fixedHeight = 0;
+                rowStyle.stretchHeight = false;
+                rowStyle.alignment = TextAnchor.MiddleCenter;
+
+                if (GUILayout.Button("全部安装或重装", style, GUILayout.ExpandWidth(true))) {
+                    BehaviourDownloadInstaller.InstallAll();
+                    Debug.Log("已全量安装/重装，节点已生成");
+                }
+
                 string targetFolder = "Packages/evoreek.lazypan/Download/Behaviour/";//遍历目标文件夹下所有的脚本名
                 string targetFolderDisk = ResolveToDiskPath(targetFolder);//解析为磁盘路径 虚拟包名与目录名可能不一致
                 if (!string.IsNullOrEmpty(targetFolderDisk) && Directory.Exists(targetFolderDisk)) {
                     string[] folders = Directory.GetDirectories(targetFolderDisk);
                     foreach (string folder in folders) {
                         GUILayout.BeginHorizontal();
-                        GUIStyle style = LazyPanTool.GetGUISkin("AButtonGUISkin").GetStyle("button");
-                        if (GUILayout.Button(string.Concat("点击获取 ", Path.GetFileName(folder)), style)) {
-                            AutoCopyBehaviours(string.Concat(targetFolder, Path.GetFileName(folder), "/"));
+                        bool installed = BehaviourDownloadInstaller.IsInstalled(folder);
+                        string sign = BehaviourDownloadInstaller.FindSign(folder);
+                        GUILayout.Label(Path.GetFileName(folder), GUILayout.ExpandWidth(true), GUILayout.Height(18));
+                        GUILayout.Label(installed ? "已安装" : "未安装", GUILayout.Width(60), GUILayout.Height(18));
+                        if (installed) {
+                            if (GUILayout.Button("重装", rowStyle, GUILayout.Width(70), GUILayout.Height(18))) {
+                                BehaviourDownloadInstaller.Install(folder, true);
+                                Debug.Log("已重装");
+                            }
+                            if (GUILayout.Button("卸载", rowStyle, GUILayout.Width(70), GUILayout.Height(18))) {
+                                if (BehaviourDownloadInstaller.ConfirmUninstall(folder, sign)) {
+                                    BehaviourDownloadInstaller.Uninstall(folder, true);
+                                    Debug.Log("已卸载");
+                                }
+                            }
+                        } else {
+                            if (GUILayout.Button("获取", rowStyle, GUILayout.Width(70), GUILayout.Height(18))) {
+                                BehaviourDownloadInstaller.Install(folder, true);
+                                Debug.Log("已获取");
+                            }
                         }
                         GUILayout.EndHorizontal();
                     }
@@ -241,63 +269,6 @@ namespace LazyPan {
             if (changed) {
                 AssetDatabase.Refresh();
             }
-        }
-
-        private void TemplateDownload() {
-            //根据文件夹分类生成获取按钮
-            isFoldoutTemplate = EditorGUILayout.Foldout(isFoldoutTemplate, LazyPanTool.GetText("工具箱模板获取展开文本"), true);
-            Rect rect = GUILayoutUtility.GetLastRect();
-            float height = 0;
-            if (isFoldoutTemplate) {
-                GUILayout.Label("");
-                height += GUILayoutUtility.GetLastRect().height;
-                GUILayout.BeginVertical();
-                
-                string targetFolder = "Packages/evoreek.lazypan/Download/Template/";//遍历目标文件夹下所有的脚本名
-                string targetFolderDisk = ResolveToDiskPath(targetFolder);//解析为磁盘路径 虚拟包名与目录名可能不一致
-                if (!string.IsNullOrEmpty(targetFolderDisk) && Directory.Exists(targetFolderDisk)) {
-                    string[] folders = Directory.GetDirectories(targetFolderDisk);
-                    foreach (string folder in folders) {
-                        GUILayout.BeginHorizontal();
-                        GUIStyle style = LazyPanTool.GetGUISkin("AButtonGUISkin").GetStyle("button");
-                        if (GUILayout.Button(string.Concat("点击获取 ", Path.GetFileName(folder)), style)) {
-                            AutoCopyTemplates(Path.GetFileName(folder));
-                        }
-                        GUILayout.EndHorizontal();
-                    }
-                }
-                
-                GUILayout.EndVertical();
-                height += GUILayoutUtility.GetLastRect().height;
-            } else {
-                GUILayout.Space(10);
-            }
-            
-            LazyPanTool.DrawBorder(new Rect(rect.x + 2f, rect.y - 2f, rect.width - 2f, rect.height + height + 5f), Color.white);
-
-            GUILayout.Space(10);
-        }
-        
-        private void AutoCopyTemplates(string targetFolder) {
-            string sourceVirtualPath = $"Packages/evoreek.lazypan/Download/Template/{targetFolder}/Assets/";
-            string sourceDiskPath = ResolveToDiskPath(sourceVirtualPath);
-            if (string.IsNullOrEmpty(sourceDiskPath) || !Directory.Exists(sourceDiskPath)) {
-                Debug.LogError($"错误! 未找到模板来源目录:{sourceVirtualPath}");
-                return;
-            }
-
-            string[] allFiles = Directory.GetFiles(sourceDiskPath, "*", SearchOption.AllDirectories);
-            foreach (string sourceFile in allFiles) {
-                if (sourceFile.EndsWith(".meta")) continue;// 跳过.meta文件
-                string relativePath = Path.GetRelativePath(sourceDiskPath, sourceFile);// 计算相对路径（相对于源文件夹）
-                string targetFile = Path.Combine("Assets/", relativePath);// 构建目标文件路径
-                string targetDir = Path.GetDirectoryName(targetFile);// 获取目标文件夹路径
-                if (!Directory.Exists(targetDir)) {// 如果目标文件夹不存在，则创建
-                    Directory.CreateDirectory(targetDir);
-                }
-                File.Copy(sourceFile, targetFile, true);//复制文件
-            }
-            AssetDatabase.Refresh();
         }
 
         private void Title() {

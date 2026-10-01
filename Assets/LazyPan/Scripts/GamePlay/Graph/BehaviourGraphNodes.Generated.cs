@@ -246,4 +246,35 @@ namespace LazyPan {
         public override string BehaviourSign => nameof(Behaviour_Event_OrbitKeeper);
     }
 
+
+    /// <summary>
+    /// 挂载界面行为节点 无配置，开箱即用
+    /// </summary>
+    [Serializable]
+    [NodeMenuItem("LazyPan/行为/挂载界面")]
+    public class BehaviourNode_UIBinder : BehaviourGraphNode {
+        public override string name => "挂载界面";
+        public override string BehaviourSign => nameof(Behaviour_Event_UIBinder);
+    }
+
+    /// <summary>
+    /// 浮窗行为节点 无配置，开箱即用
+    /// </summary>
+    [Serializable]
+    [NodeMenuItem("LazyPan/行为/浮窗")]
+    public class BehaviourNode_UIFloatingWindow : BehaviourGraphNode {
+        public override string name => "浮窗";
+        public override string BehaviourSign => nameof(Behaviour_Event_UIFloatingWindow);
+    }
+
+    /// <summary>
+    /// 透明桌面行为节点 无配置，开箱即用
+    /// </summary>
+    [Serializable]
+    [NodeMenuItem("LazyPan/行为/透明桌面")]
+    public class BehaviourNode_WindowsTransparent : BehaviourGraphNode {
+        public override string name => "透明桌面";
+        public override string BehaviourSign => nameof(Behaviour_Event_WindowsTransparent);
+    }
+
 }

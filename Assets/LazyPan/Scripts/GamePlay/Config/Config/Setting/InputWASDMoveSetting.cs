@@ -6,22 +6,6 @@ namespace LazyPan {
     /// <summary>控制器WASD移动 — 读输入按 CharacterController 移动，带重力与转向。依赖 inputactions 与 CharacterController。</summary>
     [CreateAssetMenu(fileName = "InputWASDMoveSetting", menuName = "LazyPan/InputWASDMoveSetting")]
     public class InputWASDMoveSetting : Setting {
-        [Header("节点便签说明 自由修改")]
-        [Tooltip("控制器移动节点上的行为说明书，改这里就行，不用改代码。清空则回退到代码里的默认文案")]
-        [TextArea(5, 15)]
-        public string MemoDoc =
-            "【控制器移动】管一个实体的 WASD 走路，读输入、推 CharacterController，不调别的移动行为。\n" +
-            "停走命令看实体级 MoveAttr，谁置停都停。\n" +
-            "— 配置参数（InputWASDMoveSetting 里按 SourceSign 配）—\n" +
-            "- <color=#FFD54F>InputControlSign</color>：输入方案名，填 InputRegister 里的那一个，错了就没反应\n" +
-            "- <color=#FFD54F>MoveSpeed</color>：移动速度，0=不动，建议 3~8\n" +
-            "- <color=#FFD54F>RotateSpeed</color>：转向速度，0=不转身，建议 5~15\n" +
-            "- <color=#FFD54F>Gravity</color>：重力加速度，一般填负数（如 -20），落地后自动压住\n" +
-            "- <color=#FFD54F>MovePriority</color>：移动优先级，跟瞬移的 TeleportPriority 比，0=常规会被默认瞬移压住，填大则反压\n" +
-            "— 数据交流（读写实体级 MoveAttr，不直接调别的行为）—\n" +
-            "- <color=#FFD54F>停走</color>：MoveAttr.Stopped=true 全体移动行为一起停，false=恢复\n" +
-            "- <color=#FFD54F>让路</color>：瞬移 Teleporting=true 且 TeleportPriority>=MovePriority 时，水平归零只留重力\n" +
-            "- <color=#FFD54F>位置</color>：推 CharacterController，身体朝向跟着输入转";
         public List<InputWASDMoveSettingData> Datas = new List<InputWASDMoveSettingData>();
 
         public bool TryGet(string sourceSign, out InputWASDMoveSettingData data) {
@@ -40,29 +24,24 @@ namespace LazyPan {
 
     [Serializable]
     public struct InputWASDMoveSettingData {
-        [EntitySign]
-        [Header("SourceSign 发起移动的实体类型")]
-        [Tooltip("必须与 ObjConfig.Sign 一致，如 Obj_Player_SceneC_Player。对不上这条配置就不会被这个实体用到")]
+        [Header("发起移动的实体类型")]
+        [Tooltip("发起移动的实体类型，必须与 ObjConfig.Sign 一致，如 Obj_Player_Player1")]
         public string SourceSign;
 
-        [Header("InputControlSign 输入方案名")]
-        [Tooltip("填 InputRegister 里的那一个，如 Player/Motion。填错就没反应，先去 inputactions 里确认名字")]
+        [Header("输入控制标识")]
+        [Tooltip("输入动作标识（InputRegister 路径），如 Player/Motion，需在 LazyPanInputControl.inputactions 中存在")]
         public string InputControlSign;
 
-        [Header("MoveSpeed 移动速度")]
-        [Tooltip("移动速度，0=不动，建议 3~8。填负数会被钳到 0")]
+        [Header("移动速度")]
+        [Tooltip("移动速度")]
         public float MoveSpeed;
 
-        [Header("RotateSpeed 转向速度")]
-        [Tooltip("转向速度，0=不转身，建议 5~15。越大转身越快")]
+        [Header("转向速度 每秒转向系数")]
+        [Tooltip("转向速度，每秒转向系数，越大越快，0 不转向")]
         public float RotateSpeed;
 
-        [Header("Gravity 重力")]
-        [Tooltip("重力加速度，一般填负数（如 -20）。落地后自动压住，填正数会往天上飘")]
+        [Header("重力 负数向下")]
+        [Tooltip("重力，负数向下（保持贴地）")]
         public float Gravity;
-
-        [Header("MovePriority 移动优先级")]
-        [Tooltip("跟瞬移的 TeleportPriority 比大小。填 0=常规，会被默认瞬移（优先级10）压住；填得比瞬移大，瞬移时 WASD 照走不让路")]
-        public int MovePriority;
     }
 }

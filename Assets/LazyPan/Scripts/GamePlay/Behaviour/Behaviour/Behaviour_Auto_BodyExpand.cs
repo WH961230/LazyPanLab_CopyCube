@@ -37,6 +37,14 @@ namespace LazyPan {
             "— 外部怎么互动 —\n" +
             "- <color=#FFD54F>停下</color>：长满自动停并喊死，不用你管";
         /// <summary>
+        /// 对外契约（仅兼容老配置：Setting 为 0 时才读这些 Data）
+        /// </summary>
+        public static readonly PayloadContractDef[] RequiredPayload = {
+            new PayloadContractDef() { Sign = "MaxRadius", ValueType = DataValueType.Float, FloatDefault = 5f },
+            new PayloadContractDef() { Sign = "ExpandSpeed", ValueType = DataValueType.Float, FloatDefault = 3f },
+        };
+
+        /// <summary>
         /// 模块依赖 扩满散场走死亡 无血条分支
         /// </summary>
         public static readonly string[] RequiredModules = { "死亡" };

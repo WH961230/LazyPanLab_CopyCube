@@ -39,5 +39,10 @@ namespace LazyPan {
         [Header("被追踪的实体类型")]
         [Tooltip("被追踪的实体类型(ObjConfig.Type 列)，如 Player，运行时随机取该类型的一个实体")]
         public string TargetType;
+
+        [Header("导航地形实体")]
+        [Tooltip("烘焙导航网格的地形实体 Sign，只用于编辑器实查地形预制体上有没有导航组件，不参与运行")]
+        [EntitySign]
+        public string NavMeshTerrainSign;
     }
 }

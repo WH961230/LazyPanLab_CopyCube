@@ -50,3 +50,15 @@
    - 用户拉下来能不能直接看效果？节点格子够不够白话？要不要把常量默认值填好（如传送默认 `>=100`）？
 3. 反省完先问再干：把“别的行为也有同款问题，要不要一起改”列成选项让我选，我说改才改，不擅自扩散。
 4. 方针一致就顺：大方向是用户快速拉取、节点配完直接看效果。凡是让用户多配一步、多看一眼代码的改法，一律打回。
+
+## 7. 插件使用机制（行为拉取制，公用常驻插件）
+
+1. 每一个行为都是要拉取的：新项目默认没有行为，去 Behaviour 界面的下载安装区按需拉，拉哪个看哪个的效果。
+2. 拉一个行为，自动带齐五件套：`Behaviour_*.cs` 进 `Assets/LazyPan/Scripts/GamePlay/Behaviour`，`SettingScript` 进 `Config/Setting`，`Data` 进 `Data`，`Setting/*.asset` 进 `Bundles/Configs/Setting`，`NodeView` 进 `Assets/Editor`，同时在 `BehaviourConfig.csv` 登记中文名并自动生成图节点。
+3. 行为私有的东西（Setting/Data/Behaviour/占位配置如 BulletFlySetting、OrbitFollowSetting、RingExpandSetting、本行为的 `*NodeView.cs`）一律放在 `Packages/LazyPanPro/Download/Behaviour/对应行为包/` 里，不许进 Core。
+4. 所有公用的东西常驻插件：`EntityAttrRegistry`、`DataLabels`、`Entity、Data、Setting` 基类、`Register` 各注册表、`Tool/Label/Config` 公共脚本全在 `Packages/LazyPanPro/Runtime/Core` 里，图框架（全局总览图、实体图窗口、说明书、总览节点类型与配色）全在 `Packages/LazyPanPro/Editor/EntityGraph` 里，新项目拉取检出后就是完整的，不用再拷。
+5. 留守 Assets 的只有两样：`BehaviourGraphNodes.Generated.cs`（20 来个实体图资产按 Assembly-CSharp 序列化引用了里面的节点类，搬家就全变 Missing，且生成器持续往这里写），以及还没装进包的新行为草稿。`Download/Template` 下 5 个空文件夹是模板占位，内容进来前不动。
+6. F2 就是全局图：包内 F2 入口先走 `GlobalMapHook` 开图，钩子没赋值（极旧项目）才落回文字版。文字版不许再加功能。
+7. 卸载行为：已安装的行旁边有“卸载”按钮，删五件套 + 取消登记 + 摘生成节点类；还有实体在用先弹窗确认。重装即恢复，图上残留节点 Missing 一下不怕。
+5. 新加公用方法先问归属：行为之间共用的走 `Runtime/Core`，单个行为私有的跟行为包走。拿不准就列选项问，不擅自决定放哪。
+6. 下载包准入：`Download/Behaviour` 下每个行为文件夹必须有 `Behaviour_*.cs`（安装器靠它认门，没它不显示不安装），`SettingScript/Data/Doc` 三件套齐了才能进。

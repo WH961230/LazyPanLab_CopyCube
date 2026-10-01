@@ -101,7 +101,7 @@ public static class NodeMemoHelper {
     /// 上岗检查：找行为类上静态 CheckContract(config, red, yellow)，有就跑，没有就回占位话。
     /// 只读配置不改东西，跨实体的只进黄单，红了也不拦保存。
     /// </summary>
-    internal static string RunCheck(BaseNodeView view, Action<object, List<string>, List<string>> extraCheck = null) {
+    public static string RunCheck(BaseNodeView view, Action<object, List<string>, List<string>> extraCheck = null) {
         string sign = BehaviourSignOf(view);
         if (string.IsNullOrEmpty(sign)) {
             return "节点异常：拿不到行为名";
@@ -167,7 +167,7 @@ public static class NodeMemoHelper {
     /// 本实体 Unity 组件实查：读行为类上静态 RequiredComponents（如 CharacterController），
     /// 真去本实体预制体上找，缺了判红。行为自己报要什么，按钮只管验，新增行为零手写。
     /// </summary>
-    internal static void AppendRequiredComponentCheck(Type behaviourType, object config, List<string> red, List<string> yellow) {
+    public static void AppendRequiredComponentCheck(Type behaviourType, object config, List<string> red, List<string> yellow) {
         if (behaviourType == null || config == null) {
             return;
         }
@@ -252,7 +252,7 @@ public static class NodeMemoHelper {
     /// 本实体 Comp 实查：配置里的 CompTriggerSign 真去本实体预制体上找，有没有都给结论。
     /// Root=查实体根上有没有 Comp；填了名的查有没有这个 Sign 的 Comp，顺带看有没有触发碰撞体。
     /// </summary>
-    internal static void AppendCompCheck(object config, List<string> red, List<string> yellow) {
+    public static void AppendCompCheck(object config, List<string> red, List<string> yellow) {
         if (config == null) {
             return;
         }
@@ -370,7 +370,7 @@ public static class NodeMemoHelper {
         return fallback;
     }
 
-    internal static UnityEngine.GameObject FindEntityPrefab(string sourceSign) {
+    public static UnityEngine.GameObject FindEntityPrefab(string sourceSign) {
         var guids = UnityEditor.AssetDatabase.FindAssets(sourceSign + " t:Prefab");
         foreach (string guid in guids) {
             string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guid);
@@ -395,7 +395,7 @@ public static class NodeMemoHelper {
     /// 反射扫配置里所有 *EntitySign / TargetType / SpawnSign / GenerateEntitySign，
     /// 真去 ObjConfig.csv 里查 Sign 列和 Type 列，找不到只提醒（跨实体不判红）。
     /// </summary>
-    internal static void AppendEntityYellows(object config, List<string> yellow) {
+    public static void AppendEntityYellows(object config, List<string> yellow) {
         if (config == null) {
             return;
         }
@@ -543,7 +543,7 @@ public static class NodeMemoHelper {
     /// 注意两个都要拦：PointerDown 是新事件，MouseDown 是老事件，框架节点拖拽认的是老的，
     /// 只拦新的等于没拦，两边照样一起拽，打架卡死。
     /// </summary>
-    internal static void ShieldListDrag(VisualElement configField) {
+    public static void ShieldListDrag(VisualElement configField) {
         foreach (var lv in configField.Query<BaseListView>().ToList()) {
             if (lv.userData is bool done && done) {
                 continue;
@@ -555,7 +555,7 @@ public static class NodeMemoHelper {
         }
     }
 
-    internal static VisualElement FindConfig(VisualElement controls) {
+    public static VisualElement FindConfig(VisualElement controls) {
         return controls
             .Query<PropertyField>()
             .ToList()
@@ -568,7 +568,7 @@ public static class NodeMemoHelper {
     /// Config 下每行左标签定宽，右边输入框全部顶到同一 x 起跑，两表看着齐。
     /// 只管直接子行；整过一次的行打标记，下次直接跳过，不反复碰样式。
     /// </summary>
-    internal static void AlignConfigRows(VisualElement configField) {
+    public static void AlignConfigRows(VisualElement configField) {
         foreach (var child in configField.Query<PropertyField>().ToList()) {
             if (child.parent != configField) {
                 continue;

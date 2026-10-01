@@ -120,7 +120,6 @@ namespace LazyPan {
             GUILayout.BeginArea(new Rect(areaX + _tool.scrollOffsetX, 60 + _tool.scrollOffsetY, Screen.width, Screen.height * 10));
             Title();
             AutoTool();
-            BehaviourDownloadInstaller.DrawTool();
             PreviewBehaviourConfigData();
             ManualGenerateBehaviourTool();
             GUILayout.EndArea();
@@ -817,7 +816,7 @@ namespace LazyPan {
                     string normalizedTarget = targetFolder.Replace("\\", "/").TrimEnd('/');
                     string normalizedDir = directory.Replace("\\", "/");
 
-                    if (normalizedDir == normalizedTarget) {
+                    if (normalizedDir == normalizedTarget || normalizedDir.StartsWith(normalizedTarget + "/")) {
                         string scriptName = Path.GetFileNameWithoutExtension(assetPath);
 
                         // 可选：验证脚本是否继承自特定基类（如果需要）

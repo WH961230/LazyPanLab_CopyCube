@@ -16,9 +16,6 @@ Behaviour_Event_StageProgress,阶段进度,阶段进度,,,
 Behaviour_Event_UIStatusDisplay,UI状态展示,UI状态展示,,,
 Behaviour_Event_UIPickOneOfThree,UI三选一,UI三选一,,,
 Behaviour_Event_WeaponFire,开火,开火,,,
-Behaviour_Auto_BulletFly,子弹飞行,子弹飞行,,,
-Behaviour_Auto_RingExpand,圆环扩散,圆环扩散,,,
-Behaviour_Auto_OrbitFollow,环绕跟随,环绕跟随,,,
 Behaviour_Auto_FlyTrack,飞行追踪,飞行追踪,,,
 Behaviour_Auto_BodyExpand,体型扩散,体型扩散,,,
 Behaviour_Auto_ContactDamage,接触伤害,接触伤害,,,
@@ -26,3 +23,6 @@ Behaviour_Auto_LifeTimeout,寿命,寿命,,,
 Behaviour_Auto_FollowHolder,跟随主人,跟随主人,,,
 Behaviour_Auto_Teleportation,瞬间移动,瞬间移动
 Behaviour_Auto_Knockback,击退,击退
+Behaviour_Event_UIFloatingWindow,浮窗,浮窗,,,
+Behaviour_Event_OrbitKeeper,Behaviour_Event_OrbitKeeper,Behaviour_Event_OrbitKeeper
+Behaviour_Event_WindowsTransparent,透明桌面,透明桌面

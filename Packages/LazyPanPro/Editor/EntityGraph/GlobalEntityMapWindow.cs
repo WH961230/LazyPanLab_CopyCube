@@ -15,6 +15,11 @@ namespace LazyPan {
         const string graphFolder = "Assets/LazyPan/Bundles/Configs/Graph";
         static BaseGraphView lastView;
 
+        [InitializeOnLoadMethod]
+        static void RegisterHook() {
+            GlobalMapHook.OpenGlobalMap = Open;
+        }
+
         [MenuItem("Tools/LazyPan/全局总览（图）", priority = 0)]
         public static void Open() {
             var window = CreateWindow<GlobalEntityMapWindow>();

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 namespace LazyPan {
-    /// <summary>开场Logo数据 仅承载行为参数 不含外部行为数据。</summary>
+    /// <summary>装备挂载数据 仅承载行为参数 不含外部行为数据。</summary>
     public class BeginLogoData : Data {
         [Header("行为参数")] public BeginLogoConfig Config = new BeginLogoConfig();
 
@@ -18,6 +18,7 @@ namespace LazyPan {
 
         [Serializable]
         public class BeginLogoConfig {
+            [Header("播放完成后跳转场景")] public string EndJumpToScene;
         }
     }
 }

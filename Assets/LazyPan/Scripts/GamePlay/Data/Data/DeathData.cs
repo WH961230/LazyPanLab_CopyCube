@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace LazyPan {
     /// <summary>
@@ -9,22 +7,6 @@ namespace LazyPan {
     /// </summary>
     public class DeathData : Data {
         [Header("死亡行为参数")] public DeathConfig Config = new DeathConfig();
-
-        [Header("当前血量")] public float Health;
-        [Header("最大血量 0=无血条(子弹/特效靠外部置Dead)")] public float MaxHealth;
-        [Header("死亡标记")] public bool Dead;
-
-        [Header("运行时：上帧死亡标记，边沿检测用")] public bool PrevDead;
-        [Header("运行时：延迟销毁剩余秒数")] public float DeathDelayRemain;
-
-        public bool HasHealthBar => MaxHealth > 0f;
-
-        public void Damage(float amount) {
-            if (!HasHealthBar || Dead) {
-                return;
-            }
-            Health -= amount;
-        }
 
         public override bool Get<T>(string sign, out T t) {
             if (typeof(T) == typeof(DeathConfig)) {
@@ -40,24 +22,22 @@ namespace LazyPan {
         public class DeathConfig {
             [Header("死亡延迟销毁时长")] public float DeathDelay;
             [Header("死亡后处理")] public DeathAction DeathAction;
-            [Header("死亡瞬间要改的参数列表")] public List<ParamModifyConfig> OnDeathParams = new List<ParamModifyConfig>();
         }
 
+        /// <summary>
+        /// 参数改写项运行时形态 与 ParamModifyItem 同字段 升阶事件与死亡结算共用一个语义
+        /// </summary>
         [Serializable]
         public class ParamModifyConfig {
-            [Header("被修改实体 Self=自己")] public string TargetEntitySign = BehaviourSigns.Self;
-            [Header("参数标签")] public string ParamSign;
-            [Header("参数类型")] public DataValueType ValueType;
-            [Header("修改方式 Set直接赋值 Add累加")] public ParamModifyType Modify;
+            [Header("目标实体")] public string TargetEntitySign = BehaviourSigns.Self;
+            [Header("改哪个数")] public string ParamSign;
+            [Header("值的类型")] public DataValueType ValueType;
+            [Header("改法")] public ParamModifyType Modify;
             [Header("布尔值")] public bool BoolValue;
             [Header("整数值")] public int IntValue;
-            [Header("浮点值")] public float FloatValue;
+            [Header("小数值")] public float FloatValue;
             [Header("字符串值")] public string StringValue;
-            [Header("向量值")] public Vector3 Vector3Value;
+            [Header("三维向量值")] public Vector3 Vector3Value;
         }
-
-#if UNITY_EDITOR
-        //调试入口统一走 DeathTester，Data 里不再监听按键，避免双入口打架。
-#endif
     }
 }

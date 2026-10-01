@@ -24,7 +24,7 @@ namespace LazyPan {
                 return;
             }
 
-            List<string> behaviourFiles = Directory.GetFiles(behaviourDir, "Behaviour_*.cs", SearchOption.TopDirectoryOnly)
+            List<string> behaviourFiles = Directory.GetFiles(behaviourDir, "Behaviour_*.cs", SearchOption.AllDirectories)
                 .Where(p => !p.Contains("Template")).ToList();
             Dictionary<string, string> nameMap = LoadBehaviourNames();
             string oldContent = File.Exists(generatedPath) ? File.ReadAllText(generatedPath, Encoding.UTF8) : "";
@@ -42,10 +42,10 @@ namespace LazyPan {
                 if (settingMatch.Success && string.IsNullOrEmpty(dataTypeName)) {
                     dataTypeName = ResolveSettingDataType(settingMatch.Groups[1].Value);
                 }
-                if (!settingMatch.Success || string.IsNullOrEmpty(dataTypeName)) {
-                    Debug.LogWarning($"跳过 {behaviourSign}: 未识别到 Setting 类型或 SettingData 类型 请检查构造写法是否参考 Death/BeginLogo!");
-                    skipped++;
-                    continue;
+                //无 Setting 的行为（如透明桌面）不跳过，按无配置节点生成，开箱即用
+                bool hasSetting = settingMatch.Success && !string.IsNullOrEmpty(dataTypeName);
+                if (!hasSetting) {
+                    Debug.Log($"行为 {behaviourSign} 无 Setting，按无配置节点生成!");
                 }
 
                 if (existingSigns.Contains(behaviourSign)) {
@@ -61,16 +61,24 @@ namespace LazyPan {
                 string cnName = cn;
                 string nodeName = "BehaviourNode_" + Regex.Replace(behaviourSign, @"^Behaviour_(Auto|Event|Trigger)_", "");
 
-                EnsureSettingAsset(settingMatch.Groups[1].Value);
+                if (hasSetting) {
+                    EnsureSettingAsset(settingMatch.Groups[1].Value);
+                }
 
                 sb.AppendLine("    /// <summary>");
-                sb.AppendLine($"    /// {cnName}行为节点 对应 {dataTypeName} 一条");
-                sb.AppendLine($"    /// 参数便签见 BehaviourPayloadDoc.Get(nameof({behaviourSign}))，节点身上只读显示");
+                if (hasSetting) {
+                    sb.AppendLine($"    /// {cnName}行为节点 对应 {dataTypeName} 一条");
+                    sb.AppendLine($"    /// 参数便签见 BehaviourPayloadDoc.Get(nameof({behaviourSign}))，节点身上只读显示");
+                } else {
+                    sb.AppendLine($"    /// {cnName}行为节点 无配置，开箱即用");
+                }
                 sb.AppendLine("    /// </summary>");
                 sb.AppendLine("    [Serializable]");
                 sb.AppendLine($"    [NodeMenuItem(\"LazyPan/行为/{cnName}\")]");
                 sb.AppendLine($"    public class {nodeName} : BehaviourGraphNode {{");
-                sb.AppendLine($"        public {dataTypeName} Config;");
+                if (hasSetting) {
+                    sb.AppendLine($"        public {dataTypeName} Config;");
+                }
                 sb.AppendLine($"        public override string name => \"{cnName}\";");
                 sb.AppendLine($"        public override string BehaviourSign => nameof({behaviourSign});");
                 sb.AppendLine("    }");

@@ -2,46 +2,8 @@ using UnityEngine;
 
 
 namespace LazyPan {
-    /// <summary>
-    /// 行为 - 开头Logo
-    /// 只做一件事: 挂载 Logo 界面并倒计时 结束时调同实体传送行为的内部请求 不写 Data 不配 实体参数
-    /// 倒计时镜像到自己实体的 LogoRemainTime 标签(只写不读 供传送等其他行为按配置读取判定)
-    /// 跳转由同实体的传送流程行为执行 两行为仅经方法调用解耦
-    /// </summary>
     public class Behaviour_Event_BeginLogo : Behaviour {
-        /// <summary>开头Logo节点只读便签：图节点上直接显示，给用户看的参数说明</summary>
-        public static readonly string MemoDoc =
-            "【开头Logo】管开场播几秒 Logo，播完自动跳下一步。\n" +
-            "— 配置参数（BeginLogoSetting 里按 SourceSign 配）—\n" +
-            "- <color=#FFD54F>UIParentPrefabSign</color>：Logo 挂在哪个界面上，如 UI/UI_SceneA\n" +
-            "- <color=#FFD54F>UIChildPrefabSign</color>：挂哪个 Logo，如 UI/UI_Logo\n" +
-            "- <color=#FFD54F>LogoContinueTime</color>：播几秒，建议 3~8，0=一闪而过";
         private const string settingPath = "Setting/BeginLogoSetting";
-
-        /// <summary>
-        /// 上岗检查：只读配置不改东西，红=本节点缺的，黄=提醒，不拦保存。
-        /// </summary>
-        public static void CheckContract(object config, System.Collections.Generic.List<string> red, System.Collections.Generic.List<string> yellow) {
-            if (!(config is BeginLogoSettingData c)) {
-                red.Add("节点 Config 读不到，先重新生成节点");
-                return;
-            }
-
-            if (string.IsNullOrEmpty(c.UIParentPrefabSign)) {
-                red.Add("没填挂在哪个界面上，Logo 不显示");
-            }
-
-            if (string.IsNullOrEmpty(c.UIChildPrefabSign)) {
-                red.Add("没填挂哪个 Logo，Logo 不显示");
-            }
-
-            if (c.LogoContinueTime < 0f) {
-                yellow.Add("播放时间是负数，会当 0 用");
-            } else if (c.LogoContinueTime == 0f) {
-                yellow.Add("播放时间=0，一闪而过");
-            }
-        }
-        public const string REMAIN_LABEL = "LogoRemainTime";
 
         private BeginLogoData _beginLogoEntityData;
         private BeginLogoData.BeginLogoConfig _config;
@@ -49,11 +11,9 @@ namespace LazyPan {
         private float delayDeployTime;
         private bool isRunning;
 
-        //data 倒计时镜像 注册表统一，其他行为只读此标签做判定
-        private bool _hasRemain;
-
         public Behaviour_Event_BeginLogo(Entity entity, string behaviourSign) : base(entity, behaviourSign) {
-            _beginLogoEntityData = AttachBehaviourData<BeginLogoData>();
+            _beginLogoEntityData = entity.Prefab.AddComponent<BeginLogoData>();
+            _beginLogoEntityData.EntityID = entity.ID;
 
             BeginLogoSetting setting = Loader.LoadAsset<BeginLogoSetting>(AssetType.ASSET, settingPath);
 
@@ -67,11 +27,9 @@ namespace LazyPan {
             }
 
             _config = _beginLogoEntityData.Config;
-            delayDeployTime = Mathf.Max(settingData.LogoContinueTime, 0f);
+            _config.EndJumpToScene = settingData.EndJumpToScene;
+            delayDeployTime = settingData.LogoContinueTime;
             isRunning = true;
-
-            EntityAttrRegistry.SetNumber(entity, REMAIN_LABEL, delayDeployTime);
-            _hasRemain = true;
 
             InitBinding(settingData);
 
@@ -94,25 +52,16 @@ namespace LazyPan {
             if (!isRunning) return;
             if (delayDeployTime > 0) {
                 delayDeployTime -= Time.deltaTime;
-                if (_hasRemain) {
-                    EntityAttrRegistry.SetNumber(entity, REMAIN_LABEL, Mathf.Max(delayDeployTime, 0f));
-                }
             } else {
-                isRunning = false;
-                if (_hasRemain) {
-                    EntityAttrRegistry.SetNumber(entity, REMAIN_LABEL, 0f);
-                }
-
-                // 倒计时结束 只往自己身上写传送纸条，不直接调传送行为，由传送行为自己轮询消费
-                if (entity != null) {
-                    EntityAttrRegistry.SetBool(entity, DataLabels.WantTeleport, true);
+                if (Flo.Instance.GetCurFlow(out Flow flow)) {
+                    flow.Next(_config.EndJumpToScene);
+                    isRunning = false;
                 }
             }
         }
 
         public override void Clear() {
             Game.instance.OnUpdateEvent.RemoveListener(OnUpdate);
-            DetachBehaviourData<BeginLogoData>();
             base.Clear();
         }
     }

@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c857a0097564278bdf047d69fe29d91, type: 3}
+  m_Script: {fileID: 11500000, guid: d7b7821d942323f46a514c1c9908930c, type: 3}
   m_Name: TrackingEntitySetting
   m_EditorClassIdentifier:
   Datas:
