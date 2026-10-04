@@ -88,14 +88,29 @@ namespace LazyPan {
         }
 
         public static string FindSign(string dir) {
-            string[] files = Directory.GetFiles(dir, "Behaviour_*.cs", SearchOption.TopDirectoryOnly);
-            foreach (string file in files) {
-                if (file.EndsWith(".meta")) {
-                    continue;
-                }
-                return Path.GetFileNameWithoutExtension(file);
+            var names = Directory.GetFiles(dir, "Behaviour_*.cs", SearchOption.TopDirectoryOnly)
+                .Where(ff => !ff.EndsWith(".meta"))
+                .Select(ff => Path.GetFileNameWithoutExtension(ff))
+                .ToList();
+            if (names.Count == 0) {
+                return null;
             }
-            return null;
+            if (names.Count == 1) {
+                return names[0];
+            }
+            string folder = Path.GetFileName(dir.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+            foreach (string name in names) {
+                string core = Regex.Replace(name, @"^Behaviour_(Auto|Event|Trigger)_", "");
+                if (core == folder || folder.EndsWith("_" + core)) {
+                    return name;
+                }
+            }
+            foreach (string name in names) {
+                if (!name.Contains("Template")) {
+                    return name;
+                }
+            }
+            return names[0];
         }
 
         private static bool IsRegistered(string sign) {
