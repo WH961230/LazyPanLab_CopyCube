@@ -21,7 +21,7 @@ namespace LazyPan {
         private const string SettingDir = "Assets/LazyPan/Scripts/GamePlay/Config/Setting";
         private const string DataDir = "Assets/LazyPan/Scripts/GamePlay/Data";
         private const string SettingAssetDir = "Assets/LazyPan/Bundles/Configs/Setting";
-        private const string EditorDir = "Assets/Editor";
+        private const string EditorDir = "Assets/LazyPan/Editor";
 
         public static void DrawTool() {
             _foldout = EditorGUILayout.Foldout(_foldout, "下载行为一键安装（装完自动生成节点）", true);
@@ -37,6 +37,11 @@ namespace LazyPan {
             string[] dirs = Directory.GetDirectories(downloadRoot);
             if (GUILayout.Button("全部安装", GUILayout.Height(24))) {
                 InstallAll();
+            }
+            if (GUILayout.Button("一键卸载所有行为", GUILayout.Height(24))) {
+                if (EditorUtility.DisplayDialog("一键卸载所有行为", "确定要卸载全部已安装行为吗？", "确定卸载", "取消")) {
+                    UninstallAll();
+                }
             }
             _scroll = EditorGUILayout.BeginScrollView(_scroll, GUILayout.Height(220));
             foreach (string dir in dirs) {
@@ -56,6 +61,20 @@ namespace LazyPan {
             }
             AssetDatabase.Refresh();
             BehaviourNodeGenerator.GenerateAll();
+        }
+
+        public static void UninstallAll() {
+            string downloadRoot = Path.Combine(LazyPanTool.GetPackageRoot(), "Download", "Behaviour").Replace('\\', '/');
+            if (!Directory.Exists(downloadRoot)) {
+                return;
+            }
+            foreach (string dir in Directory.GetDirectories(downloadRoot)) {
+                if (!IsInstalled(dir)) {
+                    continue;
+                }
+                Uninstall(dir, false);
+            }
+            AssetDatabase.Refresh();
         }
 
         public static bool IsInstalled(string dir) {
@@ -200,9 +219,227 @@ namespace LazyPan {
             }
             UnregisterCsv(sign);
             RemoveGeneratedNode(sign);
+            // 删完立即刷资源+请求编译，不然图里还挂着旧节点类，目录消不掉
+            AssetDatabase.Refresh();
+            UnityEditor.Compilation.CompilationPipeline.RequestScriptCompilation();
             if (log) {
                 Debug.Log($"行为已卸载：{sign}，删了 {copies.Count} 个文件，登记与节点类已摘除。");
             }
+        }
+
+        /// <summary>
+        /// 卸载本地行为：包里没有的，Assets里那套（逻辑/参数/数据/视图/资产）+登记+节点类一起摘。
+        /// 有实体在用先弹窗确认，删完刷资源+请求编译，图里目录跟着消。
+        /// </summary>
+        public static void UninstallLocal(string sign) {
+            if (string.IsNullOrEmpty(sign)) {
+                return;
+            }
+            List<string> users = FindReferencingEntities(sign);
+            if (users.Count > 0 && !EditorUtility.DisplayDialog("卸载本地行为",
+                    $"{sign} 还被这些实体用着：{string.Join("、", users)}\n\n卸载后它们图上该节点会变 Missing。\n确定卸载吗？",
+                    "确定卸载", "取消")) {
+                return;
+            }
+            string core = CoreOf(sign);
+            int deleted = 0;
+            foreach (string f in new[] {
+                FirstFile(BehaviourDir, sign + ".cs", SearchOption.AllDirectories),
+                FirstFile(SettingDir, core + "Setting.cs", SearchOption.AllDirectories),
+                FirstFile(DataDir, core + "Data.cs", SearchOption.AllDirectories),
+                FirstFile(EditorDir, core + "NodeView.cs", SearchOption.TopDirectoryOnly),
+                FirstFile(SettingAssetDir, core + "Setting.asset", SearchOption.TopDirectoryOnly),
+            }) {
+                if (string.IsNullOrEmpty(f)) {
+                    continue;
+                }
+                try {
+                    File.Delete(f);
+                    deleted++;
+                } catch {
+                }
+                string meta = f + ".meta";
+                if (File.Exists(meta)) {
+                    try {
+                        File.Delete(meta);
+                    } catch {
+                    }
+                }
+            }
+            UnregisterCsv(sign);
+            RemoveGeneratedNode(sign);
+            AssetDatabase.Refresh();
+            UnityEditor.Compilation.CompilationPipeline.RequestScriptCompilation();
+            Debug.Log($"本地行为已卸载：{sign}，删了 {deleted} 个文件，登记与节点类已摘除。");
+        }
+
+        /// <summary>
+        /// 能不能上传：只有插件自己工程（包文件夹名就是 LazyPanPro，可写）才开上传。
+        /// 外面下载插件的用户包在只读缓存里，没有可写的源文件夹，上传按钮直接藏掉。
+        /// </summary>
+        public static bool CanUpload() {
+            string root = LazyPanTool.GetPackageRoot();
+            if (string.IsNullOrEmpty(root)) {
+                return false;
+            }
+            if (Path.GetFileName(root.TrimEnd('/', '\\')) != "LazyPanPro") {
+                return false;
+            }
+            string downloadRoot = Path.Combine(root, "Download", "Behaviour").Replace('\\', '/');
+            return Directory.Exists(downloadRoot);
+        }
+
+        /// <summary>Sign去前缀取核心名：Behaviour_Auto_Test → Test，文件夹名/文件名派生都靠它</summary>
+        public static string CoreOf(string sign) {
+            return Regex.Replace(sign ?? "", @"^Behaviour_(Auto|Event|Trigger)_", "");
+        }
+
+        /// <summary>按Sign找包里文件夹：有就返回，没有返回空（新建时再按 中文名_核心名 建）</summary>
+        public static string FindDownloadDir(string sign) {
+            string downloadRoot = Path.Combine(LazyPanTool.GetPackageRoot(), "Download", "Behaviour").Replace('\\', '/');
+            if (!Directory.Exists(downloadRoot)) {
+                return null;
+            }
+            foreach (string dir in Directory.GetDirectories(downloadRoot)) {
+                if (FindSign(dir) == sign) {
+                    return dir;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>按Sign从BehaviourConfig.csv取中文名，没有返回空</summary>
+        public static string GetChineseName(string sign) {
+            string csv = Path.Combine(Application.streamingAssetsPath, "Csv", "BehaviourConfig.csv");
+            if (!File.Exists(csv)) {
+                return null;
+            }
+            foreach (string line in CsvEncoding.ReadAllLines(csv).Skip(3)) {
+                if (string.IsNullOrWhiteSpace(line)) {
+                    continue;
+                }
+                string[] cols = line.Split(',');
+                if (cols.Length > 1 && cols[0].Trim() == sign) {
+                    return cols[1].Trim();
+                }
+            }
+            return null;
+        }
+
+        /// <summary>新行为清单：Assets里有、包里没有的Sign。包里老行不管，只管第一次入库。</summary>
+        public static List<string> FindNewBehaviours() {
+            var result = new List<string>();
+            if (!Directory.Exists(BehaviourDir)) {
+                return result;
+            }
+            var downloadSigns = new HashSet<string>();
+            string downloadRoot = Path.Combine(LazyPanTool.GetPackageRoot(), "Download", "Behaviour").Replace('\\', '/');
+            if (Directory.Exists(downloadRoot)) {
+                foreach (string dir in Directory.GetDirectories(downloadRoot)) {
+                    string s = FindSign(dir);
+                    if (!string.IsNullOrEmpty(s)) {
+                        downloadSigns.Add(s);
+                    }
+                }
+            }
+            foreach (string file in Directory.GetFiles(BehaviourDir, "Behaviour_*.cs", SearchOption.TopDirectoryOnly)) {
+                if (file.EndsWith(".meta")) {
+                    continue;
+                }
+                string sign = Path.GetFileNameWithoutExtension(file);
+                if (sign.Contains("Template") || downloadSigns.Contains(sign)) {
+                    continue;
+                }
+                result.Add(sign);
+            }
+            result.Sort();
+            return result;
+        }
+
+        /// <summary>
+        /// 上传：安装的反向。Assets里跑通的收进包 Download/Behaviour/中文名_核心名/ 六格归位。
+        /// 文件夹有就覆盖更新，没有就新建；Doc缺就套空架子并黄字提醒去填。
+        /// </summary>
+        public static void Upload(string sign) {
+            if (string.IsNullOrEmpty(sign)) {
+                return;
+            }
+            if (!CanUpload()) {
+                Debug.LogError($"上传失败:{sign} 当前工程不是插件开发工程（包文件夹下没有可写的 LazyPanPro），上传按钮不该出现！");
+                return;
+            }
+            string chinese = GetChineseName(sign);
+            if (string.IsNullOrEmpty(chinese)) {
+                Debug.LogError($"上传失败:{sign} BehaviourConfig.csv 里没登记中文名，先登记再传！");
+                return;
+            }
+            string downloadRoot = Path.Combine(LazyPanTool.GetPackageRoot(), "Download", "Behaviour").Replace('\\', '/');
+            if (!Directory.Exists(downloadRoot)) {
+                Debug.LogError($"上传失败:包里没找到 Download/Behaviour");
+                return;
+            }
+            string dir = FindDownloadDir(sign);
+            if (string.IsNullOrEmpty(dir)) {
+                dir = Path.Combine(downloadRoot, string.Concat(chinese, "_", CoreOf(sign)));
+            }
+            if (Directory.Exists(dir) && !EditorUtility.DisplayDialog("上传行为",
+                    $"{sign} 的包文件夹已存在，覆盖更新吗？\n{dir}", "覆盖上传", "取消")) {
+                return;
+            }
+            string core = CoreOf(sign);
+            int copied = 0;
+            copied += CopyOne(FirstFile(BehaviourDir, sign + ".cs", SearchOption.AllDirectories), dir);
+            copied += CopyOne(FirstFile(SettingDir, core + "Setting.cs", SearchOption.AllDirectories), Path.Combine(dir, "SettingScript"));
+            copied += CopyOne(FirstFile(DataDir, core + "Data.cs", SearchOption.AllDirectories), Path.Combine(dir, "Data"));
+            copied += CopyOne(FirstFile(EditorDir, core + "NodeView.cs", SearchOption.TopDirectoryOnly), Path.Combine(dir, "NodeView"));
+            copied += CopyOne(FirstFile(SettingAssetDir, core + "Setting.asset", SearchOption.TopDirectoryOnly), Path.Combine(dir, "Setting"));
+            if (!Directory.Exists(Path.Combine(dir, "Doc")) || Directory.GetFiles(Path.Combine(dir, "Doc"), "*.md").Length == 0) {
+                WriteDocStub(dir, sign, chinese);
+            }
+            AssetDatabase.Refresh();
+            Debug.Log($"行为已上传:{sign} → {dir}，收了 {copied} 个文件。");
+        }
+
+        static string FirstFile(string root, string name, SearchOption opt) {
+            if (!Directory.Exists(root)) {
+                return null;
+            }
+            foreach (string f in Directory.GetFiles(root, name, opt)) {
+                if (!f.EndsWith(".meta")) {
+                    return f;
+                }
+            }
+            return null;
+        }
+
+        static int CopyOne(string src, string dstDir) {
+            if (string.IsNullOrEmpty(src) || !File.Exists(src)) {
+                Debug.LogWarning($"上传缺件跳过:{src ?? "?"}");
+                return 0;
+            }
+            if (!Directory.Exists(dstDir)) {
+                Directory.CreateDirectory(dstDir);
+            }
+            File.Copy(src, Path.Combine(dstDir, Path.GetFileName(src)), true);
+            return 1;
+        }
+
+        static void WriteDocStub(string dir, string sign, string chinese) {
+            string docDir = Path.Combine(dir, "Doc");
+            if (!Directory.Exists(docDir)) {
+                Directory.CreateDirectory(docDir);
+            }
+            string templatePath = "Assets/LazyPan/Bundles/Configs/Txt/GenerateDocTemplate.txt";
+            string text;
+            if (File.Exists(templatePath)) {
+                text = File.ReadAllText(templatePath);
+                text = Regex.Replace(text, "#中文名#", chinese ?? sign);
+                text = Regex.Replace(text, "#行为标识#", CoreOf(sign));
+            } else {
+                text = $"# 行为设计文档：{chinese}_{CoreOf(sign)}\n\nTODO：按九节格式补全。\n";
+            }
+            File.WriteAllText(Path.Combine(docDir, string.Concat("Behaviour_", sign, ".md")), text);
+            Debug.LogWarning($"{sign} 的 Doc 是空架子，记得去包里补全！");
         }
 
         /// <summary>本包已拷进 Assets 的文件（平铺旧错位和双层现行目录都认，NodeView/资产只认顶层）</summary>

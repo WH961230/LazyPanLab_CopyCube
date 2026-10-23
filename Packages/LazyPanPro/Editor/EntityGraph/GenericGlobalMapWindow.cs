@@ -31,7 +31,6 @@ namespace LazyPan {
             public string[] Behaviours = new string[0];
         }
 
-        [MenuItem("Tools/LazyPan/全局总览 _F2", priority = 0)]
         public static void Open() {
             if (GlobalMapHook.OpenGlobalMap != null) {
                 GlobalMapHook.OpenGlobalMap();

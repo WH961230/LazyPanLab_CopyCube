@@ -243,6 +243,77 @@ namespace LazyPan {
             return true;
         }
 
+        /// <summary>
+        /// 配套模板落盘：文件已存在就跳过，不覆盖手改，不抛异常
+        /// </summary>
+        static void WriteTemplateIfAbsent(string path, string content) {
+            if (System.IO.File.Exists(path)) {
+                return;
+            }
+            string dir = System.IO.Path.GetDirectoryName(path);
+            if (!string.IsNullOrEmpty(dir) && !System.IO.Directory.Exists(dir)) {
+                System.IO.Directory.CreateDirectory(dir);
+            }
+            var streamWriter = new StreamWriter(path, false, new UTF8Encoding(true, false));
+            streamWriter.Write(content);
+            streamWriter.Close();
+            AssetDatabase.ImportAsset(path);
+        }
+
+        /// <summary>
+        /// 一行为单位吐五件套其余四件：Setting脚本/Data脚本/NodeView/Doc，不存在才写
+        /// </summary>
+        static void GenerateBehaviourCompanions(string sign, string chineseName) {
+            string settingName = string.Concat(sign, "Setting");
+            string settingDataName = string.Concat(sign, "SettingData");
+            string dataName = string.Concat(sign, "Data");
+            var replaces = new Dictionary<string, string> {
+                { "#行为标识#", sign },
+                { "#中文名#", chineseName ?? sign },
+                { "#Setting名#", settingName },
+                { "#SettingData名#", settingDataName },
+                { "#Data名#", dataName },
+            };
+            var outputs = new Dictionary<string, string> {
+                { "Assets/LazyPan/Bundles/Configs/Txt/GenerateSettingTemplate.txt", string.Concat("Assets/LazyPan/Scripts/GamePlay/Config/Setting/", settingName, ".cs") },
+                { "Assets/LazyPan/Bundles/Configs/Txt/GenerateDataTemplate.txt", string.Concat("Assets/LazyPan/Scripts/GamePlay/Data/", dataName, ".cs") },
+                { "Assets/LazyPan/Bundles/Configs/Txt/GenerateDocTemplate.txt", string.Concat("Assets/LazyPan/Scripts/GamePlay/Behaviour/Doc/Behaviour_", sign, ".md") },
+            };
+            foreach (var kv in outputs) {
+                if (System.IO.File.Exists(kv.Value)) {
+                    continue;
+                }
+                if (!System.IO.File.Exists(kv.Key)) {
+                    LogUtil.LogErrorFormat("缺少配套模板:{0} 跳过:{1}", kv.Key, kv.Value);
+                    continue;
+                }
+                var streamReader = new StreamReader(kv.Key);
+                string text = streamReader.ReadToEnd();
+                streamReader.Close();
+                foreach (var rp in replaces) {
+                    text = Regex.Replace(text, rp.Key, rp.Value ?? "");
+                }
+                WriteTemplateIfAbsent(kv.Value, text);
+            }
+            WarnIfNodeMissing(sign);
+        }
+
+        /// <summary>
+        /// NodeView引用节点类，类还没生成会红：提前黄字告诉下一步，不让人对着报错瞎找
+        /// </summary>
+        static void WarnIfNodeMissing(string sign) {
+            try {
+                string generatedPath = "Assets/LazyPan/Scripts/GamePlay/Graph/BehaviourGraphNodes.Generated.cs";
+                string nodeName = string.Concat("BehaviourNode_", sign);
+                bool exists = System.IO.File.Exists(generatedPath)
+                    && System.IO.File.ReadAllText(generatedPath).Contains(string.Concat("class ", nodeName, " "));
+                if (!exists) {
+                    UnityEngine.Debug.LogWarningFormat("行为已生成:{0}，但节点类 {1} 还没有：NodeView会红一次，去跑 菜单Assets/Create/LazyPan/一键生成行为节点（先在BehaviourConfig.csv登记中文名），再回来即绿", sign, nodeName);
+                }
+            } catch {
+            }
+        }
+
         public static void GenerateBehaviour(bool isTemplate) {
             /*读取配置*/
             ReadCSV.Instance.Read("BehaviourGenerate", out string content, out string[] lines);
@@ -296,6 +367,10 @@ namespace LazyPan {
                         log = Regex.Replace(log, "#命名空间#", curNamespace);
                         log = Regex.Replace(log, "#行为类型#", curBehaviourType);
                         log = Regex.Replace(log, "#行为标识#", isTemplate ? string.Concat(curBehaviourSign, "_Template") : curBehaviourSign);
+                        log = Regex.Replace(log, "#中文名#", strs.Length > 1 ? strs[1] : curBehaviourSign);
+                        log = Regex.Replace(log, "#Setting名#", string.Concat(curBehaviourSign, "Setting"));
+                        log = Regex.Replace(log, "#SettingData名#", string.Concat(curBehaviourSign, "SettingData"));
+                        log = Regex.Replace(log, "#Data名#", string.Concat(curBehaviourSign, "Data"));
 
                         string customerMethod = "";
 
@@ -320,6 +395,7 @@ namespace LazyPan {
                         streamWriter.Write(log);
                         streamWriter.Close();
                         AssetDatabase.ImportAsset(createPath);
+                        GenerateBehaviourCompanions(curBehaviourSign, strs.Length > 1 ? strs[1] : curBehaviourSign);
 
                         customer.Clear();
                         namespaces.Clear();
@@ -385,6 +461,10 @@ namespace LazyPan {
                             log = Regex.Replace(log, "#行为类型#", curBehaviourType);
                             log = Regex.Replace(log, "#行为标识#",
                                 isTemplate ? string.Concat(curBehaviourSign, "_Template") : curBehaviourSign);
+                            log = Regex.Replace(log, "#中文名#", strs.Length > 1 ? strs[1] : curBehaviourSign);
+                            log = Regex.Replace(log, "#Setting名#", string.Concat(curBehaviourSign, "Setting"));
+                            log = Regex.Replace(log, "#SettingData名#", string.Concat(curBehaviourSign, "SettingData"));
+                            log = Regex.Replace(log, "#Data名#", string.Concat(curBehaviourSign, "Data"));
 
                             string customerMethod = "";
 
@@ -414,6 +494,7 @@ namespace LazyPan {
                             streamWriter.Write(log);
                             streamWriter.Close();
                             AssetDatabase.ImportAsset(createPath);
+                            GenerateBehaviourCompanions(curBehaviourSign, strs.Length > 1 ? strs[1] : curBehaviourSign);
 
                             customer.Clear();
                             namespaces.Clear();

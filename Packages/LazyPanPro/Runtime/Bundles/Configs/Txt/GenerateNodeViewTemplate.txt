@@ -1,0 +1,13 @@
+using GraphProcessor;
+using LazyPan;
+
+/// <summary>
+/// #中文名#节点视图：只做共享装配，不加按钮不加折叠。
+/// </summary>
+[NodeCustomEditor(typeof(BehaviourNode_#行为标识#))]
+public class #行为标识#NodeView : BaseNodeView {
+    public override void Enable() {
+        base.Enable();
+        NodeMemoHelper.Attach(this);
+    }
+}

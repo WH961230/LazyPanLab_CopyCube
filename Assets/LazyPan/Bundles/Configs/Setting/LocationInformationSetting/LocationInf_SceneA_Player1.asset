@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77819a1bce2c4b03a3046288c64f14d7, type: 3}
   m_Name: LocationInf_SceneA_Player1
   m_EditorClassIdentifier: 
-  SettingName: 
+  SettingName: "\u73A9\u5BB61"
   locationInformationDatas:
   - Position: {x: 0, y: 0, z: 0}
-    Rotation: {x: -0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0}

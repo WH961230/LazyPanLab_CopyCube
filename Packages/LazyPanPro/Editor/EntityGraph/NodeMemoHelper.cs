@@ -14,7 +14,7 @@ public static class NodeMemoHelper {
     static readonly Dictionary<string, string> sMemoCache = new Dictionary<string, string>();
 
     public static void Attach(BaseNodeView view, Action<VisualElement> onConfigRows = null, Action<object, List<string>, List<string>> extraCheck = null) {
-        //节点本身强制展开，不然折叠后便签跟着被藏起来；已经展开就别碰，碰一次图就脏一次
+        //节点本身强制展开，不然折叠后内容跟着被藏起来；已经展开就别碰，碰一次图就脏一次
         if (view.nodeTarget != null && !view.nodeTarget.expanded) {
             view.nodeTarget.expanded = true;
         }
@@ -22,55 +22,21 @@ public static class NodeMemoHelper {
             view.expanded = true;
         }
 
-        // 每次打开节点清掉这份说明的缓存，保证资产里改了字，重开节点立刻看见，不用点按钮刷
-        string sign = BehaviourSignOf(view);
-        BehaviourPayloadDoc.ClearCache();
-        if (sign != null) {
-            sMemoCache.Remove(sign);
-        }
-
         var controls = view.controlsContainer;
 
-        //藏起节点自带的“参数便签”输入框，只留折叠里的 Label，两份不打架、不压 Config
+        //藏起节点自带的“参数便签”输入框，不在节点上显示说明书
         var builtinMemo = controls.Q("参数便签");
         if (builtinMemo != null) {
             builtinMemo.style.display = DisplayStyle.None;
         }
 
-        var memoLabel = new UnityEngine.UIElements.Label();
-        memoLabel.enableRichText = true;
-        memoLabel.style.whiteSpace = WhiteSpace.Normal;
-        memoLabel.style.unityTextAlign = UnityEngine.TextAnchor.MiddleLeft;
-        memoLabel.style.marginTop = 4f;
-        memoLabel.style.marginBottom = 4f;
-
-        // 说明书包一层折叠，标题叫“行为说明书”，默认折叠，想看点一下就行
-        var memoFoldout = new Foldout { text = "行为说明书", value = false };
-        memoFoldout.Add(memoLabel);
-        controls.Insert(0, memoFoldout);
-
-        // 上岗检查：点一下验这条配置能不能跑，红=本节点缺的，黄=跨实体的提醒，不拦保存
-        var checkLabel = new UnityEngine.UIElements.Label();
-        checkLabel.enableRichText = true;
-        checkLabel.style.whiteSpace = WhiteSpace.Normal;
-        checkLabel.style.unityTextAlign = UnityEngine.TextAnchor.MiddleLeft;
-        checkLabel.style.marginTop = 4f;
-        var checkFoldout = new Foldout { text = "检查上岗条件", value = false };
-        checkFoldout.Add(checkLabel);
-        controls.Add(checkFoldout);
-        var checkButton = new Button(() => {
-            checkLabel.text = RunCheck(view, extraCheck);
-            checkFoldout.value = true;
-        }) { text = "检查上岗条件" };
-        controls.Add(checkButton);
-
-        Refresh(view, memoLabel, false, onConfigRows);
-        // 别轮询：界面画好后补刷几次（行是异步建出来的），之后只点按钮才刷。
+        Refresh(view, onConfigRows);
+        // 别轮询：界面画好后补刷几次（行是异步建出来的）。
         // 按住鼠标（拖节点/改数）时不动手，拖一半改样式会把框架的排版顶丢，松手再刷。
-        ScheduleSettle(view, memoLabel, onConfigRows, 5);
+        ScheduleSettle(view, onConfigRows, 5);
     }
 
-    static void ScheduleSettle(BaseNodeView view, UnityEngine.UIElements.Label memoLabel, Action<VisualElement> onConfigRows, int triesLeft) {
+    static void ScheduleSettle(BaseNodeView view, Action<VisualElement> onConfigRows, int triesLeft) {
         view.schedule.Execute(() => {
             // 视图关了就收工，别碰已拆的树
             if (view.controlsContainer == null || view.controlsContainer.panel == null) {
@@ -78,16 +44,16 @@ public static class NodeMemoHelper {
             }
 
             if (triesLeft > 0 && UnityEngine.Input.GetMouseButton(0)) {
-                ScheduleSettle(view, memoLabel, onConfigRows, triesLeft - 1);
+                ScheduleSettle(view, onConfigRows, triesLeft - 1);
                 return;
             }
 
             try {
-                Refresh(view, memoLabel, false, onConfigRows);
+                Refresh(view, onConfigRows);
             } catch {
                 // 框架正在重建行（比如列表拖拽中途），这次改一半会留乱摊子，直接吞掉等下一拍重来
                 if (triesLeft > 0) {
-                    ScheduleSettle(view, memoLabel, onConfigRows, triesLeft - 1);
+                    ScheduleSettle(view, onConfigRows, triesLeft - 1);
                 }
             }
         }).StartingIn(400);
@@ -144,9 +110,6 @@ public static class NodeMemoHelper {
         // 本实体组件实查：CompTriggerSign 真去预制体上找 Comp，有没有给结论
         AppendCompCheck(config, red, yellow);
 
-        // 本实体 Unity 组件实查：行为自报 RequiredComponents，真去预制体上找，缺了判红
-        AppendRequiredComponentCheck(t, config, red, yellow);
-
         var sb = new System.Text.StringBuilder();
         if (red.Count == 0 && yellow.Count == 0) {
             sb.Append("<color=#9CCC65>齐了，能跑</color>");
@@ -161,74 +124,6 @@ public static class NodeMemoHelper {
         }
 
         return sb.ToString().TrimEnd();
-    }
-
-    /// <summary>
-    /// 本实体 Unity 组件实查：读行为类上静态 RequiredComponents（如 CharacterController），
-    /// 真去本实体预制体上找，缺了判红。行为自己报要什么，按钮只管验，新增行为零手写。
-    /// </summary>
-    public static void AppendRequiredComponentCheck(Type behaviourType, object config, List<string> red, List<string> yellow) {
-        if (behaviourType == null || config == null) {
-            return;
-        }
-
-        string[] required;
-        try {
-            required = behaviourType.GetField("RequiredComponents",
-                System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static)?.GetValue(null) as string[];
-        } catch {
-            return;
-        }
-
-        if (required == null || required.Length == 0) {
-            return;
-        }
-
-        string sourceSign = config.GetType().GetField("SourceSign")?.GetValue(config) as string;
-        if (string.IsNullOrEmpty(sourceSign)) {
-            return;
-        }
-
-        var prefab = FindEntityPrefab(sourceSign);
-        if (prefab == null) {
-            yellow.Add($"找不到 {sourceSign} 的预制体，确认 Prefabs/Obj 下有同名预制体");
-            return;
-        }
-
-        foreach (string name in new HashSet<string>(required)) {
-            if (string.IsNullOrEmpty(name)) {
-                continue;
-            }
-
-            Type compType = ResolveComponentType(name);
-            if (compType == null) {
-                yellow.Add($"依赖组件 {name} 不认识，确认名字是不是 Unity 组件类名");
-                continue;
-            }
-
-            if (prefab.GetComponentInChildren(compType, true) == null) {
-                red.Add($"预制体 {sourceSign} 上没有 {name}，先挂上再跑，不然行为不会动");
-            }
-        }
-    }
-
-    static Type ResolveComponentType(string name) {
-        foreach (var a in System.AppDomain.CurrentDomain.GetAssemblies()) {
-            Type[] types;
-            try {
-                types = a.GetTypes();
-            } catch {
-                continue;
-            }
-
-            foreach (var t in types) {
-                if (t.Name == name && typeof(UnityEngine.Component).IsAssignableFrom(t)) {
-                    return t;
-                }
-            }
-        }
-
-        return null;
     }
 
     static readonly HashSet<string> sEntityKeywords = LoadEntityKeywords();
@@ -505,30 +400,7 @@ public static class NodeMemoHelper {
         }
     }
 
-    static void Refresh(BaseNodeView view, UnityEngine.UIElements.Label memoLabel, bool saveSnapshot, Action<VisualElement> onConfigRows) {
-        string sign = BehaviourSignOf(view);
-        if (sign != null) {
-            // 说明文本缓存起来，一个行为只反射读一次，不每次翻资产
-            if (!sMemoCache.TryGetValue(sign, out string text)) {
-                text = BehaviourPayloadDoc.Get(sign);
-                if (string.IsNullOrEmpty(text)) {
-                    text = "便签为空：先等脚本编译完，再点“刷新便签”。";
-                }
-
-                sMemoCache[sign] = text;
-            }
-
-            //内容没变就不碰，避免重排把 Config 顶来顶去
-            if (memoLabel.text != text) {
-                memoLabel.text = text;
-            }
-
-            // 快照只在点按钮时存盘：写节点字段会标脏整张图，每次打开就存是巨卡
-            if (saveSnapshot && view.nodeTarget is BehaviourGraphNode node && node.参数便签 != text) {
-                node.参数便签 = text;
-            }
-        }
-
+    static void Refresh(BaseNodeView view, Action<VisualElement> onConfigRows) {
         var configField = FindConfig(view.controlsContainer);
         if (configField != null) {
             AlignConfigRows(configField);

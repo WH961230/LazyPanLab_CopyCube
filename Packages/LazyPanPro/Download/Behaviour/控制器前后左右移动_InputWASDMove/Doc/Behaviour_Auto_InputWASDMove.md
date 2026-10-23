@@ -1,4 +1,5 @@
-# Behaviour_Auto_InputWASDMove 控制器前后左右移动
+# Behaviour_Auto_InputWASDMove 
+# [ 控制器前后左右移动 ]
 
 一句话：读输入按 CharacterController 移动，带重力与转向。依赖 inputactions 与 CharacterController。
 

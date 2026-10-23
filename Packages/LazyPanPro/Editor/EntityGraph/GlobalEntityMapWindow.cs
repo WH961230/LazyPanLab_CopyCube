@@ -20,7 +20,7 @@ namespace LazyPan {
             GlobalMapHook.OpenGlobalMap = Open;
         }
 
-        [MenuItem("Tools/LazyPan/全局总览（图）", priority = 0)]
+        [MenuItem("Tools/LazyPan/全局总览 _F2", priority = 0)]
         public static void Open() {
             var window = CreateWindow<GlobalEntityMapWindow>();
             window.titleContent = new GUIContent("全局总览");

@@ -26,6 +26,7 @@ namespace LazyPan {
     public struct InputWASDMoveSettingData {
         [Header("发起移动的实体类型")]
         [Tooltip("发起移动的实体类型，必须与 ObjConfig.Sign 一致，如 Obj_Player_Player1")]
+        [EntitySign]
         public string SourceSign;
 
         [Header("输入控制标识")]

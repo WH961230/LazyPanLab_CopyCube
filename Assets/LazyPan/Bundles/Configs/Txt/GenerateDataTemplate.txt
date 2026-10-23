@@ -1,0 +1,11 @@
+using System;
+using UnityEngine;
+
+namespace LazyPan {
+    /// <summary>
+    /// #中文名#数据 仅承载本行为运行时状态 不含业务依赖 不许跨实体读写
+    /// </summary>
+    public class #Data名# : Data {
+        [Header("#中文名#参数")] public #SettingData名# Config = new #SettingData名#();
+    }
+}

@@ -1,19 +1,63 @@
+using System.Collections.Generic;
 using UnityEngine;
 #命名空间#
 
 namespace LazyPan {
+    /// <summary>
+    /// 行为 - #中文名#：一句话说明干什么（一个动词+一个对象）。
+    /// 实体负责装配 行为只消费自身配置与运行时状态
+    /// </summary>
     public class Behaviour_#行为类型#_#行为标识# : Behaviour {
+        private const string settingPath = "Setting/#Setting名#";
+
+        private #Data名# _data;
+        private #SettingData名# _config;
+
         public Behaviour_#行为类型#_#行为标识#(Entity entity, string behaviourSign) : base(entity, behaviourSign) {
+            _data = entity.Prefab.AddComponent<#Data名#>();
+            #Setting名# setting = Loader.LoadAsset<#Setting名#>(AssetType.ASSET, settingPath);
+
+            if (!setting.TryGet(entity.ObjConfig.Sign, out var settingData)) {
+                return;
+            }
+
+            _config = settingData;
+            _data.Config = settingData;
+            Game.instance.OnUpdateEvent.AddListener(OnUpdate);
         }
 
         public override void DelayedExecute() {
-            
+        }
+
+        private void OnUpdate() {
+            // TODO：每帧逻辑。只读 _config + 自己 Data，缺组件直接 return，不许碰别的实体
         }
 
 #自定义方法#
 
         public override void Clear() {
+            Game.instance.OnUpdateEvent.RemoveListener(OnUpdate);
+            DetachBehaviourData<#Data名#>();
             base.Clear();
+        }
+
+        public static void CheckContract(object config, List<string> red, List<string> yellow) {
+            var c = (#SettingData名#) config;
+            if (string.IsNullOrEmpty(c.SourceSign)) {
+                red.Add("SourceSign为空，填了才知道查谁的预制体");
+            }
+            // TODO：纸面参数逐条查，撞红线就 red.Add
+#if UNITY_EDITOR
+            if (string.IsNullOrEmpty(c.SourceSign)) {
+                return;
+            }
+            GameObject prefab = PrefabUtil.FindEntityPrefab(c.SourceSign);
+            if (prefab == null) {
+                yellow.Add("找不到预制体，请确认 Prefabs/Obj 下有同名预制体");
+                return;
+            }
+            // TODO：按要的组件逐个查 Comp 登记表，缺了 red.Add
+#endif
         }
     }
 }

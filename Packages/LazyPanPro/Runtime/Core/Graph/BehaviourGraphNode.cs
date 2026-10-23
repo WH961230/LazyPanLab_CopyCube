@@ -20,6 +20,18 @@ namespace LazyPan {
         [HideInInspector]
         public string LastSyncedSign = "";
 
+        /// <summary>检测灯：0未检 1通过(绿) 2不通过(红) 自动跑不存配置只看边框</summary>
+        [HideInInspector]
+        public int 检测灯;
+
+        /// <summary>检测不通过原因</summary>
+        [HideInInspector]
+        public string 检测信息 = "";
+
+        /// <summary>检测提示：节点下方纯文本，由窗口染成红/绿Label显示，字段本身藏起来</summary>
+        [HideInInspector]
+        public string 检测提示 = "";
+
         /// <summary>参数便签：节点身上直接显示，不用悬停。内容从 Behaviour 头上 RequiredPayload 反射来</summary>
         [ReadOnly]
         [TextArea(2, 5)]

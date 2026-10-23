@@ -35,6 +35,10 @@ namespace LazyPan {
             Dictionary<string, string> nameMap = LoadBehaviourNames();
             string oldContent = File.Exists(generatedPath) ? File.ReadAllText(generatedPath, Encoding.UTF8) : "";
             HashSet<string> existingSigns = CollectExistingBehaviourSigns(oldContent);
+            // 清理不存在行为的残留：文件删了/手移了，生成的节点类+视图一起摘掉，不留僵尸
+            var liveSigns = new HashSet<string>(behaviourFiles.Select(p => Path.GetFileNameWithoutExtension(p)));
+            int pruned = PruneStaleNodes(ref oldContent, existingSigns, liveSigns);
+            ReportDeadGraphNodes(liveSigns);
             var sb = new StringBuilder();
             int created = 0;
             int skipped = 0;
@@ -47,6 +51,13 @@ namespace LazyPan {
                 string dataTypeName = dataMatch.Success ? dataMatch.Groups[1].Value : null;
                 if (settingMatch.Success && string.IsNullOrEmpty(dataTypeName)) {
                     dataTypeName = ResolveSettingDataType(settingMatch.Groups[1].Value);
+                }
+                //兼容 out var 写法：按命名约定 Setting名 + Data 反推（如 InputWASDMoveSetting -> InputWASDMoveSettingData）
+                if (settingMatch.Success && string.IsNullOrEmpty(dataTypeName)) {
+                    string guess = settingMatch.Groups[1].Value + "Data";
+                    if (SettingDataTypeExists(guess)) {
+                        dataTypeName = guess;
+                    }
                 }
                 //无 Setting 的行为（如透明桌面）不跳过，按无配置节点生成，开箱即用
                 bool hasSetting = settingMatch.Success && !string.IsNullOrEmpty(dataTypeName);
@@ -91,9 +102,10 @@ namespace LazyPan {
                 sb.AppendLine();
                 created++;
                 existingSigns.Add(behaviourSign);
+                EnsureNodeView(behaviourSign);
             }
 
-            if (created == 0) {
+            if (created == 0 && pruned == 0) {
                 Debug.Log($"行为节点已是最新 无需生成 跳过:{skipped} 个!");
                 return;
             }
@@ -103,11 +115,120 @@ namespace LazyPan {
             File.WriteAllText(generatedPath, body, new UTF8Encoding(true, false));
             AssetDatabase.ImportAsset(generatedPath);
             AssetDatabase.Refresh();
-            Debug.Log($"已生成 {created} 个行为节点 跳过:{skipped} 个!");
+            Debug.Log($"已生成 {created} 个行为节点 跳过:{skipped} 个 清理僵尸:{pruned} 个!");
         }
 
-        static Dictionary<string, string> LoadBehaviourNames() {
-            var map = new Dictionary<string, string>();
+        /// <summary>
+        /// 摘僵尸节点：生成文件里有、行为文件没了的类整段删，配套视图一起删。
+        /// 图资产里的死节点不动（用户数据），只在控制台点名，让人自己去图里删。
+        /// </summary>
+        static int PruneStaleNodes(ref string content, HashSet<string> existingSigns, HashSet<string> liveSigns) {
+            var stale = existingSigns.Where(s => !liveSigns.Contains(s)).ToList();
+            if (stale.Count == 0 || string.IsNullOrEmpty(content)) {
+                return 0;
+            }
+            var lines = content.Split(new[] { "\r\n", "\n" }, System.StringSplitOptions.None).ToList();
+            int removed = 0;
+            foreach (string sign in stale) {
+                string nodeName = "BehaviourNode_" + Regex.Replace(sign, @"^Behaviour_(Auto|Event|Trigger)_", "");
+                int classIdx = -1;
+                for (int i = 0; i < lines.Count; i++) {
+                    if (lines[i].Contains("public class " + nodeName + " ")) {
+                        classIdx = i;
+                        break;
+                    }
+                }
+                if (classIdx < 0) {
+                    continue;
+                }
+                int start = classIdx;
+                for (int i = classIdx - 1; i >= 0 && i >= classIdx - 6; i--) {
+                    if (lines[i].TrimStart().StartsWith("/// <summary>")) {
+                        start = i;
+                        break;
+                    }
+                }
+                int end = -1;
+                for (int i = classIdx; i < lines.Count; i++) {
+                    if (lines[i] == "    }") {
+                        end = i;
+                        break;
+                    }
+                }
+                if (end < 0) {
+                    continue;
+                }
+                lines.RemoveRange(start, end - start + 1);
+                existingSigns.Remove(sign);
+                removed++;
+                string core = Regex.Replace(sign, @"^Behaviour_(Auto|Event|Trigger)_", "");
+                string viewPath = $"Assets/LazyPan/Editor/{core}NodeView.cs";
+                if (File.Exists(viewPath)) {
+                    File.Delete(viewPath);
+                    string meta = viewPath + ".meta";
+                    if (File.Exists(meta)) {
+                        File.Delete(meta);
+                    }
+                    Debug.Log($"已删除僵尸视图:{viewPath}");
+                }
+            }
+            if (removed > 0) {
+                content = string.Join("\n", lines.ToArray());
+            }
+            return removed;
+        }
+
+        /// <summary>
+        /// 图资产点名：实体图里还挂着已删行为的节点类，只报告不删，删图是用户的事。
+        /// </summary>
+        static void ReportDeadGraphNodes(HashSet<string> liveSigns) {
+            var liveNodes = new HashSet<string>(liveSigns.Select(s => "BehaviourNode_" + Regex.Replace(s, @"^Behaviour_(Auto|Event|Trigger)_", "")));
+            string graphDir = "Assets/LazyPan/Bundles/Configs/Graph";
+            if (!Directory.Exists(graphDir)) {
+                return;
+            }
+            foreach (string asset in Directory.GetFiles(graphDir, "*.asset", SearchOption.TopDirectoryOnly)) {
+                string text;
+                try {
+                    text = File.ReadAllText(asset, Encoding.UTF8);
+                } catch {
+                    continue;
+                }
+                var dead = new HashSet<string>();
+                foreach (Match m in Regex.Matches(text, @"BehaviourNode_\w+")) {
+                    if (!liveNodes.Contains(m.Value)) {
+                        dead.Add(m.Value);
+                    }
+                }
+                if (dead.Count > 0) {
+                    Debug.LogWarning($"图 {Path.GetFileName(asset)} 里还有已删行为的节点:{string.Join("、", dead.ToArray())}，去图里手动删掉");
+                }
+            }
+        }
+
+        /// <summary>
+        /// 节点和视图一起生：视图引用节点类，分开生必红一次。视图文件已存在就不碰。
+        /// </summary>
+        static void EnsureNodeView(string behaviourSign) {
+            string core = Regex.Replace(behaviourSign, @"^Behaviour_(Auto|Event|Trigger)_", "");
+            string viewPath = $"Assets/LazyPan/Editor/{core}NodeView.cs";
+            if (File.Exists(viewPath)) {
+                return;
+            }
+            string templatePath = "Assets/LazyPan/Bundles/Configs/Txt/GenerateNodeViewTemplate.txt";
+            if (!File.Exists(templatePath)) {
+                Debug.LogWarning($"缺少视图模板:{templatePath}，视图没生成，节点照常用默认视图");
+                return;
+            }
+            string text = File.ReadAllText(templatePath, Encoding.UTF8);
+            text = Regex.Replace(text, "#行为标识#", core);
+            text = Regex.Replace(text, "#中文名#", core);
+            File.WriteAllText(viewPath, text, new UTF8Encoding(true, false));
+            AssetDatabase.ImportAsset(viewPath);
+            Debug.Log($"已生成节点视图:{viewPath}");
+        }
+
+        static Dictionary<string, string> LoadBehaviourNames() {            var map = new Dictionary<string, string>();
             string csv = Path.Combine(Application.streamingAssetsPath, "Csv", "BehaviourConfig.csv");
             if (!File.Exists(csv)) {
                 return map;
@@ -130,10 +251,21 @@ namespace LazyPan {
             return map;
         }
 
-        /// <summary>
-        /// 兜底：源码写 out var 时正则抠不出 Data 类型，就按 Setting 类的 Datas 列表元素类型反推。
-        /// 比如 TrackingEntitySetting.Datas 是 List(TrackingEntitySettingData)，直接拿 TrackingEntitySettingData。
-        /// </summary>
+        static bool SettingDataTypeExists(string dataTypeName) {
+            foreach (string dir in new[] { "Assets/LazyPan/Scripts/GamePlay/Config/Setting", behaviourDir }) {
+                if (!Directory.Exists(dir)) {
+                    continue;
+                }
+                foreach (string f in Directory.GetFiles(dir, "*.cs", SearchOption.AllDirectories)) {
+                    string t = File.ReadAllText(f, Encoding.UTF8);
+                    if (Regex.IsMatch(t, @"(struct|class)\s+" + Regex.Escape(dataTypeName) + @"\b")) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         static string ResolveSettingDataType(string settingTypeName) {
             if (string.IsNullOrEmpty(settingTypeName)) {
                 return null;

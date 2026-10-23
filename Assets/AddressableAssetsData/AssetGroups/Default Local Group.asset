@@ -15,7 +15,7 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_Data:
     m_SerializedData: []
-  m_GUID: e8d801e81289c9941899b0482b219f92
+  m_GUID: 134a7a1a68a5fa74085e2fd34394fb6e
   m_SerializeEntries:
   - m_GUID: 9bb8d859d388d8747b0338d6da249f17
     m_Address: Assets/LazyPan/Bundles/Configs
@@ -52,7 +52,7 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 42e9ed98b1491204a8f162ee7494dbeb
+  - m_GUID: 34f2a771ab572164785b98aa2d9a4f39
     m_Address: Assets/LazyPan/Bundles/Configs/Input/LazyPanInputControl.inputactions
     m_ReadOnly: 0
     m_SerializedLabels: []

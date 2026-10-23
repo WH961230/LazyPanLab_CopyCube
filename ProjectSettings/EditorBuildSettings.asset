@@ -7,16 +7,10 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/LazyPan/Bundles/Scenes/Launch.unity
-    guid: 7040a7300761c2f4faaf70b31fda6724
+    guid: d8aa84dc85f576f47bbcd76b95b30883
   - enabled: 1
     path: Assets/LazyPan/Bundles/Scenes/SceneA.unity
     guid: 341bda9dda35ff449a65e29142f629bb
-  - enabled: 1
-    path: Assets/LazyPan/Bundles/Scenes/SceneB.unity
-    guid: e0a91f4945cac6e4b8df65a698730f50
-  - enabled: 1
-    path: Assets/LazyPan/Bundles/Scenes/SceneC.unity
-    guid: 6fa061489a161124fb6ef5a7db99700a
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: acdb673ef1cce254db45f24d4d46a1fd,
       type: 2}

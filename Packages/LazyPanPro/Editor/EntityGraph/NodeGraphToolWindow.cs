@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 using GraphProcessor;
@@ -733,6 +734,8 @@ namespace LazyPan {
         /// 所以每帧对全图 Config 做快照比对 变了就落盘 覆盖字段编辑/加删节点/连线等所有改动路径
         /// </summary>
         string lastConfigSnapshot;
+        bool checkColorPainted;
+        double lastCheckTime;
 
         static string BuildConfigSnapshot(BaseGraph graph) {
             if (graph == null)
@@ -768,12 +771,25 @@ namespace LazyPan {
             if (EditorUtility.IsDirty(graph)) {
                 SaveGraph(graph);
                 lastConfigSnapshot = BuildConfigSnapshot(graph);
+                RefreshCheckColors(graph);
                 return;
             }
 
             string snapshot = BuildConfigSnapshot(graph);
-            if (lastConfigSnapshot != null && snapshot != lastConfigSnapshot)
-                SaveGraph(graph);
+            bool changed = lastConfigSnapshot != null && snapshot != lastConfigSnapshot;
+            double now = EditorApplication.timeSinceStartup;
+            if ((changed || !checkColorPainted) && now - lastCheckTime >= 2.0) {
+                if (changed) {
+                    SaveGraph(graph);
+                }
+                RefreshCheckColors(graph);
+                lastCheckTime = now;
+                checkColorPainted = true;
+            } else if (!changed && !checkColorPainted) {
+                RefreshCheckColors(graph);
+                lastCheckTime = now;
+                checkColorPainted = true;
+            }
             lastConfigSnapshot = snapshot;
         }
 
@@ -787,6 +803,64 @@ namespace LazyPan {
                 graphView = new LazyPanGraphView(this);
             rootView.Add(graphView);
             BuildEntityBanner(graph);
+        }
+
+        /// <summary>点按钮染一次节点边框：绿=通过 红=不通过，不自动跑</summary>
+        void RefreshCheckColors(BaseGraph graph) {
+            int pass, fail;
+            BehaviourNodeValidator.Validate(graph, graph != null ? graph.name : "", out pass, out fail);
+            var view = graphView as LazyPanGraphView;
+            if (view == null || view.nodeViews == null) {
+                return;
+            }
+            foreach (var nodeView in view.nodeViews) {
+                if (nodeView == null || !(nodeView.nodeTarget is BehaviourGraphNode node)) {
+                    continue;
+                }
+                if (node.检测灯 == 1) {
+                    node.检测提示 = "✓ 通过，能跑";
+                    nodeView.style.borderTopColor = Color.green;
+                    nodeView.style.borderBottomColor = Color.green;
+                    nodeView.style.borderLeftColor = Color.green;
+                    nodeView.style.borderRightColor = Color.green;
+                    nodeView.style.borderTopWidth = 3f;
+                    nodeView.style.borderBottomWidth = 3f;
+                    nodeView.style.borderLeftWidth = 3f;
+                    nodeView.style.borderRightWidth = 3f;
+                    nodeView.tooltip = "检测通过";
+                    PaintCheckText(nodeView, node, Color.green);
+                } else if (node.检测灯 == 2) {
+                    node.检测提示 = "x " + (string.IsNullOrEmpty(node.检测信息) ? "检测不通过" : node.检测信息);
+                    nodeView.style.borderTopColor = Color.red;
+                    nodeView.style.borderBottomColor = Color.red;
+                    nodeView.style.borderLeftColor = Color.red;
+                    nodeView.style.borderRightColor = Color.red;
+                    nodeView.style.borderTopWidth = 3f;
+                    nodeView.style.borderBottomWidth = 3f;
+                    nodeView.style.borderLeftWidth = 3f;
+                    nodeView.style.borderRightWidth = 3f;
+                    nodeView.tooltip = string.IsNullOrEmpty(node.检测信息) ? "检测不通过" : $"不通过：{node.检测信息}";
+                    PaintCheckText(nodeView, node, Color.red);
+                }
+            }
+        }
+
+        /// <summary>节点下方纯文本提示：红叉开头红字，过了绿字。输入框样式去掉，只留Label。</summary>
+        static void PaintCheckText(GraphProcessor.BaseNodeView nodeView, BehaviourGraphNode node, Color color) {
+            var field = nodeView.controlsContainer.Q<PropertyField>("检测提示");
+            if (field != null) {
+                field.style.display = DisplayStyle.None;
+            }
+            var tip = nodeView.controlsContainer.Q<UnityEngine.UIElements.Label>("检测提示Label");
+            if (tip == null) {
+                tip = new UnityEngine.UIElements.Label { name = "检测提示Label" };
+                tip.style.whiteSpace = WhiteSpace.NoWrap;
+                tip.style.marginTop = 4f;
+                tip.style.marginBottom = 4f;
+                nodeView.controlsContainer.Add(tip);
+            }
+            tip.text = node.检测提示;
+            tip.style.color = color;
         }
 
         /// <summary>窗口顶部实体横幅 中文名+Sign 打开哪个实体一目了然</summary>

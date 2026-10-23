@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -253,6 +253,9 @@ namespace LazyPan {
                     }
                 }
             }
+            //默认两组阶段：初始化/Init、销毁/Clear。CSV里有同名就以CSV为准，没有就保底。
+            linkedStageDictionary.TryAdd("初始化", "Init");
+            linkedStageDictionary.TryAdd("销毁", "Clear");
 
             //实体 - 读取 ObjConfig
             linkedEntityDictionary.Clear();
@@ -579,8 +582,8 @@ namespace LazyPan {
                         && userInputNewStageCode != null
                         && !userInputStageDic
                             .ContainsKey(userInputNewStageName)
-                        && userInputNewStageName != "初始化(Init)" &&
-                        userInputNewStageName != "清除(Clear)") {
+                        && userInputNewStageName != "初始化" &&
+                        userInputNewStageName != "销毁") {
                         userInputStageDic.Add(userInputNewStageName, userInputNewStageCode);
                         linkedStageDictionary.TryAdd(userInputNewStageName, userInputNewStageCode);
                         stageNameOptions.Add(userInputNewStageName);

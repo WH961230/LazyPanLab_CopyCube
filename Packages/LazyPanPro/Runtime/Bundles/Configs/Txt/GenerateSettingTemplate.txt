@@ -1,0 +1,32 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace LazyPan {
+    /// <summary>#中文名# — 参数配置，挂哪个实体、数值多少全在这里改，不用动逻辑。</summary>
+    [CreateAssetMenu(fileName = "#Setting名#", menuName = "LazyPan/#Setting名#")]
+    public class #Setting名# : Setting {
+        public List<#SettingData名#> Datas = new List<#SettingData名#>();
+
+        public bool TryGet(string sourceSign, out #SettingData名# data) {
+            foreach (var tmp in Datas) {
+                if (tmp.SourceSign == sourceSign) {
+                    data = tmp;
+                    return true;
+                }
+            }
+
+            data = default;
+            LogUtil.LogErrorFormat("#Setting名# 缺少 SourceSign:{0} 的配置条目", sourceSign);
+            return false;
+        }
+    }
+
+    [Serializable]
+    public struct #SettingData名# {
+        [EntitySign]
+        public string SourceSign;
+
+        // TODO：参数逐条加，每个加 Header + Tooltip
+    }
+}
